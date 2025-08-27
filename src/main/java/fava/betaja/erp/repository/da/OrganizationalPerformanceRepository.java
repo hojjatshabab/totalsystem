@@ -12,7 +12,6 @@ import java.util.UUID;
 @Repository
 public interface OrganizationalPerformanceRepository extends JpaRepository<OrganizationalPerformance, UUID> {
 
-
     Page<OrganizationalPerformance> findAll(Pageable pageable);
 
     OrganizationalPerformance save(OrganizationalPerformance organizationalPerformance);

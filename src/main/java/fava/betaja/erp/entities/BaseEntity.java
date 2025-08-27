@@ -5,14 +5,8 @@ import fava.betaja.erp.entities.security.Users;
 import jakarta.persistence.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Data;
-import org.hibernate.annotations.Comment;
-import org.hibernate.annotations.Type;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.context.ApplicationContext;
-import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.Authentication;
@@ -23,7 +17,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -135,7 +128,6 @@ public abstract class BaseEntity implements Serializable {
     public void setModificationDateTime(Instant modificationDateTime) {
         this.modificationDateTime = modificationDateTime;
     }
-
 
 
     public String getLogExtraInfo() {

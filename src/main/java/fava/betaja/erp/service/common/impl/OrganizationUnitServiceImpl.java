@@ -1,9 +1,7 @@
 package fava.betaja.erp.service.common.impl;
 
 import fava.betaja.erp.dto.common.OrganizationUnitDto;
-import fava.betaja.erp.dto.da.OrganizationalPerformanceDto;
 import fava.betaja.erp.entities.common.OrganizationUnit;
-import fava.betaja.erp.entities.da.OrganizationalPerformance;
 import fava.betaja.erp.mapper.common.OrganizationUnitMapper;
 import fava.betaja.erp.repository.common.OrganizationUnitRepository;
 import fava.betaja.erp.service.common.OrganizationUnitService;
@@ -15,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class OrganizationUnitServiceImpl implements OrganizationUnitService {

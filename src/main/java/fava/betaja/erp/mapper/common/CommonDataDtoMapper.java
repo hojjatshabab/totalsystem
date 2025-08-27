@@ -1,7 +1,6 @@
 package fava.betaja.erp.mapper.common;
 
 
-import com.fasterxml.jackson.databind.ser.Serializers;
 import fava.betaja.erp.dto.common.CommonDataDto;
 import fava.betaja.erp.entities.common.CommonData;
 import fava.betaja.erp.mapper.BaseMapper;

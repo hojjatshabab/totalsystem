@@ -6,7 +6,6 @@ import fava.betaja.erp.mapper.common.CommonTypeDtoMapper;
 import fava.betaja.erp.repository.common.CommonTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
