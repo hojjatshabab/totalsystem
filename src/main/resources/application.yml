@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/TotalBetajaSystem
+    url: jdbc:postgresql://localhost:5432/total_betaja_system
     username: postgres
     password: postgres
   jpa:
@@ -14,7 +14,7 @@ spring:
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 server:
-  port: 8086
+  port: 8085
 application:
   security:
     jwt:
