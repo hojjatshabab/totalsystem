@@ -1,11 +1,12 @@
 package fava.betaja.erp.entities.common;
 
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Comment;
 
 @Builder
 @NoArgsConstructor
@@ -20,15 +21,39 @@ public class OrganizationUnit {
     private Long id;
 
     @Column(name = "name")
+    @Comment("نام")
     private String name;
 
-    @Column(name = "parent_id")
-    private Long parentId;
+    @Column(name = "address")
+    @Comment("آدرس")
+    private String address;
 
-    @Column(name = "common_base_data_org_type_id")
-    private Long orgTypeId;
+    @Column(name = "tell_number")
+    @Comment("شماره تماس")
+    private String tellNumber;
 
-    @ManyToOne
-    @JoinColumn(name = "parent_id",referencedColumnName = "id",updatable = false,insertable = false)
-    private OrganizationUnit organizationUnit;
+    @Column(name = "code")
+    @Comment("کد")
+    private String code;
+
+    @Column(name = "active")
+    @Comment("فعال/ غیرفعال")
+    private Boolean active;
+
+    @Column(name = "code_path")
+    @Comment("کد سازمانی")
+    private String codePath;
+
+    @JoinColumn(name = "common_base_data_org_type_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @Comment("نوع یگان")
+    private CommonData commonBaseDataOrgType;
+
+    @JoinColumn(name = "parent_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @Comment("یگان پدر")
+    private OrganizationUnit parent;
+
 }

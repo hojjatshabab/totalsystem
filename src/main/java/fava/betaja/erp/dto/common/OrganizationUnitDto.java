@@ -1,6 +1,5 @@
 package fava.betaja.erp.dto.common;
 
-import fava.betaja.erp.entities.common.OrganizationUnit;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,17 +9,16 @@ import lombok.NoArgsConstructor;
 @Data
 public class OrganizationUnitDto {
 
-
     private Long id;
-
     private String name;
-
-
+    private String address;
+    private String tellNumber;
+    private String code;
+    private Boolean active;
+    private String codePath;
+    private Long commonBaseDataOrgTypeId;
+    private String commonBaseDataOrgTypeValue;
     private Long parentId;
-
-
-    private Long orgTypeId;
-
-
+    private String parentName;
 
 }

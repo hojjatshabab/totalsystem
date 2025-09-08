@@ -16,7 +16,6 @@ import lombok.NoArgsConstructor;
 @Table(name = "period_type", schema = "da")
 public class PeriodType extends BaseEntity {
 
-
     @Column(name = "name")
     private String name;
 
