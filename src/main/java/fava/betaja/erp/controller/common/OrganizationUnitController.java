@@ -17,13 +17,12 @@ import java.util.Locale;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("api/v1/organization")
+@RequestMapping("api/organization")
 @RequiredArgsConstructor
 public class OrganizationUnitController extends BaseController {
 
     @Autowired
     OrganizationUnitService service;
-
 
     @PostMapping("/save")
     public ActionResult<OrganizationUnitDto> save(@RequestBody OrganizationUnitDto dto, Locale locale) {
@@ -57,9 +56,6 @@ public class OrganizationUnitController extends BaseController {
 
     }
 
-
-
-
     @PutMapping("/update")
     public ActionResult<OrganizationUnitDto> update(@RequestBody OrganizationUnitDto dto, Locale locale) {
         try {
@@ -68,8 +64,4 @@ public class OrganizationUnitController extends BaseController {
             return INTERNAL_SERVER_ERROR(exception.getMessage(), locale);
         }
     }
-
-
-
-
 }
