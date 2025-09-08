@@ -1,11 +1,13 @@
 package fava.betaja.erp.entities.common;
 
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import fava.betaja.erp.entities.da.DataPeriod;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Comment;
 
 @Builder
 @NoArgsConstructor
@@ -25,14 +27,10 @@ public class CommonData {
     @Column(name = "key")
     private String key;
 
-    @Column(name = "type_id")
-    private String typeId;
-
-
-    @ManyToOne
-    @JoinColumn(name = "type_id", referencedColumnName = "id", insertable = false,updatable = false)
+    @JoinColumn(name = "type_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @Comment("نوع داده")
     private CommonType commonType;
-
-
 
 }

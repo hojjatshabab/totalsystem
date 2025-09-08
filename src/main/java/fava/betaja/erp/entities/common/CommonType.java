@@ -22,5 +22,4 @@ public class CommonType {
     @Column(name = "type_name")
     private String typeName;
 
-
 }

@@ -18,6 +18,7 @@ public interface CommonDataDtoMapper  extends BaseMapper<CommonDataDto, CommonDa
 
     @Override
     @Mapping(source = "commonType.typeName",target = "typeName")
+    @Mapping(source = "commonType.id",target = "typeId")
     List<CommonDataDto> toDtoList(List<CommonData> entityList);
 
     @Override
@@ -25,6 +26,7 @@ public interface CommonDataDtoMapper  extends BaseMapper<CommonDataDto, CommonDa
 
     @Override
     @Mapping(source = "commonType.typeName",target = "typeName")
+    @Mapping(source = "commonType.id",target = "typeId")
     CommonDataDto toDto(CommonData entity);
 
     @Override

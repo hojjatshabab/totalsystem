@@ -1,6 +1,5 @@
 package fava.betaja.erp.entities.da;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import fava.betaja.erp.entities.BaseEntity;
 import fava.betaja.erp.entities.common.OrganizationUnit;

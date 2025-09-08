@@ -9,19 +9,9 @@ import lombok.NoArgsConstructor;
 @Data
 public class CommonDataDto {
 
-
     private Long id;
-
-
     private String value;
-
-
     private String key;
-
-
-    private String typeId;
-
+    private Long typeId;
     private String typeName;
-
-
 }
