@@ -14,7 +14,7 @@ import org.hibernate.annotations.Comment;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "attribute", schema = "da")
+@Table(name = "attribute_value", schema = "da")
 public class AttributeValue extends BaseEntity {
 
     @Column(name = "value")
@@ -25,12 +25,6 @@ public class AttributeValue extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Comment("نوع مقدار")
     private ValueType valueType;
-
-    @JoinColumn(name = "organization_unit_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
-    @Comment("یگان")
-    private OrganizationUnit organizationUnit;
 
     @JoinColumn(name = "attribute_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)

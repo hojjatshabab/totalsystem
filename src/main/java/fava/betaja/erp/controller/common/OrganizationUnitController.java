@@ -21,10 +21,10 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class OrganizationUnitController extends BaseController {
 
-    @Autowired
-    OrganizationUnitService service;
 
-    @PostMapping("/save")
+    private final OrganizationUnitService service;
+
+    @PostMapping
     public ActionResult<OrganizationUnitDto> save(@RequestBody OrganizationUnitDto dto, Locale locale) {
         try {
             return RESULT(service.save(dto), locale);
@@ -33,7 +33,7 @@ public class OrganizationUnitController extends BaseController {
         }
     }
 
-    @GetMapping("/find-all")
+    @GetMapping
     public Page<OrganizationUnitDto> findAll(@RequestParam(defaultValue = "0") int page,
                                                       @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
@@ -56,7 +56,7 @@ public class OrganizationUnitController extends BaseController {
 
     }
 
-    @PutMapping("/update")
+    @PutMapping
     public ActionResult<OrganizationUnitDto> update(@RequestBody OrganizationUnitDto dto, Locale locale) {
         try {
             return RESULT(service.save(dto), locale);
