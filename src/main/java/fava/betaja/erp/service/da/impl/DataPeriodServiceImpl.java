@@ -3,9 +3,11 @@ package fava.betaja.erp.service.da.impl;
 import fava.betaja.erp.dto.PageRequest;
 import fava.betaja.erp.dto.PageResponse;
 import fava.betaja.erp.dto.da.AttributeDto;
+import fava.betaja.erp.dto.da.DataPeriodDto;
 import fava.betaja.erp.entities.da.Attribute;
-import fava.betaja.erp.mapper.da.AttributeDtoMapper;
-import fava.betaja.erp.repository.da.AttributeRepository;
+import fava.betaja.erp.entities.da.DataPeriod;
+import fava.betaja.erp.mapper.da.DataPeriodDtoMapper;
+import fava.betaja.erp.repository.da.DataPeriodRepository;
 import fava.betaja.erp.service.da.DataPeriodService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,51 +26,51 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DataPeriodServiceImpl implements DataPeriodService {
 
-    private final AttributeRepository attributeRepository;
-    private final AttributeDtoMapper attributeDtoMapper;
+    private final DataPeriodRepository dataPeriodRepository;
+    private final DataPeriodDtoMapper dataPeriodDtoMapper;
 
     @Override
-    public AttributeDto save(AttributeDto attributeDto) {
-        log.info("Save attribute name {} .", attributeDto.getName());
-        return attributeDtoMapper.toDto(attributeRepository.save(
-                attributeDtoMapper.toEntity(attributeDto)
+    public DataPeriodDto save(DataPeriodDto dataPeriodDto) {
+        log.info("Save DataPeriodDto .");
+        return dataPeriodDtoMapper.toDto(dataPeriodRepository.save(
+                dataPeriodDtoMapper.toEntity(dataPeriodDto)
         ));
     }
 
     @Override
-    public AttributeDto update(AttributeDto attributeDto) {
-        log.info("Update attribute name {} .", attributeDto.getName());
-        return attributeDtoMapper.toDto(attributeRepository.save(
-                attributeDtoMapper.toEntity(attributeDto)
+    public DataPeriodDto update(DataPeriodDto dataPeriodDto) {
+        log.info("Update DataPeriodDto .");
+        return dataPeriodDtoMapper.toDto(dataPeriodRepository.save(
+                dataPeriodDtoMapper.toEntity(dataPeriodDto)
         ));
     }
 
     @Override
-    public PageResponse<AttributeDto> findAll(PageRequest<AttributeDto> model) {
-        List<AttributeDto> result = attributeRepository
+    public PageResponse<DataPeriodDto> findAll(PageRequest<DataPeriodDto> model) {
+        List<DataPeriodDto> result = dataPeriodRepository
                 .findAll(
                         Pageable.ofSize(model.getPageSize())
                                 .withPage(model.getCurrentPage() - 1))
-                .stream().map(attributeDtoMapper::toDto)
+                .stream().map(dataPeriodDtoMapper::toDto)
                 .collect(Collectors.toList());
-        long count = attributeRepository.count();
+        long count = dataPeriodRepository.count();
         return new PageResponse<>(result, model.getPageSize(), count, model.getCurrentPage(), model.getSortBy());
     }
 
     @Override
-    public List<AttributeDto> findAll() {
-        List<Attribute> result = attributeRepository.findAll();
+    public List<DataPeriodDto> findAll() {
+        List<DataPeriod> result = dataPeriodRepository.findAll();
         if (result.isEmpty()) {
             return List.of();
         }
-        return result.stream().map(attributeDtoMapper::toDto).collect(Collectors.toList());
+        return result.stream().map(dataPeriodDtoMapper::toDto).collect(Collectors.toList());
     }
 
     @Override
-    public Optional<AttributeDto> findById(UUID id) {
-        Optional<Attribute> optionalAttribute = attributeRepository.findById(id);
-        if (optionalAttribute.isPresent()) {
-            return Optional.ofNullable(attributeDtoMapper.toDto(optionalAttribute.get()));
+    public Optional<DataPeriodDto> findById(UUID id) {
+        Optional<DataPeriod> optionalDataPeriod = dataPeriodRepository.findById(id);
+        if (optionalDataPeriod.isPresent()) {
+            return Optional.ofNullable(dataPeriodDtoMapper.toDto(optionalDataPeriod.get()));
         }
         return Optional.empty();
     }
@@ -78,7 +80,7 @@ public class DataPeriodServiceImpl implements DataPeriodService {
         if (id == null || !findById(id).isPresent()) {
             return false;
         }
-        attributeRepository.deleteById(id);
+        dataPeriodRepository.deleteById(id);
         return true;
     }
 

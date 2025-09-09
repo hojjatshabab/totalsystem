@@ -2,9 +2,9 @@ package fava.betaja.erp.service.da.impl;
 
 import fava.betaja.erp.dto.PageRequest;
 import fava.betaja.erp.dto.PageResponse;
-import fava.betaja.erp.dto.da.AttributeDto;
-import fava.betaja.erp.entities.da.Attribute;
-import fava.betaja.erp.mapper.da.AttributeDtoMapper;
+import fava.betaja.erp.dto.da.PeriodTypeDto;
+import fava.betaja.erp.entities.da.PeriodType;
+import fava.betaja.erp.mapper.da.PeriodTypeDtoMapper;
 import fava.betaja.erp.repository.da.PeriodTypeRepository;
 import fava.betaja.erp.service.da.PeriodTypeService;
 import lombok.RequiredArgsConstructor;
@@ -25,50 +25,50 @@ import java.util.stream.Collectors;
 public class PeriodTypeServiceImpl implements PeriodTypeService {
 
     private final PeriodTypeRepository periodTypeRepository;
-    private final PeriodTypeDtoMapper attributeDtoMapper;
+    private final PeriodTypeDtoMapper periodTypeDtoMapper;
 
     @Override
-    public AttributeDto save(AttributeDto attributeDto) {
-        log.info("Save attribute name {} .", attributeDto.getName());
-        return attributeDtoMapper.toDto(periodTypeRepository.save(
-                attributeDtoMapper.toEntity(attributeDto)
+    public PeriodTypeDto save(PeriodTypeDto periodTypeDto) {
+        log.info("Save PeriodType name {} .", periodTypeDto.getName());
+        return periodTypeDtoMapper.toDto(periodTypeRepository.save(
+                periodTypeDtoMapper.toEntity(periodTypeDto)
         ));
     }
 
     @Override
-    public AttributeDto update(AttributeDto attributeDto) {
-        log.info("Update attribute name {} .", attributeDto.getName());
-        return attributeDtoMapper.toDto(periodTypeRepository.save(
-                attributeDtoMapper.toEntity(attributeDto)
+    public PeriodTypeDto update(PeriodTypeDto periodTypeDto) {
+        log.info("Update PeriodType name {} .", periodTypeDto.getName());
+        return periodTypeDtoMapper.toDto(periodTypeRepository.save(
+                periodTypeDtoMapper.toEntity(periodTypeDto)
         ));
     }
 
     @Override
-    public PageResponse<AttributeDto> findAll(PageRequest<AttributeDto> model) {
-        List<AttributeDto> result = periodTypeRepository
+    public PageResponse<PeriodTypeDto> findAll(PageRequest<PeriodTypeDto> model) {
+        List<PeriodTypeDto> result = periodTypeRepository
                 .findAll(
                         Pageable.ofSize(model.getPageSize())
                                 .withPage(model.getCurrentPage() - 1))
-                .stream().map(attributeDtoMapper::toDto)
+                .stream().map(periodTypeDtoMapper::toDto)
                 .collect(Collectors.toList());
         long count = periodTypeRepository.count();
         return new PageResponse<>(result, model.getPageSize(), count, model.getCurrentPage(), model.getSortBy());
     }
 
     @Override
-    public List<AttributeDto> findAll() {
-        List<Attribute> result = periodTypeRepository.findAll();
+    public List<PeriodTypeDto> findAll() {
+        List<PeriodType> result = periodTypeRepository.findAll();
         if (result.isEmpty()) {
             return List.of();
         }
-        return result.stream().map(attributeDtoMapper::toDto).collect(Collectors.toList());
+        return result.stream().map(periodTypeDtoMapper::toDto).collect(Collectors.toList());
     }
 
     @Override
-    public Optional<AttributeDto> findById(UUID id) {
-        Optional<Attribute> optionalAttribute = periodTypeRepository.findById(id);
-        if (optionalAttribute.isPresent()) {
-            return Optional.ofNullable(attributeDtoMapper.toDto(optionalAttribute.get()));
+    public Optional<PeriodTypeDto> findById(UUID id) {
+        Optional<PeriodType> optionalPeriodType = periodTypeRepository.findById(id);
+        if (optionalPeriodType.isPresent()) {
+            return Optional.ofNullable(periodTypeDtoMapper.toDto(optionalPeriodType.get()));
         }
         return Optional.empty();
     }
@@ -81,6 +81,4 @@ public class PeriodTypeServiceImpl implements PeriodTypeService {
         periodTypeRepository.deleteById(id);
         return true;
     }
-
-
 }
