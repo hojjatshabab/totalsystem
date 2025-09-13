@@ -1,8 +1,7 @@
 package fava.betaja.erp.handlers;
 
 
-import fava.betaja.erp.exception.TokenException;
-import fava.betaja.erp.enums.Role;
+import fava.betaja.erp.exceptions.TokenException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
 import java.time.Instant;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 

@@ -1,4 +1,8 @@
 spring:
+  messages:
+    basename: messages
+    encoding: UTF-8
+
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/total_betaja_system

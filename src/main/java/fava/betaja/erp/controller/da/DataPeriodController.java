@@ -26,7 +26,7 @@ public class DataPeriodController extends BaseController {
     public ActionResult<DataPeriodDto> save(@RequestBody DataPeriodDto dataPeriodDto, Locale locale) {
         isExist(dataPeriodDto, ModeType.CREATE, locale);
         try {
-            return RESULT(dataPeriodService.update(dataPeriodDto), locale);
+            return RESULT(dataPeriodService.save(dataPeriodDto), locale);
         } catch (Exception exception) {
             return INTERNAL_SERVER_ERROR(exception.getMessage(), locale);
         }

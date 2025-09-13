@@ -1,7 +1,7 @@
 package fava.betaja.erp.service.impl;
 
 import fava.betaja.erp.entities.security.RefreshToken;
-import fava.betaja.erp.exception.TokenException;
+import fava.betaja.erp.exceptions.TokenException;
 import fava.betaja.erp.repository.RefreshTokenRepository;
 import fava.betaja.erp.repository.UserRepository;
 import fava.betaja.erp.entities.security.Users;

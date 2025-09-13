@@ -1,4 +1,4 @@
-package fava.betaja.erp.exception;
+package fava.betaja.erp.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

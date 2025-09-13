@@ -26,7 +26,7 @@ public class AttributeController extends BaseController {
     public ActionResult<AttributeDto> save(@RequestBody AttributeDto attributeDto, Locale locale) {
         isExist(attributeDto, ModeType.CREATE, locale);
         try {
-            return RESULT(attributeService.update(attributeDto), locale);
+            return RESULT(attributeService.save(attributeDto), locale);
         } catch (Exception exception) {
             return INTERNAL_SERVER_ERROR(exception.getMessage(), locale);
         }

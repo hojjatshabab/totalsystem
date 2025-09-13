@@ -26,7 +26,7 @@ public class PeriodTypeController extends BaseController {
     public ActionResult<PeriodTypeDto> save(@RequestBody PeriodTypeDto periodTypeDto, Locale locale) {
         isExist(periodTypeDto, ModeType.CREATE, locale);
         try {
-            return RESULT(periodTypeService.update(periodTypeDto), locale);
+            return RESULT(periodTypeService.save(periodTypeDto), locale);
         } catch (Exception exception) {
             return INTERNAL_SERVER_ERROR(exception.getMessage(), locale);
         }
