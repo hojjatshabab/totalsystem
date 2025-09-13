@@ -81,6 +81,4 @@ public class AttributeServiceImpl implements AttributeService {
         attributeRepository.deleteById(id);
         return true;
     }
-
-
 }
