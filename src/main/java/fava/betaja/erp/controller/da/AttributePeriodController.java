@@ -50,13 +50,28 @@ public class AttributePeriodController extends BaseController {
         request.setPageSize(pageSize);
         request.setCurrentPage(currentPage);
         PageResponse<AttributePeriodDto> response = attributePeriodService.findAll(request);
-        return response.getRows().isEmpty() ? NO_CONTENT("attributePeriods", locale) : RESULT(response, locale);
+        return RESULT(response, locale);
+    }
+
+    @GetMapping("/find-by-attribute")
+    public ActionResult<PageResponse<AttributePeriodDto>> findByAttributeId(@RequestParam int currentPage,
+                                                                            @RequestParam int pageSize,
+                                                                            @RequestParam UUID attributeId,
+                                                                            Locale locale) {
+        if (currentPage <= 0 || pageSize <= 0) {
+            return NOT_ACCEPTABLE("{ currentPage <= 0 || pageSize <= 0 }", locale);
+        }
+        PageRequest<AttributePeriodDto> request = new PageRequest<>();
+        request.setPageSize(pageSize);
+        request.setCurrentPage(currentPage);
+        PageResponse<AttributePeriodDto> response = attributePeriodService.findByAttributeId(attributeId, request);
+        return RESULT(response, locale);
     }
 
     @GetMapping("/list")
     public ActionResult<List<AttributePeriodDto>> list(Locale locale) {
         List<AttributePeriodDto> periods = attributePeriodService.findAll();
-        return periods.isEmpty() ? NO_CONTENT("attributePeriods", locale) : RESULT(periods, locale);
+        return RESULT(periods, locale);
     }
 
     @GetMapping("/id/{id}")

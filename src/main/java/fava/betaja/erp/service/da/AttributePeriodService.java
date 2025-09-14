@@ -3,6 +3,9 @@ package fava.betaja.erp.service.da;
 import fava.betaja.erp.dto.PageRequest;
 import fava.betaja.erp.dto.PageResponse;
 import fava.betaja.erp.dto.da.AttributePeriodDto;
+import fava.betaja.erp.entities.da.AttributePeriod;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +18,8 @@ public interface AttributePeriodService {
     AttributePeriodDto update(AttributePeriodDto attributePeriodDto);
 
     PageResponse<AttributePeriodDto> findAll(PageRequest<AttributePeriodDto> model);
+
+    PageResponse<AttributePeriodDto> findByAttributeId(UUID attributeId,PageRequest<AttributePeriodDto> model);
 
     List<AttributePeriodDto> findAll();
 

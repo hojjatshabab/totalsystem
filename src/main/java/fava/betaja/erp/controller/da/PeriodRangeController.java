@@ -50,13 +50,13 @@ public class PeriodRangeController extends BaseController {
         request.setPageSize(pageSize);
         request.setCurrentPage(currentPage);
         PageResponse<PeriodRangeDto> response = periodRangeService.findAll(request);
-        return response.getRows().isEmpty() ? NO_CONTENT("periodRanges", locale) : RESULT(response, locale);
+        return RESULT(response, locale);
     }
 
     @GetMapping("/list")
     public ActionResult<List<PeriodRangeDto>> list(Locale locale) {
         List<PeriodRangeDto> periods = periodRangeService.findAll();
-        return periods.isEmpty() ? NO_CONTENT("periodRanges", locale) : RESULT(periods, locale);
+        return RESULT(periods, locale);
     }
 
     @GetMapping("/id/{id}")

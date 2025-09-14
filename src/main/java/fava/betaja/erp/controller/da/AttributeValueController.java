@@ -50,13 +50,13 @@ public class AttributeValueController extends BaseController {
         request.setPageSize(pageSize);
         request.setCurrentPage(currentPage);
         PageResponse<AttributeValueDto> response = attributeValueService.findAll(request);
-        return response.getRows().isEmpty() ? NO_CONTENT("attributeValues", locale) : RESULT(response, locale);
+        return RESULT(response, locale);
     }
 
     @GetMapping("/list")
     public ActionResult<List<AttributeValueDto>> list(Locale locale) {
         List<AttributeValueDto> values = attributeValueService.findAll();
-        return values.isEmpty() ? NO_CONTENT("attributeValues", locale) : RESULT(values, locale);
+        return RESULT(values, locale);
     }
 
     @GetMapping("/id/{id}")
