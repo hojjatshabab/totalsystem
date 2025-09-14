@@ -4,8 +4,11 @@ import fava.betaja.erp.dto.PageRequest;
 import fava.betaja.erp.dto.PageResponse;
 import fava.betaja.erp.dto.da.AttributeValueDto;
 import fava.betaja.erp.entities.da.AttributeValue;
+import fava.betaja.erp.exceptions.ServiceException;
 import fava.betaja.erp.mapper.da.AttributeValueDtoMapper;
 import fava.betaja.erp.repository.da.AttributeValueRepository;
+import fava.betaja.erp.repository.da.AttributePeriodRepository;
+import fava.betaja.erp.repository.da.PeriodRangeRepository;
 import fava.betaja.erp.service.da.AttributeValueService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,63 +27,89 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AttributeValueServiceImpl implements AttributeValueService {
 
-    private final AttributeValueRepository attributeValueRepository;
-    private final AttributeValueDtoMapper attributeValueDtoMapper;
+    private final AttributeValueRepository repository;
+    private final AttributePeriodRepository attributePeriodRepository;
+    private final PeriodRangeRepository periodRangeRepository;
+    private final AttributeValueDtoMapper mapper;
 
     @Override
-    public AttributeValueDto save(AttributeValueDto attributeValueDto) {
-        log.info("Save AttributeValue name .");
-        return attributeValueDtoMapper.toDto(attributeValueRepository.save(
-                attributeValueDtoMapper.toEntity(attributeValueDto)
-        ));
+    public AttributeValueDto save(AttributeValueDto dto) {
+        validate(dto, true);
+        log.info("Saving AttributeValue for AttributePeriodId={}", dto.getAttributePeriodId());
+        AttributeValue entity = mapper.toEntity(dto);
+        return mapper.toDto(repository.save(entity));
     }
 
     @Override
-    public AttributeValueDto update(AttributeValueDto attributeValueDto) {
-        log.info("Update attribute name .");
-        return attributeValueDtoMapper.toDto(attributeValueRepository.save(
-                attributeValueDtoMapper.toEntity(attributeValueDto)
-        ));
+    public AttributeValueDto update(AttributeValueDto dto) {
+        validate(dto, false);
+        log.info("Updating AttributeValue: id={}, AttributePeriodId={}", dto.getId(), dto.getAttributePeriodId());
+        AttributeValue entity = mapper.toEntity(dto);
+        return mapper.toDto(repository.save(entity));
     }
 
     @Override
     public PageResponse<AttributeValueDto> findAll(PageRequest<AttributeValueDto> model) {
-        List<AttributeValueDto> result = attributeValueRepository
-                .findAll(
-                        Pageable.ofSize(model.getPageSize())
-                                .withPage(model.getCurrentPage() - 1))
-                .stream().map(attributeValueDtoMapper::toDto)
+        List<AttributeValueDto> dtos = repository
+                .findAll(Pageable.ofSize(model.getPageSize())
+                        .withPage(model.getCurrentPage() - 1))
+                .stream()
+                .map(mapper::toDto)
                 .collect(Collectors.toList());
-        long count = attributeValueRepository.count();
-        return new PageResponse<>(result, model.getPageSize(), count, model.getCurrentPage(), model.getSortBy());
+
+        long count = repository.count();
+        return new PageResponse<>(dtos, model.getPageSize(), count, model.getCurrentPage(), model.getSortBy());
     }
 
     @Override
     public List<AttributeValueDto> findAll() {
-        List<AttributeValue> result = attributeValueRepository.findAll();
-        if (result.isEmpty()) {
-            return List.of();
-        }
-        return result.stream().map(attributeValueDtoMapper::toDto).collect(Collectors.toList());
+        return repository.findAll().stream()
+                .map(mapper::toDto)
+                .collect(Collectors.toList());
     }
 
     @Override
     public Optional<AttributeValueDto> findById(UUID id) {
-        Optional<AttributeValue> optionalAttributeValue = attributeValueRepository.findById(id);
-        if (optionalAttributeValue.isPresent()) {
-            return Optional.ofNullable(attributeValueDtoMapper.toDto(optionalAttributeValue.get()));
-        }
-        return Optional.empty();
+        return Optional.ofNullable(id)
+                .flatMap(repository::findById)
+                .map(mapper::toDto);
     }
 
     @Override
-    public Boolean deleteById(UUID id) {
-        if (id == null || !findById(id).isPresent()) {
-            return false;
-        }
-        attributeValueRepository.deleteById(id);
-        return true;
+    public void deleteById(UUID id) {
+        AttributeValue entity = repository.findById(id)
+                .orElseThrow(() -> new ServiceException("AttributeValue با این id یافت نشد: " + id));
+        repository.deleteById(id);
+        log.info("Deleted AttributeValue: id={}, AttributePeriodId={}", entity.getId(), entity.getAttributePeriod().getId());
     }
 
+    private void validate(AttributeValueDto dto, boolean isCreate) {
+        if (!isCreate && (dto.getId() == null || !repository.existsById(dto.getId()))) {
+            throw new ServiceException("AttributeValue برای بروزرسانی موجود نیست.");
+        }
 
+        if (dto.getAttributePeriodId() == null) {
+            throw new ServiceException("AttributePeriod الزامی است.");
+        }
+
+        if (!attributePeriodRepository.existsById(dto.getAttributePeriodId())) {
+            throw new ServiceException("AttributePeriod انتخاب شده موجود نیست.");
+        }
+
+        if (dto.getValue() == null ) {
+            throw new ServiceException("نوع مقدار (Value) الزامی است.");
+        }
+
+        if (dto.getPeriodRangeId() == null) {
+            throw new ServiceException("نوع دوره (periodRange) الزامی است.");
+        }
+
+        if (!periodRangeRepository.existsById(dto.getPeriodRangeId())) {
+            throw new ServiceException("نوع دوره انتخاب شده موجود نیست.");
+        }
+
+        if (dto.getValue() == null) {
+            throw new ServiceException("مقدار (value) الزامی است.");
+        }
+    }
 }

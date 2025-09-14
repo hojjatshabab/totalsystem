@@ -13,19 +13,18 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AttributeValueDto {
+public class AttributePeriodDto {
 
     private UUID id;
     private LocalDate startDate;
     private LocalDate endDate;
-    private BigDecimal value;
-    private String description;
-    private UUID periodRangeId;
-    private String periodRangeName;
-    private UUID attributePeriodId;
-    private String attributePeriodTitle;
+    private Boolean isActive;
+    private String title;
+    private BigDecimal valuePlanned;
     private UUID attributeId;
     private String attributeName;
     private Long organizationId;
     private String organizationName;
+    private UUID periodRangeId;
+    private String periodRangeName;
 }

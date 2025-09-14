@@ -1,7 +1,6 @@
 package fava.betaja.erp.entities.common;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import fava.betaja.erp.entities.da.DataPeriod;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

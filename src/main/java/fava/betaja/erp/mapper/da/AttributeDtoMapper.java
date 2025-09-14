@@ -7,34 +7,26 @@ import org.mapstruct.*;
 
 import java.util.List;
 
-@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE
-        , nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
-        , componentModel = "spring")
+@Mapper(
+        componentModel = "spring",
+        unmappedTargetPolicy = ReportingPolicy.IGNORE,
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
+)
 public interface AttributeDtoMapper extends BaseMapper<AttributeDto, Attribute> {
 
-    @Override
-    @Mapping(source = "organizationUnitId", target = "organizationUnit.id")
-    @Mapping(source = "organizationUnitName", target = "organizationUnit.name")
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "organizationUnit.id", source = "organizationUnitId")
     Attribute toEntity(AttributeDto dto);
 
     @Override
-    @Mapping(source = "organizationUnit.id", target = "organizationUnitId")
-    @Mapping(source = "organizationUnit.name", target = "organizationUnitName")
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    List<AttributeDto> toDtoList(List<Attribute> entityList);
-
-    @Override
-    @Mapping(source = "organizationUnitId", target = "organizationUnit.id")
-    @Mapping(source = "organizationUnitName", target = "organizationUnit.name")
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @IterableMapping(nullValueMappingStrategy = NullValueMappingStrategy.RETURN_NULL)
     List<Attribute> toEntityList(List<AttributeDto> dtoList);
 
     @Override
     @Mapping(source = "organizationUnit.id", target = "organizationUnitId")
     @Mapping(source = "organizationUnit.name", target = "organizationUnitName")
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     AttributeDto toDto(Attribute entity);
 
-
+    @Override
+    @IterableMapping(nullValueMappingStrategy = NullValueMappingStrategy.RETURN_NULL)
+    List<AttributeDto> toDtoList(List<Attribute> entityList);
 }

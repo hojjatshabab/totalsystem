@@ -7,46 +7,36 @@ import org.mapstruct.*;
 
 import java.util.List;
 
-@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE
-        , nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
-        , componentModel = "spring")
+@Mapper(
+        componentModel = "spring",
+        unmappedTargetPolicy = ReportingPolicy.IGNORE,
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
+)
 public interface AttributeValueDtoMapper extends BaseMapper<AttributeValueDto, AttributeValue> {
 
-    @Override
-    @Mapping(source = "organizationUnitId", target = "attribute.organizationUnit.id")
-    @Mapping(source = "organizationUnitName", target = "attribute.organizationUnit.name")
-    @Mapping(source = "attributeId", target = "attribute.id")
-    @Mapping(source = "attributeName", target = "attribute.name")
-    @Mapping(source = "dataPeriodId", target = "dataPeriod.id")
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "attributePeriod.id", source = "attributePeriodId")
+    @Mapping(target = "periodRange.id", source = "periodRangeId")
+    @Mapping(target = "attributePeriod.attribute.id", source = "attributeId")
+    @Mapping(target = "attributePeriod.attribute.organizationUnit.id", source = "organizationId")
     AttributeValue toEntity(AttributeValueDto dto);
 
     @Override
-    @Mapping(source = "attribute.organizationUnit.id", target = "organizationUnitId")
-    @Mapping(source = "attribute.organizationUnit.name", target = "organizationUnitName")
-    @Mapping(source = "attribute.id", target = "attributeId")
-    @Mapping(source = "attribute.name", target = "attributeName")
-    @Mapping(source = "dataPeriod.id", target = "dataPeriodId")
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    List<AttributeValueDto> toDtoList(List<AttributeValue> entityList);
-
-    @Override
-    @Mapping(source = "organizationUnitId", target = "attribute.organizationUnit.id")
-    @Mapping(source = "organizationUnitName", target = "attribute.organizationUnit.name")
-    @Mapping(source = "attributeId", target = "attribute.id")
-    @Mapping(source = "attributeName", target = "attribute.name")
-    @Mapping(source = "dataPeriodId", target = "dataPeriod.id")
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @IterableMapping(nullValueMappingStrategy = NullValueMappingStrategy.RETURN_NULL)
     List<AttributeValue> toEntityList(List<AttributeValueDto> dtoList);
 
     @Override
-    @Mapping(source = "attribute.organizationUnit.id", target = "organizationUnitId")
-    @Mapping(source = "attribute.organizationUnit.name", target = "organizationUnitName")
-    @Mapping(source = "attribute.id", target = "attributeId")
-    @Mapping(source = "attribute.name", target = "attributeName")
-    @Mapping(source = "dataPeriod.id", target = "dataPeriodId")
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(source = "attributePeriod.id", target = "attributePeriodId")
+    @Mapping(source = "attributePeriod.title", target = "attributePeriodTitle")
+    @Mapping(source = "periodRange.id", target = "periodRangeId")
+    @Mapping(source = "periodRange.name", target = "periodRangeName")
+    @Mapping(source = "attributePeriod.attribute.id", target = "attributeId")
+    @Mapping(source = "attributePeriod.attribute.name", target = "attributeName")
+    @Mapping(source = "attributePeriod.attribute.organizationUnit.id", target = "organizationId")
+    @Mapping(source = "attributePeriod.attribute.organizationUnit.name", target = "organizationName")
     AttributeValueDto toDto(AttributeValue entity);
 
+    @Override
+    @IterableMapping(nullValueMappingStrategy = NullValueMappingStrategy.RETURN_NULL)
+    List<AttributeValueDto> toDtoList(List<AttributeValue> entityList);
 
 }

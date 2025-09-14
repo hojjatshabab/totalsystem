@@ -87,6 +87,5 @@ public class OrganizationUnitServiceImpl implements OrganizationUnitService {
         if (dto.getName() == null || dto.getName().isBlank()) {
             throw new ServiceException("نام یگان الزامی است.");
         }
-        // می‌توانید سایر اعتبارسنجی‌ها مانند parentId یا commonBaseDataOrgTypeId را هم اضافه کنید
     }
 }

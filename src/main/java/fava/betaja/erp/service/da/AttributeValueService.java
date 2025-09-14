@@ -21,6 +21,6 @@ public interface AttributeValueService {
 
     Optional<AttributeValueDto> findById(UUID id);
 
-    Boolean deleteById(UUID id);
+    void deleteById(UUID id);
 
 }

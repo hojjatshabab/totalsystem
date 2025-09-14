@@ -4,120 +4,79 @@ import fava.betaja.erp.controller.ActionResult;
 import fava.betaja.erp.controller.BaseController;
 import fava.betaja.erp.dto.PageRequest;
 import fava.betaja.erp.dto.PageResponse;
-import fava.betaja.erp.dto.da.AttributeDto;
 import fava.betaja.erp.dto.da.AttributeValueDto;
-import fava.betaja.erp.enums.ModeType;
+import fava.betaja.erp.exceptions.ServiceException;
 import fava.betaja.erp.service.da.AttributeValueService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.List;
+import java.util.Locale;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/attribute-value")
-@Tag(name = "مقدار ویژگی ها", description = " مقادیر ویژگی های ارگان ها")
+@Tag(name = "مقدار ویژگی ها", description = "مقادیر ویژگی های ارگان ها")
 public class AttributeValueController extends BaseController {
 
     private final AttributeValueService attributeValueService;
 
     @PostMapping
-    public ActionResult<AttributeValueDto> save(@RequestBody AttributeValueDto attributeValueDto, Locale locale) {
-        isExist(attributeValueDto, ModeType.CREATE, locale);
-        try {
-            return RESULT(attributeValueService.save(attributeValueDto), locale);
-        } catch (Exception exception) {
-            return INTERNAL_SERVER_ERROR(exception.getMessage(), locale);
-        }
+    public ActionResult<AttributeValueDto> save(@RequestBody @Valid AttributeValueDto dto, Locale locale) {
+        return RESULT(attributeValueService.save(dto), locale);
     }
 
     @PutMapping
-    public ActionResult<AttributeValueDto> update(@RequestBody AttributeValueDto attributeValueDto, Locale locale) {
-        isExist(attributeValueDto, ModeType.EDIT, locale);
-        try {
-            return RESULT(attributeValueService.update(attributeValueDto), locale);
-        } catch (Exception exception) {
-            return INTERNAL_SERVER_ERROR(exception.getMessage(), locale);
+    public ActionResult<AttributeValueDto> update(@RequestBody @Valid AttributeValueDto dto, Locale locale) {
+        if (dto.getId() == null) {
+            return NO_CONTENT("id", locale);
         }
+        attributeValueService.findById(dto.getId())
+                .orElseThrow(() -> new ServiceException("AttributeValue با این id یافت نشد: " + dto.getId()));
+        return RESULT(attributeValueService.update(dto), locale);
     }
 
     @GetMapping
-    public ActionResult<PageResponse<AttributeValueDto>> findAll(@RequestParam int currentPage, @RequestParam int pageSize, Locale locale) {
+    public ActionResult<PageResponse<AttributeValueDto>> findAll(@RequestParam int currentPage,
+                                                                 @RequestParam int pageSize,
+                                                                 Locale locale) {
         if (currentPage <= 0 || pageSize <= 0) {
-            return NOT_ACCEPTABLE(" { currentPage == 0 || pageSize == 0 } ", locale);
+            return NOT_ACCEPTABLE("{ currentPage <= 0 || pageSize <= 0 }", locale);
         }
         PageRequest<AttributeValueDto> request = new PageRequest<>();
         request.setPageSize(pageSize);
         request.setCurrentPage(currentPage);
-        PageResponse<AttributeValueDto> attributeValueDtoPageResponse;
-        try {
-            attributeValueDtoPageResponse = attributeValueService.findAll(request);
-        } catch (Exception exception) {
-            return INTERNAL_SERVER_ERROR(exception.getMessage(), locale);
-        }
-        if (Objects.isNull(attributeValueDtoPageResponse)) {
-            return NO_CONTENT("attributeValueDtoPageResponse", locale);
-        } else {
-            return RESULT(attributeValueDtoPageResponse, locale);
-        }
+        PageResponse<AttributeValueDto> response = attributeValueService.findAll(request);
+        return response.getRows().isEmpty() ? NO_CONTENT("attributeValues", locale) : RESULT(response, locale);
     }
 
     @GetMapping("/list")
     public ActionResult<List<AttributeValueDto>> list(Locale locale) {
-        try {
-            return RESULT(attributeValueService.findAll(), locale);
-        } catch (Exception exception) {
-            return INTERNAL_SERVER_ERROR(exception.getMessage(), locale);
-        }
+        List<AttributeValueDto> values = attributeValueService.findAll();
+        return values.isEmpty() ? NO_CONTENT("attributeValues", locale) : RESULT(values, locale);
     }
 
     @GetMapping("/id/{id}")
-    public ActionResult<Optional<AttributeValueDto>> findById(@PathVariable UUID id, Locale locale) {
-        Optional<AttributeValueDto> attributeValueDto;
-        if (id.equals(null)) {
-            return NO_CONTENT(" id= " + id, locale);
+    public ActionResult<AttributeValueDto> findById(@PathVariable UUID id, Locale locale) {
+        if (id == null) {
+            return NO_CONTENT("id", locale);
         }
-        try {
-            attributeValueDto = attributeValueService.findById(id);
-        } catch (Exception exception) {
-            return INTERNAL_SERVER_ERROR(exception.getMessage(), locale);
-        }
-        if (attributeValueDto.isPresent()) {
-            return RESULT(attributeValueDto, locale);
-        } else {
-            return NOT_FOUND(" id= " + id, locale);
-        }
+        AttributeValueDto dto = attributeValueService.findById(id)
+                .orElseThrow(() -> new ServiceException("AttributeValue با این id یافت نشد: " + id));
+        return RESULT(dto, locale);
     }
 
     @DeleteMapping("/{id}")
     public ActionResult<Boolean> delete(@PathVariable UUID id, Locale locale) {
-        if (id.equals(null)) {
+        if (id == null) {
             return NO_CONTENT("id", locale);
         }
-        if (!attributeValueService.findById(id).isPresent()) {
-            return NOT_FOUND("id =" + id, locale);
-        }
-        try {
-            return RESULT(attributeValueService.deleteById(id), locale);
-        } catch (Exception exception) {
-            return INTERNAL_SERVER_ERROR(exception.getMessage(), locale);
-        }
-    }
-
-    private void isExist(AttributeValueDto attributeValueDto, ModeType modeType, Locale locale) {
-        if (modeType.equals(ModeType.EDIT)) {
-            if (Objects.nonNull(attributeValueDto.getId())) {
-                Optional<AttributeValueDto> optionalAttributeDto = attributeValueService.findById(attributeValueDto.getId());
-                if (!optionalAttributeDto.isPresent()) {
-                    NOT_FOUND(" id ", locale);
-                }
-            } else {
-                NO_CONTENT(" id ", locale);
-            }
-        }
-        if (Objects.isNull(attributeValueDto.getValue())) {
-            NO_CONTENT(" value ", locale);
-        }
+        attributeValueService.findById(id)
+                .orElseThrow(() -> new ServiceException("AttributeValue با این id یافت نشد: " + id));
+        attributeValueService.deleteById(id);
+        return RESULT(true, locale);
     }
 }

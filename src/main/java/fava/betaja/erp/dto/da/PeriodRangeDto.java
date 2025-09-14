@@ -11,7 +11,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PeriodTypeDto {
+public class PeriodRangeDto {
 
     private UUID id;
     private String name;
