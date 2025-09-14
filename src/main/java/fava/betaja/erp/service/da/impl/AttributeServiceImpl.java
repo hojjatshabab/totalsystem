@@ -3,7 +3,6 @@ package fava.betaja.erp.service.da.impl;
 import fava.betaja.erp.dto.PageRequest;
 import fava.betaja.erp.dto.PageResponse;
 import fava.betaja.erp.dto.da.AttributeDto;
-import fava.betaja.erp.dto.da.AttributePeriodDto;
 import fava.betaja.erp.entities.da.Attribute;
 import fava.betaja.erp.exceptions.ServiceException;
 import fava.betaja.erp.mapper.da.AttributeDtoMapper;
@@ -13,7 +12,6 @@ import fava.betaja.erp.service.da.AttributeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,6 +50,18 @@ public class AttributeServiceImpl implements AttributeService {
     public PageResponse<AttributeDto> findAll(PageRequest<AttributeDto> model) {
         List<AttributeDto> result = repository
                 .findAll(
+                        Pageable.ofSize(model.getPageSize())
+                                .withPage(model.getCurrentPage() - 1))
+                .stream().map(mapper::toDto)
+                .collect(Collectors.toList());
+        long count = repository.count();
+        return new PageResponse<>(result, model.getPageSize(), count, model.getCurrentPage(), model.getSortBy());
+    }
+
+    @Override
+    public PageResponse<AttributeDto> findByOrganizationUnitId(Long organizationUnitId, PageRequest<AttributeDto> model) {
+        List<AttributeDto> result = repository
+                .findByOrganizationUnitId(organizationUnitId,
                         Pageable.ofSize(model.getPageSize())
                                 .withPage(model.getCurrentPage() - 1))
                 .stream().map(mapper::toDto)

@@ -50,13 +50,28 @@ public class AttributeController extends BaseController {
         request.setPageSize(pageSize);
         request.setCurrentPage(currentPage);
         PageResponse<AttributeDto> response = attributeService.findAll(request);
-        return response.getRows().isEmpty() ? NO_CONTENT("attributes", locale) : RESULT(response, locale);
+        return RESULT(response, locale);
+    }
+
+    @GetMapping("find-by-org")
+    public ActionResult<PageResponse<AttributeDto>> findByOrganizationUnitId(@RequestParam int currentPage,
+                                                                             @RequestParam int pageSize,
+                                                                             @RequestParam Long organizationUnitId,
+                                                                             Locale locale) {
+        if (currentPage <= 0 || pageSize <= 0) {
+            return NOT_ACCEPTABLE("{ currentPage <= 0 || pageSize <= 0 }", locale);
+        }
+        PageRequest<AttributeDto> request = new PageRequest<>();
+        request.setPageSize(pageSize);
+        request.setCurrentPage(currentPage);
+        PageResponse<AttributeDto> response = attributeService.findByOrganizationUnitId(organizationUnitId, request);
+        return RESULT(response, locale);
     }
 
     @GetMapping("/list")
     public ActionResult<List<AttributeDto>> list(Locale locale) {
         List<AttributeDto> attributes = attributeService.findAll();
-        return attributes.isEmpty() ? NO_CONTENT("attributes", locale) : RESULT(attributes, locale);
+        return RESULT(attributes, locale);
     }
 
     @GetMapping("/id/{id}")

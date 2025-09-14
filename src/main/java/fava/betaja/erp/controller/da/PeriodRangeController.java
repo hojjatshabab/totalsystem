@@ -18,9 +18,9 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/period-type")
+@RequestMapping("api/period-range")
 @Tag(name = "دوره های زمانی", description = "دوره های زمانی")
-public class PeriodTypeController extends BaseController {
+public class PeriodRangeController extends BaseController {
 
     private final PeriodRangeService periodRangeService;
 

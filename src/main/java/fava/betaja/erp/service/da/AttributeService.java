@@ -16,6 +16,8 @@ public interface AttributeService {
 
     PageResponse<AttributeDto> findAll(PageRequest<AttributeDto> model);
 
+    PageResponse<AttributeDto> findByOrganizationUnitId(Long organizationUnitId, PageRequest<AttributeDto> model);
+
     List<AttributeDto> findAll();
 
     Optional<AttributeDto> findById(UUID id);
