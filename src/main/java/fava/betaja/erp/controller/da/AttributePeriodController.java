@@ -5,7 +5,9 @@ import fava.betaja.erp.controller.BaseController;
 import fava.betaja.erp.dto.PageRequest;
 import fava.betaja.erp.dto.PageResponse;
 import fava.betaja.erp.dto.da.AttributePeriodDto;
+import fava.betaja.erp.dto.da.AttributePeriodProgressDto;
 import fava.betaja.erp.exceptions.ServiceException;
+import fava.betaja.erp.service.da.AttributePeriodReportService;
 import fava.betaja.erp.service.da.AttributePeriodService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -24,6 +26,7 @@ import java.util.UUID;
 public class AttributePeriodController extends BaseController {
 
     private final AttributePeriodService attributePeriodService;
+    private final AttributePeriodReportService attributePeriodReportService;
 
     @PostMapping
     public ActionResult<AttributePeriodDto> save(@RequestBody @Valid AttributePeriodDto dto, Locale locale) {
@@ -91,6 +94,15 @@ public class AttributePeriodController extends BaseController {
         }
         BigDecimal totalValue = attributePeriodService.getTotalValue(id);
         return RESULT(totalValue, locale);
+    }
+
+    @GetMapping("/{id}/progress")
+    public ActionResult<AttributePeriodProgressDto> getProgress(@PathVariable UUID id, Locale locale) {
+        try {
+            return RESULT(attributePeriodReportService.getProgress(id), locale);
+        } catch (Exception e) {
+            return INTERNAL_SERVER_ERROR(e.getMessage(), locale);
+        }
     }
 
     @DeleteMapping("/{id}")

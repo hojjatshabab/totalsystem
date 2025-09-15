@@ -8,11 +8,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 @Repository
 public interface AttributeValueRepository extends JpaRepository<AttributeValue, UUID> {
     Page<AttributeValue> findByAttributePeriodId(UUID attributePeriodId, Pageable pageable);
+    List<AttributeValue> findByAttributePeriodId(UUID attributePeriodId);
     @Query("SELECT COALESCE(SUM(av.value), 0) FROM AttributeValue av WHERE av.attributePeriod.id = :attributePeriodId")
     BigDecimal sumValueByAttributePeriodId(UUID attributePeriodId);
 }
