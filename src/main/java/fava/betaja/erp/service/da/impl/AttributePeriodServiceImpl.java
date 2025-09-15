@@ -5,10 +5,12 @@ import fava.betaja.erp.dto.PageResponse;
 import fava.betaja.erp.dto.da.AttributePeriodDto;
 import fava.betaja.erp.entities.da.AttributePeriod;
 import fava.betaja.erp.entities.da.PeriodRange;
+import fava.betaja.erp.entities.da.Attribute;
 import fava.betaja.erp.exceptions.ServiceException;
 import fava.betaja.erp.mapper.da.AttributePeriodDtoMapper;
 import fava.betaja.erp.repository.da.AttributePeriodRepository;
 import fava.betaja.erp.repository.da.AttributeRepository;
+import fava.betaja.erp.repository.da.AttributeValueRepository;
 import fava.betaja.erp.repository.da.PeriodRangeRepository;
 import fava.betaja.erp.service.da.AttributePeriodService;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -31,48 +34,13 @@ public class AttributePeriodServiceImpl implements AttributePeriodService {
     private final AttributePeriodRepository repository;
     private final AttributeRepository attributeRepository;
     private final PeriodRangeRepository periodRangeRepository;
+    private final AttributeValueRepository attributeValueRepository;
     private final AttributePeriodDtoMapper mapper;
 
     @Override
     public AttributePeriodDto save(AttributePeriodDto dto) {
         validate(dto, true);
-
-        String periodRangeName = "";
-        String attributeName = "";
-
-        Integer durationDays = null;
-
-        if (dto.getPeriodRangeId() != null) {
-            Optional<PeriodRange> optionalPeriodRange = periodRangeRepository.findById(dto.getPeriodRangeId());
-            if (optionalPeriodRange.isPresent()){
-                periodRangeName = optionalPeriodRange.get().getName();
-                durationDays = optionalPeriodRange.get().getDurationDays();
-            }
-        }
-
-        if (dto.getAttributeId() != null) {
-            attributeName = attributeRepository.findById(dto.getAttributeId())
-                    .map(a -> a.getName())
-                    .orElse("");
-        }
-
-        // ساخت title
-        String title = "";
-        if (!periodRangeName.isBlank()) {
-            title += periodRangeName;
-        }
-        if (!attributeName.isBlank()) {
-            if (!title.isEmpty()) {
-                title += " - ";
-            }
-            title += attributeName;
-        }
-        dto.setTitle(title);
-
-        // محاسبه endDate بر اساس startDate و durationDays
-        if (dto.getStartDate() != null && durationDays != null) {
-            dto.setEndDate(dto.getStartDate().plusDays(durationDays));
-        }
+        enrichDto(dto);
 
         log.info("Saving AttributePeriod: title={}, startDate={}, endDate={}", dto.getTitle(), dto.getStartDate(), dto.getEndDate());
 
@@ -83,6 +51,8 @@ public class AttributePeriodServiceImpl implements AttributePeriodService {
     @Override
     public AttributePeriodDto update(AttributePeriodDto dto) {
         validate(dto, false);
+        enrichDto(dto);
+
         log.info("Updating AttributePeriod: id={}, title={}", dto.getId(), dto.getTitle());
         AttributePeriod entity = mapper.toEntity(dto);
         return mapper.toDto(repository.save(entity));
@@ -110,6 +80,11 @@ public class AttributePeriodServiceImpl implements AttributePeriodService {
                 .collect(Collectors.toList());
         long count = repository.count();
         return new PageResponse<>(result, model.getPageSize(), count, model.getCurrentPage(), model.getSortBy());
+    }
+
+    @Override
+    public BigDecimal getTotalValue(UUID attributePeriodId) {
+        return attributeValueRepository.sumValueByAttributePeriodId(attributePeriodId);
     }
 
     @Override
@@ -158,7 +133,54 @@ public class AttributePeriodServiceImpl implements AttributePeriodService {
         if (!attributeRepository.existsById(dto.getAttributeId())) {
             throw new ServiceException("ویژگی انتخاب شده موجود نیست.");
         }
-
-
     }
+    private void enrichDto(AttributePeriodDto dto) {
+        // مقداردهی نام‌ها و مدت زمان
+        String periodRangeName = "";
+        String attributeName = "";
+        Integer durationDays = null;
+
+        if (dto.getPeriodRangeId() != null) {
+            periodRangeRepository.findById(dto.getPeriodRangeId()).ifPresent(p -> {
+                dto.setPeriodRangeName(p.getName());
+                dto.setEndDate(null); // اگه لازم باشه مقدار قبلی پاک بشه
+                dto.setPeriodRangeId(p.getId());
+                if (p.getDurationDays() != null) {
+                    dto.setEndDate(dto.getStartDate() != null ? dto.getStartDate().plusDays(p.getDurationDays()) : null);
+                }
+            });
+            durationDays = periodRangeRepository.findById(dto.getPeriodRangeId())
+                    .map(PeriodRange::getDurationDays)
+                    .orElse(null);
+            periodRangeName = periodRangeRepository.findById(dto.getPeriodRangeId())
+                    .map(PeriodRange::getName)
+                    .orElse("");
+        }
+
+        if (dto.getAttributeId() != null) {
+            attributeName = attributeRepository.findById(dto.getAttributeId())
+                    .map(Attribute::getName)
+                    .orElse("");
+            dto.setAttributeName(attributeName);
+        }
+
+        // ساخت title (بر اساس periodRangeName + attributeName)
+        StringBuilder titleBuilder = new StringBuilder();
+        if (!periodRangeName.isBlank()) {
+            titleBuilder.append(periodRangeName);
+        }
+        if (!attributeName.isBlank()) {
+            if (titleBuilder.length() > 0) {
+                titleBuilder.append(" - ");
+            }
+            titleBuilder.append(attributeName);
+        }
+        dto.setTitle(titleBuilder.toString());
+
+        // محاسبه endDate بر اساس startDate و durationDays
+        if (dto.getStartDate() != null && durationDays != null) {
+            dto.setEndDate(dto.getStartDate().plusDays(durationDays));
+        }
+    }
+
 }

@@ -12,6 +12,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
@@ -82,6 +83,14 @@ public class AttributePeriodController extends BaseController {
         AttributePeriodDto dto = attributePeriodService.findById(id)
                 .orElseThrow(() -> new ServiceException("AttributePeriod با این id یافت نشد: " + id));
         return RESULT(dto, locale);
+    }
+    @GetMapping("/{id}/total-value")
+    public ActionResult<BigDecimal> getTotalValue(@PathVariable UUID id, Locale locale) {
+        if (id == null) {
+            return NO_CONTENT("id", locale);
+        }
+        BigDecimal totalValue = attributePeriodService.getTotalValue(id);
+        return RESULT(totalValue, locale);
     }
 
     @DeleteMapping("/{id}")

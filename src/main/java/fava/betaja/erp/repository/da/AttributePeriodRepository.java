@@ -10,7 +10,6 @@ import java.util.UUID;
 
 @Repository
 public interface AttributePeriodRepository extends JpaRepository<AttributePeriod, UUID> {
-
     Page<AttributePeriod> findByAttributeId(UUID attributeId, Pageable pageable);
 
 }

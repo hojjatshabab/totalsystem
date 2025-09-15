@@ -28,4 +28,6 @@ public class AttributeValueDto {
     private String attributeName;
     private Long organizationId;
     private String organizationName;
+    private BigDecimal valuePlanned;
+
 }

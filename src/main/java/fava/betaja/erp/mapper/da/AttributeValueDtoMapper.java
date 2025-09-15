@@ -33,6 +33,7 @@ public interface AttributeValueDtoMapper extends BaseMapper<AttributeValueDto, A
     @Mapping(source = "attributePeriod.attribute.name", target = "attributeName")
     @Mapping(source = "attributePeriod.attribute.organizationUnit.id", target = "organizationId")
     @Mapping(source = "attributePeriod.attribute.organizationUnit.name", target = "organizationName")
+    @Mapping(source = "attributePeriod.valuePlanned", target = "valuePlanned")
     AttributeValueDto toDto(AttributeValue entity);
 
     @Override

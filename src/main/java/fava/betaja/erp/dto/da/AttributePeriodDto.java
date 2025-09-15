@@ -27,4 +27,5 @@ public class AttributePeriodDto {
     private String organizationName;
     private UUID periodRangeId;
     private String periodRangeName;
+    //private BigDecimal totalValue;
 }

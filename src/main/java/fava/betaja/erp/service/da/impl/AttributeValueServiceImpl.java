@@ -6,8 +6,8 @@ import fava.betaja.erp.dto.da.AttributeValueDto;
 import fava.betaja.erp.entities.da.AttributeValue;
 import fava.betaja.erp.exceptions.ServiceException;
 import fava.betaja.erp.mapper.da.AttributeValueDtoMapper;
-import fava.betaja.erp.repository.da.AttributeValueRepository;
 import fava.betaja.erp.repository.da.AttributePeriodRepository;
+import fava.betaja.erp.repository.da.AttributeValueRepository;
 import fava.betaja.erp.repository.da.PeriodRangeRepository;
 import fava.betaja.erp.service.da.AttributeValueService;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +35,8 @@ public class AttributeValueServiceImpl implements AttributeValueService {
     @Override
     public AttributeValueDto save(AttributeValueDto dto) {
         validate(dto, true);
+        calculateEndDate(dto);
+
         log.info("Saving AttributeValue for AttributePeriodId={}", dto.getAttributePeriodId());
         AttributeValue entity = mapper.toEntity(dto);
         return mapper.toDto(repository.save(entity));
@@ -43,14 +45,17 @@ public class AttributeValueServiceImpl implements AttributeValueService {
     @Override
     public AttributeValueDto update(AttributeValueDto dto) {
         validate(dto, false);
+        calculateEndDate(dto);
+
         log.info("Updating AttributeValue: id={}, AttributePeriodId={}", dto.getId(), dto.getAttributePeriodId());
         AttributeValue entity = mapper.toEntity(dto);
         return mapper.toDto(repository.save(entity));
     }
 
+
     @Override
     public PageResponse<AttributeValueDto> findAll(PageRequest<AttributeValueDto> model) {
-        List<AttributeValueDto> dtos = repository
+        List<AttributeValueDto> result = repository
                 .findAll(Pageable.ofSize(model.getPageSize())
                         .withPage(model.getCurrentPage() - 1))
                 .stream()
@@ -58,7 +63,20 @@ public class AttributeValueServiceImpl implements AttributeValueService {
                 .collect(Collectors.toList());
 
         long count = repository.count();
-        return new PageResponse<>(dtos, model.getPageSize(), count, model.getCurrentPage(), model.getSortBy());
+        return new PageResponse<>(result, model.getPageSize(), count, model.getCurrentPage(), model.getSortBy());
+    }
+
+    @Override
+    public PageResponse<AttributeValueDto> findByAttributePeriodId(UUID attributePeriodId, PageRequest<AttributeValueDto> model) {
+        List<AttributeValueDto> result = repository
+                .findByAttributePeriodId(attributePeriodId, Pageable.ofSize(model.getPageSize())
+                        .withPage(model.getCurrentPage() - 1))
+                .stream()
+                .map(mapper::toDto)
+                .collect(Collectors.toList());
+
+        long count = repository.count();
+        return new PageResponse<>(result, model.getPageSize(), count, model.getCurrentPage(), model.getSortBy());
     }
 
     @Override
@@ -96,10 +114,6 @@ public class AttributeValueServiceImpl implements AttributeValueService {
             throw new ServiceException("AttributePeriod انتخاب شده موجود نیست.");
         }
 
-        if (dto.getValue() == null ) {
-            throw new ServiceException("نوع مقدار (Value) الزامی است.");
-        }
-
         if (dto.getPeriodRangeId() == null) {
             throw new ServiceException("نوع دوره (periodRange) الزامی است.");
         }
@@ -110,6 +124,25 @@ public class AttributeValueServiceImpl implements AttributeValueService {
 
         if (dto.getValue() == null) {
             throw new ServiceException("مقدار (value) الزامی است.");
+        }
+
+        if (dto.getStartDate() == null) {
+            throw new ServiceException("ویژگی (startDate) الزامی است.");
+        }
+    }
+
+    /**
+     * متدی برای محاسبه endDate بر اساس startDate و periodRange.durationDays
+     */
+    private void calculateEndDate(AttributeValueDto dto) {
+        if (dto.getPeriodRangeId() != null) {
+            periodRangeRepository.findById(dto.getPeriodRangeId())
+                    .ifPresent(p -> {
+                        Integer durationDays = p.getDurationDays();
+                        if (dto.getStartDate() != null && durationDays != null) {
+                            dto.setEndDate(dto.getStartDate().plusDays(durationDays));
+                        }
+                    });
         }
     }
 }

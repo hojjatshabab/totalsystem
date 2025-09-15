@@ -53,6 +53,21 @@ public class AttributeValueController extends BaseController {
         return RESULT(response, locale);
     }
 
+    @GetMapping("/find-by-attribute-period")
+    public ActionResult<PageResponse<AttributeValueDto>> findAll(@RequestParam int currentPage,
+                                                                 @RequestParam int pageSize,
+                                                                 @RequestParam UUID attributePeriodId,
+                                                                 Locale locale) {
+        if (currentPage <= 0 || pageSize <= 0) {
+            return NOT_ACCEPTABLE("{ currentPage <= 0 || pageSize <= 0 }", locale);
+        }
+        PageRequest<AttributeValueDto> request = new PageRequest<>();
+        request.setPageSize(pageSize);
+        request.setCurrentPage(currentPage);
+        PageResponse<AttributeValueDto> response = attributeValueService.findByAttributePeriodId(attributePeriodId, request);
+        return RESULT(response, locale);
+    }
+
     @GetMapping("/list")
     public ActionResult<List<AttributeValueDto>> list(Locale locale) {
         List<AttributeValueDto> values = attributeValueService.findAll();
