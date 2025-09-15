@@ -6,177 +6,6 @@
 	},
 	"item": [
 		{
-			"name": "performance",
-			"item": [
-				{
-					"name": "save-Performance",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyZXphIiwiaWF0IjoxNzU1NzgwNzM0LCJleHAiOjE3NTU3ODE2MzR9.bR8F5P74S5NQZWV0qntS4ed3X_SSHHcMDbtAOEGOPMQ",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n   \"informationDate\":\"2025-08-21T12:12:13.970168500Z\"\r\n   ,\"description\":\"رضا\"\r\n  ,\"informationTypeId\":null\r\n    ,\"informationTypeName\":null\r\n    ,\"organizationUnitId\":null\r\n\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8086/api/v1/org-performance/save",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8086",
-							"path": [
-								"api",
-								"v1",
-								"org-performance",
-								"save"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "update-Performance",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyZXphIiwiaWF0IjoxNzU1NzgwNzM0LCJleHAiOjE3NTU3ODE2MzR9.bR8F5P74S5NQZWV0qntS4ed3X_SSHHcMDbtAOEGOPMQ",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n   \"informationDate\":\"2025-08-21T12:12:13.970168500Z\"\r\n   ,\"description\":\"خسروی\"\r\n  ,\"informationTypeId\":1\r\n    ,\"informationTypeName\":null\r\n    ,\"organizationUnitId\":null\r\n\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8086/api/v1/org-performance/update",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8086",
-							"path": [
-								"api",
-								"v1",
-								"org-performance",
-								"update"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "remove-performance",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyZXphIiwiaWF0IjoxNzU1NzgwODI1LCJleHAiOjE3NTU3ODE3MjV9.sWi6OQ5MBh-01qXrym8tC2LBpOWSoY63h9YsxtwTzgM",
-									"type": "string"
-								}
-							]
-						},
-						"method": "DELETE",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n   \"first_name\":\"رضا\"\r\n   ,\"last_name\":\"خسروی\"\r\n  ,\"username\":\"reza\"\r\n    ,\"password\":\"123\"\r\n\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8086/api/v1/org-performance/remove/620b79cf-098d-48d0-89bf-37af78e91410",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8086",
-							"path": [
-								"api",
-								"v1",
-								"org-performance",
-								"remove",
-								"620b79cf-098d-48d0-89bf-37af78e91410"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "findall-performance",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyZXphIiwiaWF0IjoxNzU1NzgwNzM0LCJleHAiOjE3NTU3ODE2MzR9.bR8F5P74S5NQZWV0qntS4ed3X_SSHHcMDbtAOEGOPMQ",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8086/api/v1/org-performance/find-all?page=0&size=10",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8086",
-							"path": [
-								"api",
-								"v1",
-								"org-performance",
-								"find-all"
-							],
-							"query": [
-								{
-									"key": "page",
-									"value": "0"
-								},
-								{
-									"key": "size",
-									"value": "10"
-								}
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
 			"name": "commontype",
 			"item": [
 				{
@@ -264,7 +93,7 @@
 			]
 		},
 		{
-			"name": "PeriodType",
+			"name": "PeriodRange",
 			"item": [
 				{
 					"name": "finadAll",
@@ -282,13 +111,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{server_url}}/api/period-type?currentPage=1&pageSize=10",
+							"raw": "{{server_url}}/api/period-range?currentPage=1&pageSize=10",
 							"host": [
 								"{{server_url}}"
 							],
 							"path": [
 								"api",
-								"period-type"
+								"period-range"
 							],
 							"query": [
 								{
@@ -320,13 +149,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{server_url}}/api/period-type/list",
+							"raw": "{{server_url}}/api/period-range/list",
 							"host": [
 								"{{server_url}}"
 							],
 							"path": [
 								"api",
-								"period-type",
+								"period-range",
 								"list"
 							]
 						}
@@ -350,7 +179,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"2سالانه\",\r\n    \"key\": \"yearly2\",\r\n    \"durationDays\": 365\r\n}",
+							"raw": "{\r\n    \"name\": \"سالانه\",\r\n    \"key\": \"yearly\",\r\n    \"durationDays\": 365\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -358,13 +187,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{server_url}}/api/period-type",
+							"raw": "{{server_url}}/api/period-range",
 							"host": [
 								"{{server_url}}"
 							],
 							"path": [
 								"api",
-								"period-type"
+								"period-range"
 							]
 						}
 					},
@@ -395,13 +224,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{server_url}}/api/period-type",
+							"raw": "{{server_url}}/api/period-range",
 							"host": [
 								"{{server_url}}"
 							],
 							"path": [
 								"api",
-								"period-type"
+								"period-range"
 							]
 						}
 					},
@@ -423,13 +252,13 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{server_url}}/api/period-type/692d4c53-8216-4ec7-b4ec-d16a41457224",
+							"raw": "{{server_url}}/api/period-range/692d4c53-8216-4ec7-b4ec-d16a41457224",
 							"host": [
 								"{{server_url}}"
 							],
 							"path": [
 								"api",
-								"period-type",
+								"period-range",
 								"692d4c53-8216-4ec7-b4ec-d16a41457224"
 							]
 						}
@@ -473,6 +302,49 @@
 								{
 									"key": "pageSize",
 									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "finadAllByOrg",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/attribute/find-by-org?currentPage=1&pageSize=10&organizationUnitId=46",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"attribute",
+								"find-by-org"
+							],
+							"query": [
+								{
+									"key": "currentPage",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								},
+								{
+									"key": "organizationUnitId",
+									"value": "46"
 								}
 							]
 						}
@@ -525,7 +397,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"string\",\r\n    \"code\": \"string\",\r\n    \"dataType\": \"string\",\r\n    \"organizationUnitId\": 1\r\n}",
+							"raw": "{\r\n  \"name\": \"تعداد کل پروژه های نهضت ملی مسکن در کل کشور\",\r\n  \"key\": \"NehzatMelliMaskan\",\r\n  \"dataType\": \"INT\",\r\n  \"organizationUnitId\": 46\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -562,7 +434,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\": \"692d4c53-8216-4ec7-b4ec-d16a41457224\",\r\n    \"name\": \"هفتگی\",\r\n    \"key\": \"weekly\",\r\n    \"durationDays\": 7\r\n}",
+							"raw": "{\r\n    \"id\": \"25efcfac-dda6-407a-ac70-2785cd2371b1\",\r\n    \"name\": \"تعداد کل پروژه های نهضت ملی مسکن در کل کشور\",\r\n    \"key\": \"NehzatMelliMaskan\",\r\n    \"dataType\": \"INT\",\r\n    \"organizationUnitId\": 46\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -570,13 +442,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{server_url}}/api/period-type",
+							"raw": "{{server_url}}/api/attribute",
 							"host": [
 								"{{server_url}}"
 							],
 							"path": [
 								"api",
-								"period-type"
+								"attribute"
 							]
 						}
 					},
@@ -598,14 +470,510 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{server_url}}/api/period-type/692d4c53-8216-4ec7-b4ec-d16a41457224",
+							"raw": "{{server_url}}/api/attribute/25efcfac-dda6-407a-ac70-2785cd2371b1",
 							"host": [
 								"{{server_url}}"
 							],
 							"path": [
 								"api",
-								"period-type",
-								"692d4c53-8216-4ec7-b4ec-d16a41457224"
+								"attribute",
+								"25efcfac-dda6-407a-ac70-2785cd2371b1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "AttributePeriod",
+			"item": [
+				{
+					"name": "finadAll",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/attribute-period?currentPage=1&pageSize=10",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"attribute-period"
+							],
+							"query": [
+								{
+									"key": "currentPage",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getProgress",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/attribute-period/34312aad-4ab3-4d62-bca5-889d3aa9c3c5/progress",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"attribute-period",
+								"34312aad-4ab3-4d62-bca5-889d3aa9c3c5",
+								"progress"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getTotalValue",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/attribute-period/34312aad-4ab3-4d62-bca5-889d3aa9c3c5/total-value",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"attribute-period",
+								"34312aad-4ab3-4d62-bca5-889d3aa9c3c5",
+								"total-value"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "finadAllByAttribute",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/attribute-period/find-by-attribute?currentPage=1&pageSize=10&attributeId=95dba84a-7245-4f35-9dca-b1da6705a041",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"attribute-period",
+								"find-by-attribute"
+							],
+							"query": [
+								{
+									"key": "currentPage",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								},
+								{
+									"key": "attributeId",
+									"value": "95dba84a-7245-4f35-9dca-b1da6705a041"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "finadAllList",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/attribute-period/list",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"attribute-period",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "save",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"startDate\": \"2025-09-14\",\r\n  \"isActive\": true,\r\n  \"valuePlanned\": 100,\r\n  \"attributeId\": \"95dba84a-7245-4f35-9dca-b1da6705a041\",\r\n  \"periodRangeId\": \"e88ca761-3c29-4973-9943-bc5a4ea4e45c\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/api/attribute-period",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"attribute-period"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"34312aad-4ab3-4d62-bca5-889d3aa9c3c5\",\r\n    \"startDate\": \"2025-09-14\",\r\n    \"isActive\": true,\r\n    \"valuePlanned\": 200,\r\n    \"attributeId\": \"95dba84a-7245-4f35-9dca-b1da6705a041\",\r\n    \"periodRangeId\": \"d124c1b2-df94-4fa8-a704-defc297f861a\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/api/attribute-period",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"attribute-period"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/attribute-period/57ff9348-3151-4ba0-aac8-7a8687e2b54c",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"attribute-period",
+								"57ff9348-3151-4ba0-aac8-7a8687e2b54c"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "AttributeValue",
+			"item": [
+				{
+					"name": "finadAll",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/attribute-value?currentPage=1&pageSize=10",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"attribute-value"
+							],
+							"query": [
+								{
+									"key": "currentPage",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "finadAllByAttributePeriod",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/attribute-value/find-by-attribute-period?currentPage=1&pageSize=10&attributePeriodId=34312aad-4ab3-4d62-bca5-889d3aa9c3c5",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"attribute-value",
+								"find-by-attribute-period"
+							],
+							"query": [
+								{
+									"key": "currentPage",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								},
+								{
+									"key": "attributePeriodId",
+									"value": "34312aad-4ab3-4d62-bca5-889d3aa9c3c5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "finadAllList",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/attribute-value/list",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"attribute-value",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "save",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"startDate\": \"2025-11-14\",\r\n  \"value\": 30,\r\n  \"description\": \"\",\r\n  \"periodRangeId\": \"e88ca761-3c29-4973-9943-bc5a4ea4e45c\",\r\n  \"attributePeriodId\": \"34312aad-4ab3-4d62-bca5-889d3aa9c3c5\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/api/attribute-value",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"attribute-value"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"67c323ec-d6b2-40e9-9302-ba06bc4a0798\",\r\n    \"startDate\": \"2025-11-14\",\r\n    \"value\": 5.00,\r\n    \"description\": \"\",\r\n    \"periodRangeId\": \"e88ca761-3c29-4973-9943-bc5a4ea4e45c\",\r\n    \"attributePeriodId\": \"34312aad-4ab3-4d62-bca5-889d3aa9c3c5\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/api/attribute-value",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"attribute-value"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/attribute-value/57ff9348-3151-4ba0-aac8-7a8687e2b54c",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"attribute-value",
+								"57ff9348-3151-4ba0-aac8-7a8687e2b54c"
 							]
 						}
 					},
@@ -706,7 +1074,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \r\n  \"name\": \"string\",\r\n  \"address\": \"string\",\r\n  \"tellNumber\": \"string\",\r\n  \"code\": \"string\",\r\n  \"active\": true,\r\n  \"codePath\": \"string\",\r\n  \"parentId\": 1\r\n}",
+							"raw": "{\r\n    \"name\": \"معاونت مسکن بتاجا\",\r\n    \"address\": \"\",\r\n    \"tellNumber\": \"\",\r\n    \"code\": \"\",\r\n    \"active\": true,\r\n    \"codePath\": \"001001\",\r\n    \"parentId\": 1\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -743,7 +1111,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\": \"692d4c53-8216-4ec7-b4ec-d16a41457224\",\r\n    \"name\": \"هفتگی\",\r\n    \"key\": \"weekly\",\r\n    \"durationDays\": 7\r\n}",
+							"raw": "{\r\n    \"name\": \"string\",\r\n    \"address\": \"string\",\r\n    \"tellNumber\": \"string\",\r\n    \"code\": \"string\",\r\n    \"active\": true,\r\n    \"codePath\": \"string\",\r\n    \"parentId\": 1\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -751,13 +1119,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{server_url}}/api/period-type",
+							"raw": "{{server_url}}/api/organization",
 							"host": [
 								"{{server_url}}"
 							],
 							"path": [
 								"api",
-								"period-type"
+								"organization"
 							]
 						}
 					},
@@ -779,13 +1147,13 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{server_url}}/api/period-type/692d4c53-8216-4ec7-b4ec-d16a41457224",
+							"raw": "{{server_url}}/api/organization/692d4c53-8216-4ec7-b4ec-d16a41457224",
 							"host": [
 								"{{server_url}}"
 							],
 							"path": [
 								"api",
-								"period-type",
+								"organization",
 								"692d4c53-8216-4ec7-b4ec-d16a41457224"
 							]
 						}
