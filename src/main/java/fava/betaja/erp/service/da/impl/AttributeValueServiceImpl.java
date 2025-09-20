@@ -6,7 +6,7 @@ import fava.betaja.erp.dto.da.AttributeValueDto;
 import fava.betaja.erp.entities.da.AttributeValue;
 import fava.betaja.erp.exceptions.ServiceException;
 import fava.betaja.erp.mapper.da.AttributeValueDtoMapper;
-import fava.betaja.erp.repository.da.AttributePeriodRepository;
+import fava.betaja.erp.repository.da.ProgressPeriodRepository;
 import fava.betaja.erp.repository.da.AttributeValueRepository;
 import fava.betaja.erp.repository.da.PeriodRangeRepository;
 import fava.betaja.erp.service.da.AttributeValueService;
@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 public class AttributeValueServiceImpl implements AttributeValueService {
 
     private final AttributeValueRepository repository;
-    private final AttributePeriodRepository attributePeriodRepository;
+    private final ProgressPeriodRepository progressPeriodRepository;
     private final PeriodRangeRepository periodRangeRepository;
     private final AttributeValueDtoMapper mapper;
 
@@ -98,7 +98,7 @@ public class AttributeValueServiceImpl implements AttributeValueService {
         AttributeValue entity = repository.findById(id)
                 .orElseThrow(() -> new ServiceException("AttributeValue با این id یافت نشد: " + id));
         repository.deleteById(id);
-        log.info("Deleted AttributeValue: id={}, AttributePeriodId={}", entity.getId(), entity.getAttributePeriod().getId());
+        log.info("Deleted AttributeValue: id={}, AttributePeriodId={}", entity.getId(), entity.getProgressPeriod().getId());
     }
 
     private void validate(AttributeValueDto dto, boolean isCreate) {
@@ -110,7 +110,7 @@ public class AttributeValueServiceImpl implements AttributeValueService {
             throw new ServiceException("AttributePeriod الزامی است.");
         }
 
-        if (!attributePeriodRepository.existsById(dto.getAttributePeriodId())) {
+        if (!progressPeriodRepository.existsById(dto.getAttributePeriodId())) {
             throw new ServiceException("AttributePeriod انتخاب شده موجود نیست.");
         }
 

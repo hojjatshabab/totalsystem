@@ -53,6 +53,6 @@ public class AttributeValue extends BaseEntity {
     @JoinColumn(name = "attribute_period_id", referencedColumnName = "id",nullable = false)
     @JsonIgnore
     @Comment("بازه ویژگی")
-    private AttributePeriod attributePeriod;
+    private ProgressPeriod progressPeriod;
 
 }

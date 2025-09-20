@@ -2,17 +2,16 @@ package fava.betaja.erp.service.da.impl;
 
 import fava.betaja.erp.dto.PageRequest;
 import fava.betaja.erp.dto.PageResponse;
-import fava.betaja.erp.dto.da.AttributePeriodDto;
-import fava.betaja.erp.entities.da.AttributePeriod;
-import fava.betaja.erp.entities.da.PeriodRange;
+import fava.betaja.erp.dto.da.ProgressPeriodDto;
 import fava.betaja.erp.entities.da.Attribute;
+import fava.betaja.erp.entities.da.PeriodRange;
+import fava.betaja.erp.entities.da.ProgressPeriod;
 import fava.betaja.erp.exceptions.ServiceException;
-import fava.betaja.erp.mapper.da.AttributePeriodDtoMapper;
-import fava.betaja.erp.repository.da.AttributePeriodRepository;
-import fava.betaja.erp.repository.da.AttributeRepository;
+import fava.betaja.erp.mapper.da.ProgressPeriodDtoMapper;
 import fava.betaja.erp.repository.da.AttributeValueRepository;
 import fava.betaja.erp.repository.da.PeriodRangeRepository;
-import fava.betaja.erp.service.da.AttributePeriodService;
+import fava.betaja.erp.repository.da.ProgressPeriodRepository;
+import fava.betaja.erp.service.da.ProgressPeriodService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -29,38 +28,37 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class AttributePeriodServiceImpl implements AttributePeriodService {
+public class ProgressPeriodServiceImpl implements ProgressPeriodService {
 
-    private final AttributePeriodRepository repository;
-    private final AttributeRepository attributeRepository;
+    private final ProgressPeriodRepository repository;
     private final PeriodRangeRepository periodRangeRepository;
     private final AttributeValueRepository attributeValueRepository;
-    private final AttributePeriodDtoMapper mapper;
+    private final ProgressPeriodDtoMapper mapper;
 
     @Override
-    public AttributePeriodDto save(AttributePeriodDto dto) {
+    public ProgressPeriodDto save(ProgressPeriodDto dto) {
         validate(dto, true);
         enrichDto(dto);
 
-        log.info("Saving AttributePeriod: title={}, startDate={}, endDate={}", dto.getTitle(), dto.getStartDate(), dto.getEndDate());
+        log.info("Saving ProgressPeriod: title={}, startDate={}, endDate={}", dto.getTitle(), dto.getStartDate(), dto.getEndDate());
 
-        AttributePeriod entity = mapper.toEntity(dto);
+        ProgressPeriod entity = mapper.toEntity(dto);
         return mapper.toDto(repository.save(entity));
     }
 
     @Override
-    public AttributePeriodDto update(AttributePeriodDto dto) {
+    public ProgressPeriodDto update(ProgressPeriodDto dto) {
         validate(dto, false);
         enrichDto(dto);
 
-        log.info("Updating AttributePeriod: id={}, title={}", dto.getId(), dto.getTitle());
-        AttributePeriod entity = mapper.toEntity(dto);
+        log.info("Updating ProgressPeriodDto: id={}, title={}", dto.getId(), dto.getTitle());
+        ProgressPeriod entity = mapper.toEntity(dto);
         return mapper.toDto(repository.save(entity));
     }
 
     @Override
-    public PageResponse<AttributePeriodDto> findAll(PageRequest<AttributePeriodDto> model) {
-        List<AttributePeriodDto> result = repository
+    public PageResponse<ProgressPeriodDto> findAll(PageRequest<ProgressPeriodDto> model) {
+        List<ProgressPeriodDto> result = repository
                 .findAll(
                         Pageable.ofSize(model.getPageSize())
                                 .withPage(model.getCurrentPage() - 1))
@@ -71,9 +69,9 @@ public class AttributePeriodServiceImpl implements AttributePeriodService {
     }
 
     @Override
-    public PageResponse<AttributePeriodDto> findByAttributeId(UUID attributeId, PageRequest<AttributePeriodDto> model) {
-        List<AttributePeriodDto> result = repository
-                .findByAttributeId(attributeId,
+    public PageResponse<ProgressPeriodDto> findByReferenceId(UUID referenceId, PageRequest<ProgressPeriodDto> model) {
+        List<ProgressPeriodDto> result = repository
+                .findByReferenceId(referenceId,
                         Pageable.ofSize(model.getPageSize())
                                 .withPage(model.getCurrentPage() - 1))
                 .stream().map(mapper::toDto)
@@ -83,19 +81,19 @@ public class AttributePeriodServiceImpl implements AttributePeriodService {
     }
 
     @Override
-    public BigDecimal getTotalValue(UUID attributePeriodId) {
-        return attributeValueRepository.sumValueByAttributePeriodId(attributePeriodId);
+    public BigDecimal getTotalValue(UUID progressPeriodId) {
+        return attributeValueRepository.sumValueByProgressPeriodId(progressPeriodId);
     }
 
     @Override
-    public List<AttributePeriodDto> findAll() {
+    public List<ProgressPeriodDto> findAll() {
         return repository.findAll().stream()
                 .map(mapper::toDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Optional<AttributePeriodDto> findById(UUID id) {
+    public Optional<ProgressPeriodDto> findById(UUID id) {
         return Optional.ofNullable(id)
                 .flatMap(repository::findById)
                 .map(mapper::toDto);
@@ -110,31 +108,29 @@ public class AttributePeriodServiceImpl implements AttributePeriodService {
         log.info("Deleted AttributePeriod: id={}", id);
     }
 
-    private void validate(AttributePeriodDto dto, boolean isCreate) {
+    private void validate(ProgressPeriodDto dto, boolean isCreate) {
         if (!isCreate && (dto.getId() == null || !repository.existsById(dto.getId()))) {
             throw new ServiceException("AttributePeriod برای بروزرسانی موجود نیست.");
         }
-
         if (dto.getStartDate() == null) {
             throw new ServiceException("ویژگی (startDate) الزامی است.");
         }
-        if (dto.getAttributeId() == null) {
-            throw new ServiceException("ویژگی (attribute) الزامی است.");
+        if (dto.getReferenceId() == null) {
+            throw new ServiceException("ویژگی (ReferenceId) الزامی است.");
         }
-
+        if (dto.getReferenceType() == null) {
+            throw new ServiceException("ویژگی (ReferenceTyp) الزامی است.");
+        }
         if (dto.getPeriodRangeId() == null) {
             throw new ServiceException("نوع دوره (periodRange) الزامی است.");
         }
-
         if (!periodRangeRepository.existsById(dto.getPeriodRangeId())) {
             throw new ServiceException("نوع دوره انتخاب شده موجود نیست.");
         }
 
-        if (!attributeRepository.existsById(dto.getAttributeId())) {
-            throw new ServiceException("ویژگی انتخاب شده موجود نیست.");
-        }
     }
-    private void enrichDto(AttributePeriodDto dto) {
+
+    private void enrichDto(ProgressPeriodDto dto) {
         // مقداردهی نام‌ها و مدت زمان
         String periodRangeName = "";
         String attributeName = "";
@@ -155,13 +151,6 @@ public class AttributePeriodServiceImpl implements AttributePeriodService {
             periodRangeName = periodRangeRepository.findById(dto.getPeriodRangeId())
                     .map(PeriodRange::getName)
                     .orElse("");
-        }
-
-        if (dto.getAttributeId() != null) {
-            attributeName = attributeRepository.findById(dto.getAttributeId())
-                    .map(Attribute::getName)
-                    .orElse("");
-            dto.setAttributeName(attributeName);
         }
 
         // ساخت title (بر اساس periodRangeName + attributeName)

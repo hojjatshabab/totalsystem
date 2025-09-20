@@ -15,6 +15,6 @@ import java.util.UUID;
 public interface AttributeValueRepository extends JpaRepository<AttributeValue, UUID> {
     Page<AttributeValue> findByAttributePeriodId(UUID attributePeriodId, Pageable pageable);
     List<AttributeValue> findByAttributePeriodId(UUID attributePeriodId);
-    @Query("SELECT COALESCE(SUM(av.value), 0) FROM AttributeValue av WHERE av.attributePeriod.id = :attributePeriodId")
-    BigDecimal sumValueByAttributePeriodId(UUID attributePeriodId);
+    @Query("SELECT COALESCE(SUM(av.value), 0) FROM AttributeValue av WHERE av.progressPeriod.id = :progressPeriodId")
+    BigDecimal sumValueByProgressPeriodId(UUID progressPeriodId);
 }

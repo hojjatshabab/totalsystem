@@ -1,11 +1,11 @@
 package fava.betaja.erp.service.da.impl;
 
 import fava.betaja.erp.dto.da.AttributePeriodProgressDto;
-import fava.betaja.erp.entities.da.AttributePeriod;
+import fava.betaja.erp.entities.da.ProgressPeriod;
 import fava.betaja.erp.entities.da.AttributeValue;
 import fava.betaja.erp.entities.da.PeriodRange;
 import fava.betaja.erp.exceptions.ServiceException;
-import fava.betaja.erp.repository.da.AttributePeriodRepository;
+import fava.betaja.erp.repository.da.ProgressPeriodRepository;
 import fava.betaja.erp.repository.da.AttributeValueRepository;
 import fava.betaja.erp.service.da.AttributePeriodReportService;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -26,17 +24,17 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AttributePeriodReportServiceImpl implements AttributePeriodReportService {
 
-    private final AttributePeriodRepository attributePeriodRepository;
+    private final ProgressPeriodRepository progressPeriodRepository;
     private final AttributeValueRepository attributeValueRepository;
 
     @Override
     public AttributePeriodProgressDto getProgress(UUID attributePeriodId) {
-        AttributePeriod period = attributePeriodRepository.findById(attributePeriodId)
+        ProgressPeriod period = progressPeriodRepository.findById(attributePeriodId)
                 .orElseThrow(() -> new ServiceException("AttributePeriod not found"));
 
         BigDecimal plannedValue = period.getValuePlanned() != null ? period.getValuePlanned() : BigDecimal.ZERO;
 
-        BigDecimal totalValue = attributeValueRepository.sumValueByAttributePeriodId(attributePeriodId);
+        BigDecimal totalValue = attributeValueRepository.sumValueByProgressPeriodId(attributePeriodId);
         if (totalValue == null) totalValue = BigDecimal.ZERO;
 
         // --- محاسبه روزها (شامل ابتدا و انتهای بازه)

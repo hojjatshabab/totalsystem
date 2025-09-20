@@ -12,13 +12,22 @@ import org.hibernate.annotations.Comment;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Data
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "attribute_period", schema = "da")
-public class AttributePeriod extends BaseEntity {
+@Table(name = "progress_period", schema = "da")
+public class ProgressPeriod extends BaseEntity {
+
+    @NotNull(message = "referenceId نمی‌تواند خالی باشد")
+    @Column(name = "reference_id", nullable = false)
+    private UUID referenceId;
+
+    @NotBlank(message = "referenceType نمی‌تواند خالی باشد")
+    @Column(name = "reference_type", nullable = false, length = 50)
+    private String referenceType; 
 
     @Column(name = "start_date", nullable = false)
     @NotNull(message = "تاریخ شروع نمی‌تواند خالی باشد")
@@ -52,13 +61,6 @@ public class AttributePeriod extends BaseEntity {
     @DecimalMin(value = "0.0", inclusive = false, message = "مقدار پیش ‌بینی باید صفر یا بیشتر باشد")
     @Comment("مقدار پیش‌ بینی شده")
     private BigDecimal valuePlanned;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "attribute_id", referencedColumnName = "id", nullable = false)
-    @NotNull(message = "ویژگی نمی‌تواند خالی باشد")
-    @JsonIgnore
-    @Comment("ویژگی")
-    private Attribute attribute;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "period_range_id", referencedColumnName = "id", nullable = false)
