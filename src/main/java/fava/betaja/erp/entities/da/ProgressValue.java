@@ -18,8 +18,8 @@ import java.time.LocalDate;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "attribute_value", schema = "da")
-public class AttributeValue extends BaseEntity {
+@Table(name = "progress_value", schema = "da")
+public class ProgressValue extends BaseEntity {
 
     @NotNull(message = "تاریخ شروع الزامی است")
     @Column(name = "start_date", nullable = false)
@@ -50,9 +50,9 @@ public class AttributeValue extends BaseEntity {
     private PeriodRange periodRange;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "attribute_period_id", referencedColumnName = "id",nullable = false)
+    @JoinColumn(name = "progress_period_id", referencedColumnName = "id",nullable = false)
     @JsonIgnore
-    @Comment("بازه ویژگی")
+    @Comment("دوره پیشرفت")
     private ProgressPeriod progressPeriod;
 
 }

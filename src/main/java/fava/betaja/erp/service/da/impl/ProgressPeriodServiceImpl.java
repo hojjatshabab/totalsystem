@@ -3,12 +3,11 @@ package fava.betaja.erp.service.da.impl;
 import fava.betaja.erp.dto.PageRequest;
 import fava.betaja.erp.dto.PageResponse;
 import fava.betaja.erp.dto.da.ProgressPeriodDto;
-import fava.betaja.erp.entities.da.Attribute;
 import fava.betaja.erp.entities.da.PeriodRange;
 import fava.betaja.erp.entities.da.ProgressPeriod;
 import fava.betaja.erp.exceptions.ServiceException;
 import fava.betaja.erp.mapper.da.ProgressPeriodDtoMapper;
-import fava.betaja.erp.repository.da.AttributeValueRepository;
+import fava.betaja.erp.repository.da.ProgressValueRepository;
 import fava.betaja.erp.repository.da.PeriodRangeRepository;
 import fava.betaja.erp.repository.da.ProgressPeriodRepository;
 import fava.betaja.erp.service.da.ProgressPeriodService;
@@ -32,7 +31,7 @@ public class ProgressPeriodServiceImpl implements ProgressPeriodService {
 
     private final ProgressPeriodRepository repository;
     private final PeriodRangeRepository periodRangeRepository;
-    private final AttributeValueRepository attributeValueRepository;
+    private final ProgressValueRepository progressValueRepository;
     private final ProgressPeriodDtoMapper mapper;
 
     @Override
@@ -82,7 +81,7 @@ public class ProgressPeriodServiceImpl implements ProgressPeriodService {
 
     @Override
     public BigDecimal getTotalValue(UUID progressPeriodId) {
-        return attributeValueRepository.sumValueByProgressPeriodId(progressPeriodId);
+        return progressValueRepository.sumValueByProgressPeriodId(progressPeriodId);
     }
 
     @Override

@@ -13,7 +13,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AttributeValueDto {
+public class ProgressValueDto {
 
     private UUID id;
     private LocalDate startDate;
@@ -22,10 +22,10 @@ public class AttributeValueDto {
     private String description;
     private UUID periodRangeId;
     private String periodRangeName;
-    private UUID attributePeriodId;
-    private String attributePeriodTitle;
-    private UUID attributeId;
-    private String attributeName;
+    private UUID progressPeriodId;
+    private String progressPeriodTitle;
+    private UUID referenceId;
+    private String referenceType;
     private Long organizationId;
     private String organizationName;
     private BigDecimal valuePlanned;

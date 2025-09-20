@@ -2,11 +2,11 @@ package fava.betaja.erp.service.da.impl;
 
 import fava.betaja.erp.dto.da.AttributePeriodProgressDto;
 import fava.betaja.erp.entities.da.ProgressPeriod;
-import fava.betaja.erp.entities.da.AttributeValue;
+import fava.betaja.erp.entities.da.ProgressValue;
 import fava.betaja.erp.entities.da.PeriodRange;
 import fava.betaja.erp.exceptions.ServiceException;
 import fava.betaja.erp.repository.da.ProgressPeriodRepository;
-import fava.betaja.erp.repository.da.AttributeValueRepository;
+import fava.betaja.erp.repository.da.ProgressValueRepository;
 import fava.betaja.erp.service.da.AttributePeriodReportService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +25,7 @@ import java.util.UUID;
 public class AttributePeriodReportServiceImpl implements AttributePeriodReportService {
 
     private final ProgressPeriodRepository progressPeriodRepository;
-    private final AttributeValueRepository attributeValueRepository;
+    private final ProgressValueRepository progressValueRepository;
 
     @Override
     public AttributePeriodProgressDto getProgress(UUID attributePeriodId) {
@@ -34,13 +34,13 @@ public class AttributePeriodReportServiceImpl implements AttributePeriodReportSe
 
         BigDecimal plannedValue = period.getValuePlanned() != null ? period.getValuePlanned() : BigDecimal.ZERO;
 
-        BigDecimal totalValue = attributeValueRepository.sumValueByProgressPeriodId(attributePeriodId);
+        BigDecimal totalValue = progressValueRepository.sumValueByProgressPeriodId(attributePeriodId);
         if (totalValue == null) totalValue = BigDecimal.ZERO;
 
         // --- محاسبه روزها (شامل ابتدا و انتهای بازه)
         long durationDays = period.getPeriodRange().getDurationDays();
-        long elapsedDays = attributeValueRepository.findByAttributePeriodId(period.getId()).stream()
-                .map(AttributeValue::getPeriodRange)         // گرفتن periodRange
+        long elapsedDays = progressValueRepository.findByProgressPeriodId(period.getId()).stream()
+                .map(ProgressValue::getPeriodRange)         // گرفتن periodRange
                 .filter(Objects::nonNull)                   // حذف null
                 .map(PeriodRange::getDurationDays)          // گرفتن durationDays
                 .filter(Objects::nonNull)                   // حذف null

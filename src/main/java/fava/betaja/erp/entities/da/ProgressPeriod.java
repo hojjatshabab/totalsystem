@@ -27,7 +27,7 @@ public class ProgressPeriod extends BaseEntity {
 
     @NotBlank(message = "referenceType نمی‌تواند خالی باشد")
     @Column(name = "reference_type", nullable = false, length = 50)
-    private String referenceType; 
+    private String referenceType;
 
     @Column(name = "start_date", nullable = false)
     @NotNull(message = "تاریخ شروع نمی‌تواند خالی باشد")

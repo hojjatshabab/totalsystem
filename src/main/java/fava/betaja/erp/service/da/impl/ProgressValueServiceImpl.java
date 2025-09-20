@@ -2,14 +2,14 @@ package fava.betaja.erp.service.da.impl;
 
 import fava.betaja.erp.dto.PageRequest;
 import fava.betaja.erp.dto.PageResponse;
-import fava.betaja.erp.dto.da.AttributeValueDto;
-import fava.betaja.erp.entities.da.AttributeValue;
+import fava.betaja.erp.dto.da.ProgressValueDto;
+import fava.betaja.erp.entities.da.ProgressValue;
 import fava.betaja.erp.exceptions.ServiceException;
-import fava.betaja.erp.mapper.da.AttributeValueDtoMapper;
+import fava.betaja.erp.mapper.da.ProgressValueDtoMapper;
 import fava.betaja.erp.repository.da.ProgressPeriodRepository;
-import fava.betaja.erp.repository.da.AttributeValueRepository;
+import fava.betaja.erp.repository.da.ProgressValueRepository;
 import fava.betaja.erp.repository.da.PeriodRangeRepository;
-import fava.betaja.erp.service.da.AttributeValueService;
+import fava.betaja.erp.service.da.ProgressValueService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -25,37 +25,37 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class AttributeValueServiceImpl implements AttributeValueService {
+public class ProgressValueServiceImpl implements ProgressValueService {
 
-    private final AttributeValueRepository repository;
+    private final ProgressValueRepository repository;
     private final ProgressPeriodRepository progressPeriodRepository;
     private final PeriodRangeRepository periodRangeRepository;
-    private final AttributeValueDtoMapper mapper;
+    private final ProgressValueDtoMapper mapper;
 
     @Override
-    public AttributeValueDto save(AttributeValueDto dto) {
+    public ProgressValueDto save(ProgressValueDto dto) {
         validate(dto, true);
         calculateEndDate(dto);
 
-        log.info("Saving AttributeValue for AttributePeriodId={}", dto.getAttributePeriodId());
-        AttributeValue entity = mapper.toEntity(dto);
+        log.info("Saving ProgressValue for ProgressPeriodId = {}", dto.getProgressPeriodId());
+        ProgressValue entity = mapper.toEntity(dto);
         return mapper.toDto(repository.save(entity));
     }
 
     @Override
-    public AttributeValueDto update(AttributeValueDto dto) {
+    public ProgressValueDto update(ProgressValueDto dto) {
         validate(dto, false);
         calculateEndDate(dto);
 
-        log.info("Updating AttributeValue: id={}, AttributePeriodId={}", dto.getId(), dto.getAttributePeriodId());
-        AttributeValue entity = mapper.toEntity(dto);
+        log.info("Updating ProgressValue: id = {}, ProgressPeriodId = {}", dto.getId(), dto.getProgressPeriodId());
+        ProgressValue entity = mapper.toEntity(dto);
         return mapper.toDto(repository.save(entity));
     }
 
 
     @Override
-    public PageResponse<AttributeValueDto> findAll(PageRequest<AttributeValueDto> model) {
-        List<AttributeValueDto> result = repository
+    public PageResponse<ProgressValueDto> findAll(PageRequest<ProgressValueDto> model) {
+        List<ProgressValueDto> result = repository
                 .findAll(Pageable.ofSize(model.getPageSize())
                         .withPage(model.getCurrentPage() - 1))
                 .stream()
@@ -67,9 +67,9 @@ public class AttributeValueServiceImpl implements AttributeValueService {
     }
 
     @Override
-    public PageResponse<AttributeValueDto> findByAttributePeriodId(UUID attributePeriodId, PageRequest<AttributeValueDto> model) {
-        List<AttributeValueDto> result = repository
-                .findByAttributePeriodId(attributePeriodId, Pageable.ofSize(model.getPageSize())
+    public PageResponse<ProgressValueDto> findByProgressValueId(UUID progressValueId, PageRequest<ProgressValueDto> model) {
+        List<ProgressValueDto> result = repository
+                .findByProgressPeriodId(progressValueId, Pageable.ofSize(model.getPageSize())
                         .withPage(model.getCurrentPage() - 1))
                 .stream()
                 .map(mapper::toDto)
@@ -80,14 +80,14 @@ public class AttributeValueServiceImpl implements AttributeValueService {
     }
 
     @Override
-    public List<AttributeValueDto> findAll() {
+    public List<ProgressValueDto> findAll() {
         return repository.findAll().stream()
                 .map(mapper::toDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Optional<AttributeValueDto> findById(UUID id) {
+    public Optional<ProgressValueDto> findById(UUID id) {
         return Optional.ofNullable(id)
                 .flatMap(repository::findById)
                 .map(mapper::toDto);
@@ -95,23 +95,23 @@ public class AttributeValueServiceImpl implements AttributeValueService {
 
     @Override
     public void deleteById(UUID id) {
-        AttributeValue entity = repository.findById(id)
-                .orElseThrow(() -> new ServiceException("AttributeValue با این id یافت نشد: " + id));
+        ProgressValue entity = repository.findById(id)
+                .orElseThrow(() -> new ServiceException("ProgressValue با این id یافت نشد: " + id));
         repository.deleteById(id);
-        log.info("Deleted AttributeValue: id={}, AttributePeriodId={}", entity.getId(), entity.getProgressPeriod().getId());
+        log.info("Deleted ProgressValue: id = {}, ProgressValue = {}", entity.getId(), entity.getProgressPeriod().getId());
     }
 
-    private void validate(AttributeValueDto dto, boolean isCreate) {
+    private void validate(ProgressValueDto dto, boolean isCreate) {
         if (!isCreate && (dto.getId() == null || !repository.existsById(dto.getId()))) {
-            throw new ServiceException("AttributeValue برای بروزرسانی موجود نیست.");
+            throw new ServiceException("ProgressValue برای بروزرسانی موجود نیست.");
         }
 
-        if (dto.getAttributePeriodId() == null) {
-            throw new ServiceException("AttributePeriod الزامی است.");
+        if (dto.getProgressPeriodId() == null) {
+            throw new ServiceException("ProgressPeriod الزامی است.");
         }
 
-        if (!progressPeriodRepository.existsById(dto.getAttributePeriodId())) {
-            throw new ServiceException("AttributePeriod انتخاب شده موجود نیست.");
+        if (!progressPeriodRepository.existsById(dto.getProgressPeriodId())) {
+            throw new ServiceException("ProgressPeriod انتخاب شده موجود نیست.");
         }
 
         if (dto.getPeriodRangeId() == null) {
@@ -134,7 +134,7 @@ public class AttributeValueServiceImpl implements AttributeValueService {
     /**
      * متدی برای محاسبه endDate بر اساس startDate و periodRange.durationDays
      */
-    private void calculateEndDate(AttributeValueDto dto) {
+    private void calculateEndDate(ProgressValueDto dto) {
         if (dto.getPeriodRangeId() != null) {
             periodRangeRepository.findById(dto.getPeriodRangeId())
                     .ifPresent(p -> {

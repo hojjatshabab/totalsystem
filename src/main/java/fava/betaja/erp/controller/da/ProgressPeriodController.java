@@ -23,7 +23,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @RequestMapping("api/progress-period")
 @Tag(name = "اطلاعات زمانی دوره پیشرفت", description = "اطلاعات زمانی دوره پیشرفت")
-public class AttributePeriodController extends BaseController {
+public class ProgressPeriodController extends BaseController {
 
     private final ProgressPeriodService progressPeriodService;
     private final AttributePeriodReportService attributePeriodReportService;
