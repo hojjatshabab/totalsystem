@@ -17,7 +17,10 @@ import org.hibernate.annotations.Comment;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "plan", schema = "da")
+@Table(name = "project", schema = "da",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"name", "plan_id"})
+        })
 public class Project extends BaseEntity {
 
     @NotBlank(message = "نام نمی‌تواند خالی باشد")
@@ -25,12 +28,6 @@ public class Project extends BaseEntity {
     @Column(name = "name", nullable = false, length = 255)
     @Comment("نام")
     private String name;
-
-    @Size(max = 100, message = "کد نباید بیشتر از ۱۰۰ کاراکتر باشد")
-    @Pattern(regexp = "^[A-Za-z0-9_-]+$", message = "کد فقط می‌تواند شامل حروف، اعداد، خط تیره و زیرخط باشد")
-    @Column(name = "key", length = 100)
-    @Comment("کلید")
-    private String key;
 
     @NotNull(message = "پلن الزامی هست")
     @JoinColumn(name = "plan_id", referencedColumnName = "id", nullable = false)

@@ -19,7 +19,8 @@ public class ProgressValueDto {
     private LocalDate startDate;
     private LocalDate endDate;
     private BigDecimal value;
-    private String description;
+    private String activitySummary;
+    private String issueSummary;
     private UUID periodRangeId;
     private String periodRangeName;
     private UUID progressPeriodId;

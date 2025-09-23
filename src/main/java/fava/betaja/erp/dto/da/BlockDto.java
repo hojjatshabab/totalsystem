@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Data
@@ -15,25 +17,13 @@ public class BlockDto {
 
     private UUID id;
     private String name;
-    private String key;
+    private Integer blockCount;
+    private Integer floorCount;
+    private Integer unitCount;
+    private BigDecimal totalArea;
+    private LocalDate startDate;
+    private LocalDate deliveryDate;
     private UUID projectId;
     private String projectName;
 }
-/*    public String getReferenceName(UUID referenceId, String referenceType) {
-        switch(referenceType) {
-            case "PROJECT":
-                return projectRepository.findById(referenceId)
-                        .map(Project::getName)
-                        .orElse("Unknown Project");
-            case "BLOCK":
-                return blockRepository.findById(referenceId)
-                        .map(Block::getName)
-                        .orElse("Unknown Block");
-            case "ATTRIBUTE":
-                return attributeRepository.findById(referenceId)
-                        .map(Attribute::getName)
-                        .orElse("Unknown Attribute");
-            default:
-                return "Unknown";
-        }
-    }*/
+

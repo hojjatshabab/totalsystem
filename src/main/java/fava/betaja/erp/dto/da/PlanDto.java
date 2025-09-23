@@ -15,7 +15,6 @@ public class PlanDto {
 
     private UUID id;
     private String name;
-    private String key;
     private Long organizationUnitId;
     private String organizationUnitName;
 }

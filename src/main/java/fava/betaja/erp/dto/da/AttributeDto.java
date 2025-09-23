@@ -16,7 +16,6 @@ public class AttributeDto {
 
     private UUID id;
     private String name;
-    private String key;
     private AttributeDataType dataType;
     private Long organizationUnitId;
     private String organizationUnitName;

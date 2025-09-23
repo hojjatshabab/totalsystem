@@ -20,7 +20,7 @@ import org.hibernate.annotations.Comment;
 @AllArgsConstructor
 @Table(name = "attribute", schema = "da",
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = {"name", "key", "organization_unit_id"})
+                @UniqueConstraint(columnNames = {"name", "organization_unit_id"})
         })
 public class Attribute extends BaseEntity {
 
@@ -30,18 +30,10 @@ public class Attribute extends BaseEntity {
     @Comment("نام")
     private String name;
 
-    @NotBlank(message = "کد الزامی است")
-    @Size(max = 100, message = "کد نباید بیشتر از ۱۰۰ کاراکتر باشد")
-    @Pattern(regexp = "^[A-Za-z0-9_-]+$", message = "کد فقط می‌تواند شامل حروف، اعداد، خط تیره و زیرخط باشد")
-    @Column(name = "key", nullable = false, length = 100)
-    @Comment("کلید")
-    private String key;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "data_type")
     @Comment("نوع داده")
     private AttributeDataType dataType;
-
 
     @NotNull(message = "یگان الزامی است")
     @JoinColumn(name = "organization_unit_id", referencedColumnName = "id", nullable = false)

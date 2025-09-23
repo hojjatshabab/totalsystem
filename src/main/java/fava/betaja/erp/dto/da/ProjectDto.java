@@ -15,7 +15,6 @@ public class ProjectDto {
 
     private UUID id;
     private String name;
-    private String key;
     private UUID planId;
     private String planName;
 }
