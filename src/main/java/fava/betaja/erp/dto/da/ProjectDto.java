@@ -17,4 +17,6 @@ public class ProjectDto {
     private String name;
     private UUID planId;
     private String planName;
+    private Long organizationUnitId;
+    private String organizationUnitName;
 }

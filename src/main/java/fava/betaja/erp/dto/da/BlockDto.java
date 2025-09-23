@@ -25,5 +25,9 @@ public class BlockDto {
     private LocalDate deliveryDate;
     private UUID projectId;
     private String projectName;
+    private UUID planId;
+    private String planName;
+    private Long organizationUnitId;
+    private String organizationUnitName;
 }
 
