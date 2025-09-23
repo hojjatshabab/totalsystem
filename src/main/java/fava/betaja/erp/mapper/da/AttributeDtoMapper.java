@@ -14,6 +14,7 @@ import java.util.List;
 )
 public interface AttributeDtoMapper extends BaseMapper<AttributeDto, Attribute> {
 
+    @Override
     @Mapping(target = "organizationUnit.id", source = "organizationUnitId")
     Attribute toEntity(AttributeDto dto);
 

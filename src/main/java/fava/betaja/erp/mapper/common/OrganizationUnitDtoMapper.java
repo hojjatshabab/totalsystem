@@ -1,7 +1,7 @@
 package fava.betaja.erp.mapper.common;
 
 import fava.betaja.erp.dto.common.OrganizationUnitDto;
-import fava.betaja.erp.entities.common.CommonData;
+import fava.betaja.erp.entities.common.CommonBaseData;
 import fava.betaja.erp.entities.common.OrganizationUnit;
 import fava.betaja.erp.mapper.BaseMapper;
 import org.mapstruct.*;
@@ -40,7 +40,7 @@ public interface OrganizationUnitDtoMapper extends BaseMapper<OrganizationUnitDt
     }
 
     @Named("mapCommonData")
-    default CommonData mapCommonData(Long commonBaseDataOrgTypeId) {
-        return commonBaseDataOrgTypeId != null ? CommonData.builder().id(commonBaseDataOrgTypeId).build() : null;
+    default CommonBaseData mapCommonData(Long commonBaseDataOrgTypeId) {
+        return commonBaseDataOrgTypeId != null ? CommonBaseData.builder().id(commonBaseDataOrgTypeId).build() : null;
     }
 }

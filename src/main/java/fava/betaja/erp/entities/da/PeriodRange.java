@@ -1,6 +1,6 @@
 package fava.betaja.erp.entities.da;
 
-import fava.betaja.erp.entities.BaseEntity;
+import fava.betaja.erp.entities.AbstractAuditingEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -14,6 +14,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 
+import java.util.UUID;
+
 @Data
 @Entity
 @NoArgsConstructor
@@ -23,7 +25,7 @@ import org.hibernate.annotations.Comment;
                 @UniqueConstraint(columnNames = {"key"}),
                 @UniqueConstraint(columnNames = {"name"})
         })
-public class PeriodRange extends BaseEntity {
+public class PeriodRange extends AbstractAuditingEntity {
 
     @NotBlank(message = "نام بازه الزامی است")
     @Size(max = 100, message = "نام نباید بیشتر از ۱۰۰ کاراکتر باشد")

@@ -1,6 +1,7 @@
 package fava.betaja.erp.entities.common;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import fava.betaja.erp.entities.AbstractAuditingEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,16 +9,21 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 
+import java.util.UUID;
+
+import static jakarta.persistence.GenerationType.AUTO;
+
 @Data
 @Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "organization_unit")
-public class OrganizationUnit {
+public class OrganizationUnit  {
 
+    private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = AUTO)
     private Long id;
 
     @Column(name = "name")
@@ -48,7 +54,7 @@ public class OrganizationUnit {
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     @Comment("نوع یگان")
-    private CommonData commonBaseDataOrgType;
+    private CommonBaseData commonBaseDataOrgType;
 
     @JoinColumn(name = "parent_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)

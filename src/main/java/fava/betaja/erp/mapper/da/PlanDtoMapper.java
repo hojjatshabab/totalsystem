@@ -14,6 +14,7 @@ import java.util.List;
 )
 public interface PlanDtoMapper extends BaseMapper<PlanDto, Plan> {
 
+    @Override
     @Mapping(target = "organizationUnit.id", source = "organizationUnitId")
     Plan toEntity(PlanDto dto);
 

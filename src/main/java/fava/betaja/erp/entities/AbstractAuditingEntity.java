@@ -26,7 +26,9 @@ import static jakarta.persistence.GenerationType.AUTO;
 @Configurable
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public abstract class BaseEntity implements Serializable {
+
+public abstract class AbstractAuditingEntity implements Serializable {
+
 
     private static final long serialVersionUID = 1L;
     @Id

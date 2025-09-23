@@ -14,6 +14,7 @@ import java.util.List;
 )
 public interface ProgressPeriodDtoMapper extends BaseMapper<ProgressPeriodDto, ProgressPeriod> {
 
+    @Override
     @Mapping(target = "periodRange.id", source = "periodRangeId")
     ProgressPeriod toEntity(ProgressPeriodDto dto);
 

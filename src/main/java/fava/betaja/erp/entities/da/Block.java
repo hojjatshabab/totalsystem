@@ -2,7 +2,7 @@ package fava.betaja.erp.entities.da;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import fava.betaja.erp.entities.BaseEntity;
+import fava.betaja.erp.entities.AbstractAuditingEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -12,6 +12,7 @@ import org.hibernate.annotations.Comment;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -21,7 +22,7 @@ import java.time.LocalDate;
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = {"name", "project_id"})
         })
-public class Block extends BaseEntity {
+public class Block extends AbstractAuditingEntity {
 
     @NotBlank(message = "نام نمی‌تواند خالی باشد")
     @Size(max = 255, message = "نام نباید بیشتر از ۲۵۵ کاراکتر باشد")

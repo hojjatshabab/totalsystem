@@ -2,7 +2,7 @@ package fava.betaja.erp.entities.da;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import fava.betaja.erp.entities.BaseEntity;
+import fava.betaja.erp.entities.AbstractAuditingEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
@@ -15,13 +15,14 @@ import org.hibernate.annotations.Comment;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Data
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "progress_value", schema = "da")
-public class ProgressValue extends BaseEntity {
+public class ProgressValue extends AbstractAuditingEntity {
 
     @NotNull(message = "تاریخ شروع الزامی است")
     @Column(name = "start_date", nullable = false)

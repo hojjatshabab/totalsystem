@@ -2,7 +2,7 @@ package fava.betaja.erp.entities.da;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import fava.betaja.erp.entities.BaseEntity;
+import fava.betaja.erp.entities.AbstractAuditingEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -19,7 +19,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "progress_period", schema = "da")
-public class ProgressPeriod extends BaseEntity {
+public class ProgressPeriod extends AbstractAuditingEntity {
 
     @NotNull(message = "referenceId نمی‌تواند خالی باشد")
     @Column(name = "reference_id", nullable = false)
