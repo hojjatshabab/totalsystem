@@ -27,11 +27,10 @@ public interface ProgressValueDtoMapper extends BaseMapper<ProgressValueDto, Pro
     @Override
     @Mapping(source = "progressPeriod.id", target = "progressPeriodId")
     @Mapping(source = "progressPeriod.title", target = "progressPeriodTitle")
-    @Mapping(source = "periodRange.id", target = "periodRangeId")
-    @Mapping(source = "periodRange.name", target = "periodRangeName")
     @Mapping(source = "progressPeriod.referenceId", target = "referenceId")
     @Mapping(source = "progressPeriod.referenceType", target = "referenceType")
-    @Mapping(source = "progressPeriod.valuePlanned", target = "valuePlanned")
+    @Mapping(source = "periodRange.id", target = "periodRangeId")
+    @Mapping(source = "periodRange.name", target = "periodRangeName")
     ProgressValueDto toDto(ProgressValue entity);
 
     @Override
