@@ -1,4 +1,4 @@
-package fava.betaja.erp.enums;
+package fava.betaja.erp.enums.da;
 
 public enum AttributeDataType {
     INT,

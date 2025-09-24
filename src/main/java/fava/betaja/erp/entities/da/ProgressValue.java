@@ -3,6 +3,7 @@ package fava.betaja.erp.entities.da;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import fava.betaja.erp.entities.AbstractAuditingEntity;
+import fava.betaja.erp.enums.da.ProgressValueStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
@@ -15,7 +16,6 @@ import org.hibernate.annotations.Comment;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Data
 @Entity
@@ -57,6 +57,11 @@ public class ProgressValue extends AbstractAuditingEntity {
     @Column(name = "issue_summary", length = 1000)
     @Comment("خلاصه مشکلات و موانع")
     private String issueSummary;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    @Comment("وضعیت")
+    private ProgressValueStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "period_range_id", referencedColumnName = "id", nullable = false)

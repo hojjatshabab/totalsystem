@@ -3,7 +3,7 @@ package fava.betaja.erp.entities.da;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import fava.betaja.erp.entities.AbstractAuditingEntity;
 import fava.betaja.erp.entities.common.OrganizationUnit;
-import fava.betaja.erp.enums.AttributeDataType;
+import fava.betaja.erp.enums.da.AttributeDataType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -12,8 +12,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
-
-import java.util.UUID;
 
 @Data
 @Entity

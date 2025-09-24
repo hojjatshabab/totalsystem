@@ -1,6 +1,6 @@
 package fava.betaja.erp.dto.da;
 
-import fava.betaja.erp.enums.AttributeDataType;
+import fava.betaja.erp.enums.da.AttributeDataType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

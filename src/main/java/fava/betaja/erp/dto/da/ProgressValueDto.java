@@ -1,5 +1,6 @@
 package fava.betaja.erp.dto.da;
 
+import fava.betaja.erp.enums.da.ProgressValueStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,6 +22,7 @@ public class ProgressValueDto {
     private BigDecimal value;
     private String activitySummary;
     private String issueSummary;
+    private ProgressValueStatus status;
     private UUID periodRangeId;
     private String periodRangeName;
     private UUID progressPeriodId;
