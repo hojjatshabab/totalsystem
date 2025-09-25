@@ -22,6 +22,7 @@ public class Role {
     @Id
     @GeneratedValue
     private Long id;
+
     @Column(name = "role_name")
     private String name;
 

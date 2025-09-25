@@ -17,5 +17,5 @@ public class CommonBaseDataDto {
     private String description;
     private Integer orderNo;
     private Long commonBaseTypeId;
-    private Long commonBaseTypeTitle;
+    private String commonBaseTypeTitle;
 }

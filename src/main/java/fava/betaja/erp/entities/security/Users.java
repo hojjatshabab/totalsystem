@@ -1,6 +1,5 @@
 package fava.betaja.erp.entities.security;
 
-import fava.betaja.erp.entities.security.UserRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,10 +20,10 @@ import java.util.stream.Collectors;
 @Entity
 @Table(name = "users")
 public class Users implements UserDetails { // make our app User a spring security User
-/*
-    we have two options : implements the UserDetails interface or create a user class that extends User spring class which also
-    implements UserDetails
- */
+    /*
+        we have two options : implements the UserDetails interface or create a user class that extends User spring class which also
+        implements UserDetails
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -37,21 +36,21 @@ public class Users implements UserDetails { // make our app User a spring securi
     private String password;
     private Boolean active;
 
-    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER    )
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<UserRole> userRoles;
 
     // we should return a list of roles
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (userRoles==null) return null;
-        List<String> authorities=new ArrayList<>();
+        if (userRoles == null) return null;
+        List<String> authorities = new ArrayList<>();
         for (UserRole userRole : userRoles) {
             authorities
                     .addAll(userRole.getRole().getRolePermissions().stream()
-                            .map(a->a.getPermission().getAuthority()).toList());
+                            .map(a -> a.getPermission().getAuthority()).toList());
 
         }
-        return authorities.stream().map(a->new GrantedAuthority() {
+        return authorities.stream().map(a -> new GrantedAuthority() {
             @Override
             public String getAuthority() {
                 return a;
