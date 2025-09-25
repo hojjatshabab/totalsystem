@@ -30,10 +30,14 @@ public class Users implements UserDetails { // make our app User a spring securi
 
     @Column(name = "first_name")
     private String firstname;
+
     @Column(name = "last_name")
     private String lastname;
+
     private String username;
+
     private String password;
+
     private Boolean active;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)

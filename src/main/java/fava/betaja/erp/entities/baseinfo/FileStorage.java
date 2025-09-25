@@ -47,7 +47,7 @@ public class FileStorage extends AbstractAuditingEntity {
     private Long size;
 
     @Column(name = "record_id", columnDefinition = "TEXT")
-    @Comment("شناسه رکورد یا موجودیت مرتبط (Cartable یا سایر موجودیت‌ها)")
+    @Comment("شناسه رکورد یا موجودیت مرتبط")
     private String recordId;
 
     @Column(name = "key", columnDefinition = "TEXT")

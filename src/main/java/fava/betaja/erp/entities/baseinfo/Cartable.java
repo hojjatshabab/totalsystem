@@ -1,12 +1,10 @@
 package fava.betaja.erp.entities.baseinfo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import fava.betaja.erp.entities.AbstractAuditingEntity;
 import fava.betaja.erp.entities.security.Users;
 import fava.betaja.erp.enums.baseinfo.CartableState;
 import fava.betaja.erp.enums.baseinfo.Priority;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,7 +33,6 @@ public class Cartable extends AbstractAuditingEntity {
     @Column(name = "document_number", length = 50, nullable = false, unique = true)
     @Comment("شماره پیگیری کارتابل")
     private String documentNumber;
-
 
     @Enumerated(EnumType.STRING)
     @Column(name = "state", nullable = false, length = 50)
