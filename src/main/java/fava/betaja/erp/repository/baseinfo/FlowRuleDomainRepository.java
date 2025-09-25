@@ -10,5 +10,5 @@ import java.util.UUID;
 @Repository
 public interface FlowRuleDomainRepository extends JpaRepository<FlowRuleDomain, UUID> {
     List<FlowRuleDomain> findByFlowRuleId(UUID flowRuleId);
-    List<FlowRuleDomain> findByDomain(String domain);
+    List<FlowRuleDomain> findByEntityNameIgnoreCase(String entityName);
 }

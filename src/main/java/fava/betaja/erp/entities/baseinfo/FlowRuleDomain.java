@@ -34,7 +34,4 @@ public class FlowRuleDomain extends AbstractAuditingEntity {
     @Comment("فعال/غیرفعال")
     private Boolean active = true;
 
-    // در صورت نیاز برای نگه داشتن مراحل مرتبط با این دامنه:
-    // @OneToMany(mappedBy = "flowRuleDomain", fetch = FetchType.LAZY)
-    // private List<FlowRuleStep> steps;
 }

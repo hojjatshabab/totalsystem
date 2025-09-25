@@ -8,6 +8,7 @@ spring:
     url: jdbc:postgresql://localhost:5432/total_betaja_system
     username: postgres
     password: postgres
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -17,6 +18,7 @@ spring:
         format_sql: false
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+
 server:
   port: 8085
 application:
@@ -28,3 +30,10 @@ application:
       refresh-token:
         expiration: 1296000000 # 15 days in ms
         cookie-name: refresh-jwt-cookie
+
+
+fileStorage:
+  file:
+    rootPath: C:\
+    directory: StorageFiles\
+    fileSize: 907200000

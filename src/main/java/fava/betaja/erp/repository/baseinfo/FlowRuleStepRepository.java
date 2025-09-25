@@ -9,6 +9,6 @@ import java.util.UUID;
 
 @Repository
 public interface FlowRuleStepRepository extends JpaRepository<FlowRuleStep, UUID> {
-    List<FlowRuleStep> findByFlowRuleIdOrderByStepOrder(UUID flowRuleId);
+    List<FlowRuleStep> findByFlowRuleIdOrderByStepOrderAsc(UUID flowRuleId);
     List<FlowRuleStep> findByPreviousStepId(UUID previousStepId);
 }

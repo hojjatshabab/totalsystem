@@ -18,6 +18,7 @@ import java.util.List;
 public interface CartableHistoryDtoMapper extends BaseMapper<CartableHistoryDto, CartableHistory> {
 
     @Mapping(target = "user.id", source = "userId")
+    @Mapping(target = "cartable.id", source = "cartableId")
     CartableHistory toEntity(CartableHistoryDto dto);
 
     List<CartableHistory> toEntityList(List<CartableHistoryDto> dtos);
@@ -25,6 +26,8 @@ public interface CartableHistoryDtoMapper extends BaseMapper<CartableHistoryDto,
     @Mapping(target = "userId", source = "user.id")
     @Mapping(target = "userFirstname", source = "user.firstname")
     @Mapping(target = "userLastname", source = "user.lastname")
+    @Mapping(target = "cartableId", source = "cartable.id")
+    @Mapping(target = "cartableTitle", source = "cartable.title")
     CartableHistoryDto toDto(CartableHistory entity);
 
     List<CartableHistoryDto> toDtoList(List<CartableHistory> entities);

@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Data
 @Builder
@@ -14,7 +15,9 @@ import java.util.Date;
 @AllArgsConstructor
 public class CartableHistoryDto {
 
-    private CartableDto cartable;
+    private UUID id;
+    private UUID cartableId;
+    private String cartableTitle;
     private Long userId;
     private String username;
     private String userFirstname;
