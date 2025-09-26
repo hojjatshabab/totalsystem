@@ -6,93 +6,6 @@
 	},
 	"item": [
 		{
-			"name": "commontype",
-			"item": [
-				{
-					"name": "search",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyZXphIiwiaWF0IjoxNzU1NzgwNzM0LCJleHAiOjE3NTU3ODE2MzR9.bR8F5P74S5NQZWV0qntS4ed3X_SSHHcMDbtAOEGOPMQ",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8086/api/v1/org-performance/find-all?page=0&size=10",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8086",
-							"path": [
-								"api",
-								"v1",
-								"org-performance",
-								"find-all"
-							],
-							"query": [
-								{
-									"key": "page",
-									"value": "0"
-								},
-								{
-									"key": "size",
-									"value": "10"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "findall",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJob2phdCIsImlhdCI6MTc1Nzc5MDAzOSwiZXhwIjoxNzU3NzkwOTM5fQ.OzVxQwPYyNZFp040xKRljzCMgymbQ0imOFaIbW6FOyE",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{server_url}}/api/v1/common-type/find-all?page=0&size=10",
-							"host": [
-								"{{server_url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"common-type",
-								"find-all"
-							],
-							"query": [
-								{
-									"key": "page",
-									"value": "0"
-								},
-								{
-									"key": "size",
-									"value": "10"
-								}
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
 			"name": "PeriodRange",
 			"item": [
 				{
@@ -397,7 +310,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"name\": \"تعداد کل پروژه های نهضت ملی مسکن در کل کشور\",\r\n  \"dataType\": \"INT\",\r\n  \"organizationUnitId\": 46\r\n}",
+							"raw": "{\r\n  \"name\": \"2تعداد کل پروژه های نهضت ملی مسکن در کل کشور\",\r\n  \"dataType\": \"INT\",\r\n  \"organizationUnitId\": 46\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -470,14 +383,1585 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{server_url}}/api/attribute/25efcfac-dda6-407a-ac70-2785cd2371b1",
+							"raw": "{{server_url}}/api/attribute/e81819d7-e623-4c07-b8eb-7e26f3503a25",
 							"host": [
 								"{{server_url}}"
 							],
 							"path": [
 								"api",
 								"attribute",
-								"25efcfac-dda6-407a-ac70-2785cd2371b1"
+								"e81819d7-e623-4c07-b8eb-7e26f3503a25"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "FlowRule",
+			"item": [
+				{
+					"name": "finadAll",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/flow-rule?currentPage=1&pageSize=10",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"flow-rule"
+							],
+							"query": [
+								{
+									"key": "currentPage",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "finadAllList",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/flow-rule/list",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"flow-rule",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "save",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"فرآیند تایید بلوک\",\r\n    \"description\": \"\",\r\n    \"active\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/api/flow-rule",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"flow-rule"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"d8c24669-f2ab-45aa-94fb-97eac42b120d\",\r\n    \"name\": \"فرآیند تایید بلوک\",\r\n    \"description\": \"\",\r\n    \"active\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/api/flow-rule",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"flow-rule"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/flow-rule/d8c24669-f2ab-45aa-94fb-97eac42b120d",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"flow-rule",
+								"d8c24669-f2ab-45aa-94fb-97eac42b120d"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "FlowRuleDomain",
+			"item": [
+				{
+					"name": "finadAll",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/flow-rule-domain?currentPage=1&pageSize=10",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"flow-rule-domain"
+							],
+							"query": [
+								{
+									"key": "currentPage",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "finadAllList",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/flow-rule-domain/list",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"flow-rule-domain",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "save",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"flowRuleId\": \"04b26cc2-421b-4779-b8cd-658ec31260bd\",\r\n    \"entityName\": \"block\",\r\n    \"active\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/api/flow-rule-domain",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"flow-rule-domain"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"72ef9f6d-29da-43b9-b05c-97aebe408262\",\r\n    \"flowRuleId\": \"04b26cc2-421b-4779-b8cd-658ec31260bd\",\r\n    \"entityName\": \"block\",\r\n    \"active\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/api/flow-rule-domain",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"flow-rule-domain"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/flow-rule-domain/72ef9f6d-29da-43b9-b05c-97aebe408262",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"flow-rule-domain",
+								"72ef9f6d-29da-43b9-b05c-97aebe408262"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "FlowRuleStep",
+			"item": [
+				{
+					"name": "finadAll",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/flow-rule-step?currentPage=1&pageSize=10",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"flow-rule-step"
+							],
+							"query": [
+								{
+									"key": "currentPage",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "finadAllList",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/flow-rule-step/list",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"flow-rule-step",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "save",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"flowRuleId\": \"04b26cc2-421b-4779-b8cd-658ec31260bd\",\r\n    \"stepOrder\": 1,\r\n    \"organizationUnitId\": 0,\r\n    \"roleId\": 0,\r\n    \"actionType\": \"SUBMIT\",\r\n    \"conditionExpression\": \"\",\r\n    \"previousStep\": null,\r\n    \"finalStep\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/api/flow-rule-step",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"flow-rule-step"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"72ef9f6d-29da-43b9-b05c-97aebe408262\",\r\n    \"flowRuleId\": \"04b26cc2-421b-4779-b8cd-658ec31260bd\",\r\n    \"entityName\": \"block\",\r\n    \"active\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/api/flow-rule-step",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"flow-rule-step"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/flow-rule-step/72ef9f6d-29da-43b9-b05c-97aebe408262",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"flow-rule-step",
+								"72ef9f6d-29da-43b9-b05c-97aebe408262"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Plan",
+			"item": [
+				{
+					"name": "finadAll",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/plan?currentPage=1&pageSize=10",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"plan"
+							],
+							"query": [
+								{
+									"key": "currentPage",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "finadAllByOrg",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/plan/find-by-org?currentPage=1&pageSize=10&organizationUnitId=4",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"plan",
+								"find-by-org"
+							],
+							"query": [
+								{
+									"key": "currentPage",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								},
+								{
+									"key": "organizationUnitId",
+									"value": "4"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "finadAllList",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/plan/list",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"plan",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "save",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"طرح A\",\r\n    \"organizationUnitId\": 4\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/api/plan",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"plan"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"9e2babde-5a24-48da-93e0-cdb0232dfea8\",\r\n    \"name\": \"طرح A\",\r\n    \"organizationUnitId\": 4\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/api/plan",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"plan"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/plan/9e2babde-5a24-48da-93e0-cdb0232dfea8",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"plan",
+								"9e2babde-5a24-48da-93e0-cdb0232dfea8"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Project",
+			"item": [
+				{
+					"name": "finadAll",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/project?currentPage=1&pageSize=10",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"project"
+							],
+							"query": [
+								{
+									"key": "currentPage",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "finadAllByPlan",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/project/find-by-plan?currentPage=1&pageSize=10&planId=38edd53b-a2e3-4e4d-89b6-4e3d02eef3d6",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"project",
+								"find-by-plan"
+							],
+							"query": [
+								{
+									"key": "currentPage",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								},
+								{
+									"key": "planId",
+									"value": "38edd53b-a2e3-4e4d-89b6-4e3d02eef3d6"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "finadAllList",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/project/list",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"project",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "save",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"پهنه D\",\r\n    \"planId\": \"38edd53b-a2e3-4e4d-89b6-4e3d02eef3d6\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/api/project",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"project"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"a4ed6240-74d2-4b0a-aa14-4f523d46da6d\",\r\n    \"name\": \"پهنه D\",\r\n    \"planId\": \"38edd53b-a2e3-4e4d-89b6-4e3d02eef3d6\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/api/project",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"project"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/project/a4ed6240-74d2-4b0a-aa14-4f523d46da6d",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"project",
+								"a4ed6240-74d2-4b0a-aa14-4f523d46da6d"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Block",
+			"item": [
+				{
+					"name": "finadAll",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/block?currentPage=1&pageSize=10",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"block"
+							],
+							"query": [
+								{
+									"key": "currentPage",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "finadAllByProject",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/block/find-by-project?currentPage=1&pageSize=10&projectId=53c94e44-a272-4ecb-b93c-85ad4ce3ae3f",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"block",
+								"find-by-project"
+							],
+							"query": [
+								{
+									"key": "currentPage",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								},
+								{
+									"key": "projectId",
+									"value": "53c94e44-a272-4ecb-b93c-85ad4ce3ae3f"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "finadAllList",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/block/list",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"block",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "save",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"بلوک A\",\r\n  \"blockCount\": 20,\r\n  \"floorCount\": 90,\r\n  \"unitCount\": 120,\r\n  \"totalArea\": 5850,\r\n  \"startDate\": \"2025-09-24\",\r\n  \"deliveryDate\": \"2026-09-24\",\r\n  \"projectId\": \"53c94e44-a272-4ecb-b93c-85ad4ce3ae3f\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/api/block",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"block"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"bd08b5fd-82a7-46d6-b77a-2f44aab78f52\",\r\n    \"name\": \"بلوک A\",\r\n    \"blockCount\": 20,\r\n    \"floorCount\": 90,\r\n    \"unitCount\": 120,\r\n    \"totalArea\": 5850,\r\n    \"startDate\": \"2025-09-24\",\r\n    \"deliveryDate\": \"2026-09-24\",\r\n    \"projectId\": \"53c94e44-a272-4ecb-b93c-85ad4ce3ae3f\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/api/block",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"block"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/block/bd08b5fd-82a7-46d6-b77a-2f44aab78f52",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"block",
+								"bd08b5fd-82a7-46d6-b77a-2f44aab78f52"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "CommonBaseType",
+			"item": [
+				{
+					"name": "finadAll",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/common-base-type?currentPage=1&pageSize=10",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"common-base-type"
+							],
+							"query": [
+								{
+									"key": "currentPage",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "finadAllList",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/common-base-type/list",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"common-base-type",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "save",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"className\": \"type-organization\",\r\n    \"active\": true,\r\n    \"title\": \"نوع یگان\",\r\n    \"description\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/api/common-base-type",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"common-base-type"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"className\": \"type-organization\",\r\n    \"active\": true,\r\n    \"title\": \"نوع یگان\",\r\n    \"description\": \"2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/api/common-base-type",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"common-base-type"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/common-base-type/1",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"common-base-type",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "CommonBaseData",
+			"item": [
+				{
+					"name": "finadAll",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/common-base-data?currentPage=1&pageSize=10",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"common-base-data"
+							],
+							"query": [
+								{
+									"key": "currentPage",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "finadAllByCommonBaseType",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/common-base-data?currentPage=1&pageSize=10&typeId=2",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"common-base-data"
+							],
+							"query": [
+								{
+									"key": "currentPage",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								},
+								{
+									"key": "typeId",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "finadAllList",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/common-base-data/list",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"common-base-data",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "save",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"active\": true,\r\n    \"value\": \"موسسه\",\r\n    \"description\": \"\",\r\n    \"orderNo\": 3,\r\n    \"commonBaseTypeId\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/api/common-base-data",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"common-base-data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 3,\r\n    \"active\": true,\r\n    \"value\": \"معاونت\",\r\n    \"description\": \"2\",\r\n    \"orderNo\": 3,\r\n    \"commonBaseTypeId\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/api/common-base-data",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"common-base-data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/common-base-data/53",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"common-base-data",
+								"53"
 							]
 						}
 					},
@@ -1023,6 +2507,86 @@
 					"response": []
 				},
 				{
+					"name": "currentOrganization",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/organization/current-organization",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"organization",
+								"current-organization"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "rootOrganization",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/organization/root-organization",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"organization",
+								"root-organization"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "finadAllList",
 					"request": {
 						"auth": {
@@ -1074,7 +2638,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"معاونت مسکن بتاجا\",\r\n    \"address\": \"\",\r\n    \"tellNumber\": \"\",\r\n    \"code\": \"\",\r\n    \"active\": true,\r\n    \"codePath\": \"001001\",\r\n    \"parentId\": 1\r\n}",
+							"raw": "{\r\n    \"name\": \"شرکت فارس2\",\r\n    \"address\": \"\",\r\n    \"tellNumber\": \"\",\r\n    \"code\": \"\",\r\n    \"active\": true,\r\n    \"commonBaseDataOrgTypeId\": 52,\r\n    \"parentId\": 52\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1111,7 +2675,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"string\",\r\n    \"address\": \"string\",\r\n    \"tellNumber\": \"string\",\r\n    \"code\": \"string\",\r\n    \"active\": true,\r\n    \"codePath\": \"string\",\r\n    \"parentId\": 1\r\n}",
+							"raw": "{\r\n    \"id\": 54,\r\n    \"name\": \"شرکت مسکن سازان\",\r\n    \"address\": \"\",\r\n    \"tellNumber\": \"\",\r\n    \"code\": \"\",\r\n    \"active\": true,\r\n    \"codePath\": \"001002004\",\r\n    \"commonBaseDataOrgTypeId\": 52,\r\n    \"commonBaseDataOrgTypeValue\": \"شرکت\",\r\n    \"parentId\": 52,\r\n    \"parentName\": \"شرکت ها و موسسات بتاجا\",\r\n    \"children\": null\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1147,18 +2711,629 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{server_url}}/api/organization/692d4c53-8216-4ec7-b4ec-d16a41457224",
+							"raw": "{{server_url}}/api/organization/103",
 							"host": [
 								"{{server_url}}"
 							],
 							"path": [
 								"api",
 								"organization",
-								"692d4c53-8216-4ec7-b4ec-d16a41457224"
+								"103"
 							]
 						}
 					},
 					"response": []
+				}
+			]
+		},
+		{
+			"name": "Security",
+			"item": [
+				{
+					"name": "User",
+					"item": [
+						{
+							"name": "finadAll",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{server_url}}/api/block?currentPage=1&pageSize=10",
+									"host": [
+										"{{server_url}}"
+									],
+									"path": [
+										"api",
+										"block"
+									],
+									"query": [
+										{
+											"key": "currentPage",
+											"value": "1"
+										},
+										{
+											"key": "pageSize",
+											"value": "10"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "finadAllByProject",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{server_url}}/api/block/find-by-project?currentPage=1&pageSize=10&projectId=53c94e44-a272-4ecb-b93c-85ad4ce3ae3f",
+									"host": [
+										"{{server_url}}"
+									],
+									"path": [
+										"api",
+										"block",
+										"find-by-project"
+									],
+									"query": [
+										{
+											"key": "currentPage",
+											"value": "1"
+										},
+										{
+											"key": "pageSize",
+											"value": "10"
+										},
+										{
+											"key": "projectId",
+											"value": "53c94e44-a272-4ecb-b93c-85ad4ce3ae3f"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "finadAllList",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{server_url}}/api/block/list",
+									"host": [
+										"{{server_url}}"
+									],
+									"path": [
+										"api",
+										"block",
+										"list"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "save",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"بلوک A\",\r\n  \"blockCount\": 20,\r\n  \"floorCount\": 90,\r\n  \"unitCount\": 120,\r\n  \"totalArea\": 5850,\r\n  \"startDate\": \"2025-09-24\",\r\n  \"deliveryDate\": \"2026-09-24\",\r\n  \"projectId\": \"53c94e44-a272-4ecb-b93c-85ad4ce3ae3f\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{server_url}}/api/block",
+									"host": [
+										"{{server_url}}"
+									],
+									"path": [
+										"api",
+										"block"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": \"bd08b5fd-82a7-46d6-b77a-2f44aab78f52\",\r\n    \"name\": \"بلوک A\",\r\n    \"blockCount\": 20,\r\n    \"floorCount\": 90,\r\n    \"unitCount\": 120,\r\n    \"totalArea\": 5850,\r\n    \"startDate\": \"2025-09-24\",\r\n    \"deliveryDate\": \"2026-09-24\",\r\n    \"projectId\": \"53c94e44-a272-4ecb-b93c-85ad4ce3ae3f\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{server_url}}/api/block",
+									"host": [
+										"{{server_url}}"
+									],
+									"path": [
+										"api",
+										"block"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{server_url}}/api/block/bd08b5fd-82a7-46d6-b77a-2f44aab78f52",
+									"host": [
+										"{{server_url}}"
+									],
+									"path": [
+										"api",
+										"block",
+										"bd08b5fd-82a7-46d6-b77a-2f44aab78f52"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "registerUser",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"firstname\": \"حجت\",\r\n    \"lastname\": \"شباب\",\r\n    \"username\": \"hojat\",\r\n    \"password\": \"123\",\r\n    \"organizationUnitId\": 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{server_url}}/api/v1/auth/register",
+									"host": [
+										"{{server_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UserInfo",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"hojat\",\r\n    \"password\": \"123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{server_url}}/api/v1/auth/info",
+									"host": [
+										"{{server_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"info"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Role",
+					"item": [
+						{
+							"name": "finadAll",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{server_url}}/api/role?currentPage=1&pageSize=10",
+									"host": [
+										"{{server_url}}"
+									],
+									"path": [
+										"api",
+										"role"
+									],
+									"query": [
+										{
+											"key": "currentPage",
+											"value": "1"
+										},
+										{
+											"key": "pageSize",
+											"value": "10"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "finadAllByProject",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{server_url}}/api/block/find-by-project?currentPage=1&pageSize=10&projectId=53c94e44-a272-4ecb-b93c-85ad4ce3ae3f",
+									"host": [
+										"{{server_url}}"
+									],
+									"path": [
+										"api",
+										"block",
+										"find-by-project"
+									],
+									"query": [
+										{
+											"key": "currentPage",
+											"value": "1"
+										},
+										{
+											"key": "pageSize",
+											"value": "10"
+										},
+										{
+											"key": "projectId",
+											"value": "53c94e44-a272-4ecb-b93c-85ad4ce3ae3f"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "finadAllList",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{server_url}}/api/block/list",
+									"host": [
+										"{{server_url}}"
+									],
+									"path": [
+										"api",
+										"block",
+										"list"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "save",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"بلوک A\",\r\n  \"blockCount\": 20,\r\n  \"floorCount\": 90,\r\n  \"unitCount\": 120,\r\n  \"totalArea\": 5850,\r\n  \"startDate\": \"2025-09-24\",\r\n  \"deliveryDate\": \"2026-09-24\",\r\n  \"projectId\": \"53c94e44-a272-4ecb-b93c-85ad4ce3ae3f\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{server_url}}/api/block",
+									"host": [
+										"{{server_url}}"
+									],
+									"path": [
+										"api",
+										"block"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": \"bd08b5fd-82a7-46d6-b77a-2f44aab78f52\",\r\n    \"name\": \"بلوک A\",\r\n    \"blockCount\": 20,\r\n    \"floorCount\": 90,\r\n    \"unitCount\": 120,\r\n    \"totalArea\": 5850,\r\n    \"startDate\": \"2025-09-24\",\r\n    \"deliveryDate\": \"2026-09-24\",\r\n    \"projectId\": \"53c94e44-a272-4ecb-b93c-85ad4ce3ae3f\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{server_url}}/api/block",
+									"host": [
+										"{{server_url}}"
+									],
+									"path": [
+										"api",
+										"block"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{server_url}}/api/block/bd08b5fd-82a7-46d6-b77a-2f44aab78f52",
+									"host": [
+										"{{server_url}}"
+									],
+									"path": [
+										"api",
+										"block",
+										"bd08b5fd-82a7-46d6-b77a-2f44aab78f52"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "registerUser",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"firstname\": \"حجت\",\r\n    \"lastname\": \"شباب\",\r\n    \"username\": \"hojat\",\r\n    \"password\": \"123\",\r\n    \"organizationUnitId\": 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{server_url}}/api/v1/auth/register",
+									"host": [
+										"{{server_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UserInfo",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"hojat\",\r\n    \"password\": \"123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{server_url}}/api/v1/auth/info",
+									"host": [
+										"{{server_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"info"
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		},
@@ -1202,38 +3377,6 @@
 						"v1",
 						"auth",
 						"authenticate"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "registerUser",
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"first_name\": \"حجت\",\r\n    \"last_name\": \"شباب\",\r\n    \"username\": \"hojat\",\r\n    \"password\": \"123\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{server_url}}/api/v1/auth/register",
-					"host": [
-						"{{server_url}}"
-					],
-					"path": [
-						"api",
-						"v1",
-						"auth",
-						"register"
 					]
 				}
 			},
