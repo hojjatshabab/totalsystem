@@ -1,5 +1,6 @@
 package fava.betaja.erp.config;
 
+import fava.betaja.erp.entities.security.Users;
 import fava.betaja.erp.service.JwtService;
 import io.micrometer.common.util.StringUtils;
 import jakarta.servlet.FilterChain;
@@ -29,13 +30,17 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
-    private final UserDetailsService userDetailsService; /** implementation is provided in config.ApplicationSecurityConfig */
+    private final UserDetailsService userDetailsService;
+
+    /**
+     * implementation is provided in config.ApplicationSecurityConfig
+     */
 
     @Override
     protected void doFilterInternal(
-           @NonNull HttpServletRequest request,
-           @NonNull HttpServletResponse response,
-           @NonNull FilterChain filterChain
+            @NonNull HttpServletRequest request,
+            @NonNull HttpServletResponse response,
+            @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
 
 
@@ -43,7 +48,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String jwt = jwtService.getJwtFromCookies(request);
         final String authHeader = request.getHeader("Authorization");
 
-        if((jwt == null && (authHeader ==  null || !authHeader.startsWith("Bearer "))) || request.getRequestURI().contains("/auth")){
+        if ((jwt == null && (authHeader == null || !authHeader.startsWith("Bearer "))) || request.getRequestURI().contains("/auth")) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -54,17 +59,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
 
-        final String userEmail =jwtService.extractUserName(jwt);
+        final String userEmail = jwtService.extractUserName(jwt);
         /*
            SecurityContextHolder: is where Spring Security stores the details of who is authenticated.
            Spring Security uses that information for authorization.*/
 
-        if(StringUtils.isNotEmpty(userEmail)
-                && SecurityContextHolder.getContext().getAuthentication() == null){
+        if (StringUtils.isNotEmpty(userEmail)
+                && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
-            if(jwtService.isTokenValid(jwt, userDetails)){
+            /*if (jwtService.isTokenValid(jwt, userDetails)) {
+
                 //update the spring security context by adding a new UsernamePasswordAuthenticationToken
                 SecurityContext context = SecurityContextHolder.createEmptyContext();
+
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,
@@ -72,12 +79,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 context.setAuthentication(authToken);
                 SecurityContextHolder.setContext(context);
+            }*/
+            if (jwtService.isTokenValid(jwt, userDetails)) {
+
+                Users user = (Users) userDetails; // <-- اینجا Users را کست کردیم تا unit قابل دسترسی باشد
+                // حالا می‌توانید unit را استفاده کنید
+                // Unit unit = user.getUnit();
+
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                        user,   // از همین Users استفاده می‌کنیم
+                        null,
+                        user.getAuthorities()
+                );
+                SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
-        filterChain.doFilter(request,response);
+        filterChain.doFilter(request, response);
     }
-
-
 
 
     @Override

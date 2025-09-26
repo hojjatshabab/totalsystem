@@ -12,6 +12,8 @@ public interface OrganizationUnitService {
 
     OrganizationUnitDto update(OrganizationUnitDto organizationUnitDto);
 
+    OrganizationUnitDto getCurrentOrganizationUnit();
+
     PageResponse<OrganizationUnitDto> findAll(PageRequest<OrganizationUnitDto> model);
 
     List<OrganizationUnitDto> findAll();

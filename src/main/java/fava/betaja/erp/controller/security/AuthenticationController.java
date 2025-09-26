@@ -1,5 +1,8 @@
 package fava.betaja.erp.controller.security;
 
+import fava.betaja.erp.dto.common.OrganizationUnitDto;
+import fava.betaja.erp.entities.common.OrganizationUnit;
+import fava.betaja.erp.entities.security.Users;
 import fava.betaja.erp.payload.request.AuthenticationRequest;
 import fava.betaja.erp.payload.request.RefreshTokenRequest;
 import fava.betaja.erp.payload.request.RegisterRequest;
@@ -17,14 +20,16 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.server.ResponseStatusException;
 
 
 @Tag(name = "Authentication", description = "The Authentication API. Contains operations like login, logout, refresh-token etc.")
@@ -43,14 +48,14 @@ public class AuthenticationController {
     private final JwtService jwtService;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register( @RequestBody RegisterRequest request) {
+    public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request) {
 
         AuthenticationResponse authenticationResponse = authenticationService.register(request);
         ResponseCookie jwtCookie = jwtService.generateJwtCookie(authenticationResponse.getAccessToken());
         ResponseCookie refreshTokenCookie = refreshTokenService.generateRefreshTokenCookie(authenticationResponse.getRefreshToken());
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-                .header(HttpHeaders.SET_COOKIE,refreshTokenCookie.toString())
+                .header(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString())
                 .body(authenticationResponse);
 
     }
@@ -74,10 +79,11 @@ public class AuthenticationController {
         ResponseCookie jwtCookie = jwtService.generateJwtCookie(authenticationResponse.getAccessToken());
         ResponseCookie refreshTokenCookie = refreshTokenService.generateRefreshTokenCookie(authenticationResponse.getRefreshToken());
         return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE,jwtCookie.toString())
-                .header(HttpHeaders.SET_COOKIE,refreshTokenCookie.toString())
+                .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+                .header(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString())
                 .body(authenticationResponse);
     }
+
     @PostMapping("/refresh-token")
     public ResponseEntity<RefreshTokenResponse> refreshToken(@RequestBody RefreshTokenRequest request) {
         return ResponseEntity.ok(refreshTokenService.generateNewToken(request));
@@ -93,23 +99,24 @@ public class AuthenticationController {
                 .header(HttpHeaders.SET_COOKIE, NewJwtCookie.toString())
                 .build();
     }
+
     @GetMapping("/info")
-    public Authentication getAuthentication(@RequestBody AuthenticationRequest request){
-        return     authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getUsername(),request.getPassword()));
+    public Authentication getAuthentication(@RequestBody AuthenticationRequest request) {
+        return authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Void> logout(HttpServletRequest request){
+    public ResponseEntity<Void> logout(HttpServletRequest request) {
         String refreshToken = refreshTokenService.getRefreshTokenFromCookies(request);
-        if(refreshToken != null) {
-           refreshTokenService.deleteByToken(refreshToken);
+        if (refreshToken != null) {
+            refreshTokenService.deleteByToken(refreshToken);
         }
         ResponseCookie jwtCookie = jwtService.getCleanJwtCookie();
         ResponseCookie refreshTokenCookie = refreshTokenService.getCleanRefreshTokenCookie();
         return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE,jwtCookie.toString())
-                .header(HttpHeaders.SET_COOKIE,refreshTokenCookie.toString())
+                .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+                .header(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString())
                 .build();
 
     }

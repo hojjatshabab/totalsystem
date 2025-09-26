@@ -4,6 +4,7 @@ import fava.betaja.erp.dto.PageRequest;
 import fava.betaja.erp.dto.PageResponse;
 import fava.betaja.erp.dto.common.OrganizationUnitDto;
 import fava.betaja.erp.entities.common.OrganizationUnit;
+import fava.betaja.erp.entities.security.Users;
 import fava.betaja.erp.exceptions.ServiceException;
 import fava.betaja.erp.mapper.common.OrganizationUnitDtoMapper;
 import fava.betaja.erp.repository.common.OrganizationUnitRepository;
@@ -11,8 +12,12 @@ import fava.betaja.erp.service.common.OrganizationUnitService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -43,6 +48,25 @@ public class OrganizationUnitServiceImpl implements OrganizationUnitService {
         return organizationUnitDtoMapper.toDto(
                 organizationUnitRepository.save(organizationUnitDtoMapper.toEntity(dto))
         );
+    }
+
+    @Override
+    public OrganizationUnitDto getCurrentOrganizationUnit() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()
+                || authentication.getPrincipal().equals("anonymousUser")) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "کاربر لاگین نشده است");
+        }
+
+        Users user = (Users) authentication.getPrincipal();
+        OrganizationUnit organizationUnit = user.getOrganizationUnit();
+
+        if (organizationUnit == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "یگان کاربر پیدا نشد");
+        }
+
+        return organizationUnitDtoMapper.toDto(organizationUnit);
     }
 
     @Override

@@ -1,39 +1,31 @@
 package fava.betaja.erp.entities.security;
 
-
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 
-import java.util.Collection;
 import java.util.List;
 
+@Data
+@Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
-@Entity
 @Table(name = "role")
-public class Role {
+public class Role implements GrantedAuthority {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "role_name")
+    @Column(name = "role_name", nullable = false, unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "role")
-    private List<UserRole> userRoles;
-
-    @OneToMany(mappedBy = "role",fetch = FetchType.EAGER    )
+    @OneToMany(mappedBy = "role", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<RolePermission> rolePermissions;
 
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+    @Override
+    public String getAuthority() {
+        return "ROLE_" + name;
     }
-
 }

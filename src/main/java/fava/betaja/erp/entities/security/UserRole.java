@@ -1,35 +1,25 @@
 package fava.betaja.erp.entities.security;
 
-
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+@Data
+@Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
-@Entity
 @Table(name = "user_role")
 public class UserRole {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "user_id")
-    private Long userId;
-    @Column(name = "role_id")
-    private Long RoleId;
 
-
-    @ManyToOne
-    @JoinColumn(name = "user_id" ,referencedColumnName = "id",updatable = false,insertable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
     private Users user;
 
-    @ManyToOne
-    @JoinColumn(name = "role_id" ,referencedColumnName = "id",updatable = false,insertable = false)  // This is the foreign key column in Order table
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role_id", nullable = false)
     private Role role;
-
 }

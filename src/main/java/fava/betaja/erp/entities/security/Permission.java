@@ -1,32 +1,20 @@
 package fava.betaja.erp.entities.security;
 
+import jakarta.persistence.*;
+import lombok.*;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
-
+@Data
+@Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
-@Entity
 @Table(name = "permission")
-public class Permission implements GrantedAuthority {
+public class Permission {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, unique = true)
     private String name;
-
-
-    @Override
-    public String getAuthority() {
-        return this.name;
-    }
 }

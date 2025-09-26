@@ -1,75 +1,65 @@
 package fava.betaja.erp.entities.security;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import fava.betaja.erp.entities.common.OrganizationUnit;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
+import org.hibernate.annotations.Comment;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Data
+@Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
-@Entity
 @Table(name = "users")
-public class Users implements UserDetails { // make our app User a spring security User
-    /*
-        we have two options : implements the UserDetails interface or create a user class that extends User spring class which also
-        implements UserDetails
-     */
+public class Users implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "first_name")
+    @NotBlank(message = "First name is required")
     private String firstname;
 
     @Column(name = "last_name")
+    @NotBlank(message = "Last name is required")
     private String lastname;
 
+    @Column(unique = true, nullable = false)
+    @NotBlank(message = "Username is required")
     private String username;
 
+    @Column(nullable = false)
+    @NotBlank(message = "Password is required")
     private String password;
 
-    private Boolean active;
+    @Column(nullable = false)
+    private Boolean active = true;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<UserRole> userRoles;
 
-    // we should return a list of roles
+    @JoinColumn(name = "organization_unit_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @Comment("یگان")
+    private OrganizationUnit organizationUnit;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (userRoles == null) return null;
-        List<String> authorities = new ArrayList<>();
-        for (UserRole userRole : userRoles) {
-            authorities
-                    .addAll(userRole.getRole().getRolePermissions().stream()
-                            .map(a -> a.getPermission().getAuthority()).toList());
-
-        }
-        return authorities.stream().map(a -> new GrantedAuthority() {
-            @Override
-            public String getAuthority() {
-                return a;
-            }
-        }).collect(Collectors.toList());
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
-    public String getUsername() {
-        return username;
+        return userRoles.stream()
+                .flatMap(userRole -> userRole.getRole().getRolePermissions().stream()
+                        .map(rolePermission -> (GrantedAuthority) () -> rolePermission.getPermission().getName()))
+                .collect(Collectors.toSet());
     }
 
     @Override
@@ -89,6 +79,6 @@ public class Users implements UserDetails { // make our app User a spring securi
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return Boolean.TRUE.equals(active);
     }
 }

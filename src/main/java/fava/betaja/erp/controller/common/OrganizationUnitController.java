@@ -5,11 +5,17 @@ import fava.betaja.erp.controller.BaseController;
 import fava.betaja.erp.dto.PageRequest;
 import fava.betaja.erp.dto.PageResponse;
 import fava.betaja.erp.dto.common.OrganizationUnitDto;
+import fava.betaja.erp.entities.common.OrganizationUnit;
+import fava.betaja.erp.entities.security.Users;
 import fava.betaja.erp.exceptions.ServiceException;
 import fava.betaja.erp.service.common.OrganizationUnitService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Locale;
@@ -28,6 +34,15 @@ public class OrganizationUnitController extends BaseController {
             return RESULT(organizationUnitService.save(dto), locale);
         } catch (ServiceException e) {
             return BAD_REQUEST(e.getMessage(), locale);
+        } catch (Exception e) {
+            return INTERNAL_SERVER_ERROR(e.getMessage(), locale);
+        }
+    }
+
+    @GetMapping("/current-organization")
+    public ActionResult<OrganizationUnitDto> getCurrentOrganization(Locale locale) {
+        try {
+            return RESULT(organizationUnitService.getCurrentOrganizationUnit(), locale);
         } catch (Exception e) {
             return INTERNAL_SERVER_ERROR(e.getMessage(), locale);
         }

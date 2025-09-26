@@ -17,13 +17,17 @@ public class RegisterRequest {
 
     @NotBlank(message = "firstname is required")
     private String firstname;
+
     @NotBlank(message = "lastname is required")
     private String lastname;
-    @NotBlank(message = "username is required")
 
+    @NotBlank(message = "username is required")
     private String username;
+
     @NotBlank(message = "password is required")
     @StrongPassword
     private String password;
+
+    private Long organizationUnitId;
 
 }
