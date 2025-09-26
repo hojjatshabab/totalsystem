@@ -1,4 +1,4 @@
-package fava.betaja.erp.repository;
+package fava.betaja.erp.repository.security;
 
 import fava.betaja.erp.entities.security.Users;
 import org.springframework.data.jpa.repository.JpaRepository;

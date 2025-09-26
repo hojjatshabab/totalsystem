@@ -1,6 +1,6 @@
 package fava.betaja.erp.config;
 
-import fava.betaja.erp.repository.UserRepository;
+import fava.betaja.erp.repository.security.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

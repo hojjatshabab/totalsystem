@@ -1,7 +1,7 @@
 package fava.betaja.erp.service.impl;
 
 import fava.betaja.erp.entities.common.OrganizationUnit;
-import fava.betaja.erp.repository.UserRepository;
+import fava.betaja.erp.repository.security.UserRepository;
 import fava.betaja.erp.enums.TokenType;
 import fava.betaja.erp.payload.request.AuthenticationRequest;
 import fava.betaja.erp.payload.request.RegisterRequest;
