@@ -31,7 +31,7 @@ public class FlowRuleDomainServiceImpl implements FlowRuleDomainService {
     @Override
     public FlowRuleDomainDto save(FlowRuleDomainDto dto) {
         validate(dto, true);
-        log.info("Saving FlowRuleDomain: entityName={}, domain={}", dto.getEntityName(), dto.getDomain());
+        log.info("Saving FlowRuleDomain: entityName={}", dto.getEntityName());
         FlowRuleDomain entity = mapper.toEntity(dto);
         return mapper.toDto(repository.save(entity));
     }
@@ -95,11 +95,6 @@ public class FlowRuleDomainServiceImpl implements FlowRuleDomainService {
         if (!isCreate && (dto.getId() == null || !repository.existsById(dto.getId()))) {
             throw new ServiceException("FlowRuleDomain برای بروزرسانی موجود نیست.");
         }
-
-        if (dto.getDomain() == null ) {
-            throw new ServiceException("نام Domain الزامی است.");
-        }
-
         if (dto.getEntityName() == null || dto.getEntityName().isBlank()) {
             throw new ServiceException("نام Entity الزامی است.");
         }
