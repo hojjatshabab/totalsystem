@@ -30,29 +30,24 @@ public class Block extends AbstractAuditingEntity {
     @Comment("نام")
     private String name;
 
-    @Min(value = 1, message = "تعداد بلوک نمی‌تواند کمتر از ۱ باشد")
-    @Column(name = "block_count", nullable = false)
+    @Column(name = "block_count")
     @Comment("تعداد بلوک")
     private Integer blockCount;
 
-    @Min(value = 1, message = "تعداد طبقات نمی‌تواند کمتر از ۱ باشد")
-    @Column(name = "floor_count", nullable = false)
+    @Column(name = "floor_count")
     @Comment("تعداد طبقه")
     private Integer floorCount;
 
-    @Min(value = 1, message = "تعداد واحدها نمی‌تواند کمتر از ۱ باشد")
-    @Column(name = "unit_count", nullable = false)
+    @Column(name = "unit_count")
     @Comment("تعداد واحد")
     private Integer unitCount;
 
-    @DecimalMin(value = "0.0", inclusive = false, message = "متراژ کلی باید بیشتر از صفر باشد")
-    @Column(name = "total_area", precision = 18, scale = 2, nullable = false)
+    @Column(name = "total_area")
     @Comment("متراژ کلی (مترمربع)")
     private BigDecimal totalArea;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", locale = "IR", timezone = "Asia/Tehran")
-    @NotNull(message = "تاریخ شروع الزامی است")
-    @Column(name = "start_date", nullable = false)
+    @Column(name = "start_date")
     @Comment("تاریخ شروع")
     private LocalDate startDate;
 
