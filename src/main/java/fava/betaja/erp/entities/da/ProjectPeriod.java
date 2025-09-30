@@ -13,14 +13,17 @@ import org.hibernate.annotations.Comment;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "block_period", schema = "da")
-public class BlockPeriod extends AbstractAuditingEntity {
+@Table(name = "project_period", schema = "da",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"year","period_range_id","project_id"})
+        })
+public class ProjectPeriod extends AbstractAuditingEntity {
 
     @Column(name = "title")
     @Comment("عنوان")
     private String title;
 
-    @Column(name = "year")
+    @Column(name = "year", nullable = false)
     @Comment("سال")
     private String year;
 
@@ -36,11 +39,11 @@ public class BlockPeriod extends AbstractAuditingEntity {
     @Comment("نوع دوره")
     private PeriodRange periodRange;
 
-    @NotNull(message = "بلوک الزامی هست")
-    @JoinColumn(name = "block_id", referencedColumnName = "id", nullable = false)
+    @NotNull(message = "پروژه الزامی هست")
+    @JoinColumn(name = "project_id", referencedColumnName = "id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JsonIgnore
-    @Comment("بلوک")
-    private Block block;
+    @Comment("پروژه")
+    private Project project;
 
 }

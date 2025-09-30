@@ -10,5 +10,9 @@ import java.util.UUID;
 
 @Repository
 public interface BlockValueRepository extends JpaRepository<BlockValue, UUID> {
-    Page<BlockValue> findByBlockPeriodId(UUID blockPeriodId, Pageable pageable);
+    Page<BlockValue> findByProjectPeriodId(UUID projectPeriodId, Pageable pageable);
+
+    Page<BlockValue> findByProjectPeriodIdAndBlockId(UUID projectPeriodId, UUID blockId, Pageable pageable);
+
+    Page<BlockValue> findByBlockId(UUID blockId, Pageable pageable);
 }

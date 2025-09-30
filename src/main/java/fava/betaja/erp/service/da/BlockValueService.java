@@ -2,7 +2,6 @@ package fava.betaja.erp.service.da;
 
 import fava.betaja.erp.dto.PageRequest;
 import fava.betaja.erp.dto.PageResponse;
-import fava.betaja.erp.dto.da.BlockDto;
 import fava.betaja.erp.dto.da.BlockValueDto;
 
 import java.util.List;
@@ -17,7 +16,11 @@ public interface BlockValueService {
 
     PageResponse<BlockValueDto> findAll(PageRequest<BlockValueDto> model);
 
-    PageResponse<BlockValueDto> findByBlockPeriodId(UUID blockPeriodId, PageRequest<BlockValueDto> model);
+    PageResponse<BlockValueDto> findByProjectPeriodId(UUID projectPeriodId, PageRequest<BlockValueDto> model);
+
+    PageResponse<BlockValueDto> findByProjectPeriodIdAndBlockId(UUID projectPeriodId, UUID blockId, PageRequest<BlockValueDto> model);
+
+    PageResponse<BlockValueDto> findByBlockId(UUID blockId, PageRequest<BlockValueDto> model);
 
     List<BlockValueDto> findAll();
 

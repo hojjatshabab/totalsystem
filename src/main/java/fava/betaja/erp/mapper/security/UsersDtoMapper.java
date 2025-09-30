@@ -1,25 +1,34 @@
 package fava.betaja.erp.mapper.security;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
+import fava.betaja.erp.dto.security.UsersDto;
+import fava.betaja.erp.entities.security.Users;
+import fava.betaja.erp.mapper.BaseMapper;
+import org.mapstruct.*;
 
 import java.util.List;
 
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class UsersDtoMapper {
+@Mapper(
+        componentModel = "spring",
+        unmappedTargetPolicy = ReportingPolicy.IGNORE,
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
+)
+public interface UsersDtoMapper extends BaseMapper<UsersDto, Users> {
 
-    private Long id;
-    private String firstname;
-    private String lastname;
-    private String username;
-    private String password;
-    private Boolean active = true;
-    private List<UserRoleDtoMapper> userRoles;
-    private Long organizationUnitId;
-    private String organizationUnitName;
+    @Override
+    @Mapping(target = "organizationUnit.id", source = "organizationUnitId")
+    Users toEntity(UsersDto dto);
+
+    @Override
+    @IterableMapping(nullValueMappingStrategy = NullValueMappingStrategy.RETURN_NULL)
+    List<Users> toEntityList(List<UsersDto> dtoList);
+
+    @Override
+    @Mapping(source = "organizationUnit.id", target = "organizationUnitId")
+    @Mapping(source = "organizationUnit.name", target = "organizationUnitName")
+    UsersDto toDto(Users entity);
+
+    @Override
+    @IterableMapping(nullValueMappingStrategy = NullValueMappingStrategy.RETURN_NULL)
+    List<UsersDto> toDtoList(List<Users> entityList);
 }

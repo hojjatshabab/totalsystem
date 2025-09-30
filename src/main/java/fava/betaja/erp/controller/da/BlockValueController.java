@@ -4,7 +4,6 @@ import fava.betaja.erp.controller.ActionResult;
 import fava.betaja.erp.controller.BaseController;
 import fava.betaja.erp.dto.PageRequest;
 import fava.betaja.erp.dto.PageResponse;
-import fava.betaja.erp.dto.da.BlockDto;
 import fava.betaja.erp.dto.da.BlockValueDto;
 import fava.betaja.erp.exceptions.ServiceException;
 import fava.betaja.erp.service.da.BlockValueService;
@@ -42,8 +41,8 @@ public class BlockValueController extends BaseController {
 
     @GetMapping
     public ActionResult<PageResponse<BlockValueDto>> findAll(@RequestParam int currentPage,
-                                                            @RequestParam int pageSize,
-                                                            Locale locale) {
+                                                             @RequestParam int pageSize,
+                                                             Locale locale) {
         if (currentPage <= 0 || pageSize <= 0) {
             return NOT_ACCEPTABLE("{ currentPage <= 0 || pageSize <= 0 }", locale);
         }
@@ -54,18 +53,49 @@ public class BlockValueController extends BaseController {
         return RESULT(response, locale);
     }
 
-    @GetMapping("find-by-block-period")
+    @GetMapping("find-by-project-period")
     public ActionResult<PageResponse<BlockValueDto>> findByProjectId(@RequestParam int currentPage,
-                                                                             @RequestParam int pageSize,
-                                                                             @RequestParam UUID blockPeriodId,
-                                                                             Locale locale) {
+                                                                     @RequestParam int pageSize,
+                                                                     @RequestParam UUID projectPeriodId,
+                                                                     Locale locale) {
         if (currentPage <= 0 || pageSize <= 0) {
             return NOT_ACCEPTABLE("{ currentPage <= 0 || pageSize <= 0 }", locale);
         }
         PageRequest<BlockValueDto> request = new PageRequest<>();
         request.setPageSize(pageSize);
         request.setCurrentPage(currentPage);
-        PageResponse<BlockValueDto> response = service.findByBlockPeriodId(blockPeriodId, request);
+        PageResponse<BlockValueDto> response = service.findByProjectPeriodId(projectPeriodId, request);
+        return RESULT(response, locale);
+    }
+
+    @GetMapping("find-by-project-period-block")
+    public ActionResult<PageResponse<BlockValueDto>> findByProjectPeriodIdAndBlockId(@RequestParam int currentPage,
+                                                                                     @RequestParam int pageSize,
+                                                                                     @RequestParam UUID projectPeriodId,
+                                                                                     @RequestParam UUID blockId,
+                                                                                     Locale locale) {
+        if (currentPage <= 0 || pageSize <= 0) {
+            return NOT_ACCEPTABLE("{ currentPage <= 0 || pageSize <= 0 }", locale);
+        }
+        PageRequest<BlockValueDto> request = new PageRequest<>();
+        request.setPageSize(pageSize);
+        request.setCurrentPage(currentPage);
+        PageResponse<BlockValueDto> response = service.findByProjectPeriodIdAndBlockId(projectPeriodId, blockId, request);
+        return RESULT(response, locale);
+    }
+
+    @GetMapping("find-by-block")
+    public ActionResult<PageResponse<BlockValueDto>> findByBlockId(@RequestParam int currentPage,
+                                                                     @RequestParam int pageSize,
+                                                                     @RequestParam UUID blockId,
+                                                                     Locale locale) {
+        if (currentPage <= 0 || pageSize <= 0) {
+            return NOT_ACCEPTABLE("{ currentPage <= 0 || pageSize <= 0 }", locale);
+        }
+        PageRequest<BlockValueDto> request = new PageRequest<>();
+        request.setPageSize(pageSize);
+        request.setCurrentPage(currentPage);
+        PageResponse<BlockValueDto> response = service.findByBlockId(blockId, request);
         return RESULT(response, locale);
     }
 

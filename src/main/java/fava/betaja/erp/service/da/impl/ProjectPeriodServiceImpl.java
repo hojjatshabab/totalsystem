@@ -2,14 +2,14 @@ package fava.betaja.erp.service.da.impl;
 
 import fava.betaja.erp.dto.PageRequest;
 import fava.betaja.erp.dto.PageResponse;
-import fava.betaja.erp.dto.da.BlockPeriodDto;
-import fava.betaja.erp.entities.da.BlockPeriod;
+import fava.betaja.erp.dto.da.ProjectPeriodDto;
+import fava.betaja.erp.entities.da.ProjectPeriod;
 import fava.betaja.erp.exceptions.ServiceException;
-import fava.betaja.erp.mapper.da.BlockPeriodDtoMapper;
-import fava.betaja.erp.repository.da.BlockPeriodRepository;
+import fava.betaja.erp.mapper.da.ProjectPeriodDtoMapper;
+import fava.betaja.erp.repository.da.ProjectPeriodRepository;
 import fava.betaja.erp.repository.da.BlockRepository;
 import fava.betaja.erp.repository.da.PeriodRangeRepository;
-import fava.betaja.erp.service.da.BlockPeriodService;
+import fava.betaja.erp.service.da.ProjectPeriodService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -25,32 +25,32 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class BlockPeriodServiceImpl implements BlockPeriodService {
+public class ProjectPeriodServiceImpl implements ProjectPeriodService {
 
-    private final BlockPeriodRepository repository;
+    private final ProjectPeriodRepository repository;
     private final BlockRepository blockRepository;
     private final PeriodRangeRepository periodRangeRepository;
-    private final BlockPeriodDtoMapper mapper;
+    private final ProjectPeriodDtoMapper mapper;
 
     @Override
-    public BlockPeriodDto save(BlockPeriodDto dto) {
+    public ProjectPeriodDto save(ProjectPeriodDto dto) {
         validate(dto, true);
-        log.info("Saving BlockPeriod: {}", dto.getTitle());
-        BlockPeriod entity = mapper.toEntity(dto);
+        log.info("Saving ProjectPeriod: {}", dto.getTitle());
+        ProjectPeriod entity = mapper.toEntity(dto);
         return mapper.toDto(repository.save(entity));
     }
 
     @Override
-    public BlockPeriodDto update(BlockPeriodDto dto) {
+    public ProjectPeriodDto update(ProjectPeriodDto dto) {
         validate(dto, false);
-        log.info("Updating BlockPeriod: id={}, title={}", dto.getId(), dto.getTitle());
-        BlockPeriod entity = mapper.toEntity(dto);
+        log.info("Updating ProjectPeriod: id={}, title={}", dto.getId(), dto.getTitle());
+        ProjectPeriod entity = mapper.toEntity(dto);
         return mapper.toDto(repository.save(entity));
     }
 
     @Override
-    public PageResponse<BlockPeriodDto> findAll(PageRequest<BlockPeriodDto> model) {
-        List<BlockPeriodDto> result = repository
+    public PageResponse<ProjectPeriodDto> findAll(PageRequest<ProjectPeriodDto> model) {
+        List<ProjectPeriodDto> result = repository
                 .findAll(
                         Pageable.ofSize(model.getPageSize())
                                 .withPage(model.getCurrentPage() - 1))
@@ -61,9 +61,9 @@ public class BlockPeriodServiceImpl implements BlockPeriodService {
     }
 
     @Override
-    public PageResponse<BlockPeriodDto> findByBlockId(UUID blockId, PageRequest<BlockPeriodDto> model) {
-        List<BlockPeriodDto> result = repository
-                .findByBlockId(blockId,
+    public PageResponse<ProjectPeriodDto> findByProjectId(UUID projectId, PageRequest<ProjectPeriodDto> model) {
+        List<ProjectPeriodDto> result = repository
+                .findByProjectId(projectId,
                         Pageable.ofSize(model.getPageSize())
                                 .withPage(model.getCurrentPage() - 1))
                 .stream().map(mapper::toDto)
@@ -73,9 +73,9 @@ public class BlockPeriodServiceImpl implements BlockPeriodService {
     }
 
     @Override
-    public PageResponse<BlockPeriodDto> findByBlockIdAndPeriodRangeIdAndYear(UUID blockId, UUID periodId, String year, PageRequest<BlockPeriodDto> model) {
-        List<BlockPeriodDto> result = repository
-                .findByBlockIdAndPeriodRangeIdAndYear(blockId, periodId, year,
+    public PageResponse<ProjectPeriodDto> findByProjectIdAndPeriodRangeIdAndYear(UUID projectId, UUID periodId, String year, PageRequest<ProjectPeriodDto> model) {
+        List<ProjectPeriodDto> result = repository
+                .findByProjectIdAndPeriodRangeIdAndYear(projectId, periodId, year,
                         Pageable.ofSize(model.getPageSize())
                                 .withPage(model.getCurrentPage() - 1))
                 .stream().map(mapper::toDto)
@@ -85,8 +85,8 @@ public class BlockPeriodServiceImpl implements BlockPeriodService {
     }
 
     @Override
-    public PageResponse<BlockPeriodDto> findByPeriodRangeIdAndYear(UUID periodId, String year, PageRequest<BlockPeriodDto> model) {
-        List<BlockPeriodDto> result = repository
+    public PageResponse<ProjectPeriodDto> findByPeriodRangeIdAndYear(UUID periodId, String year, PageRequest<ProjectPeriodDto> model) {
+        List<ProjectPeriodDto> result = repository
                 .findByPeriodRangeIdAndYear(periodId, year,
                         Pageable.ofSize(model.getPageSize())
                                 .withPage(model.getCurrentPage() - 1))
@@ -97,14 +97,14 @@ public class BlockPeriodServiceImpl implements BlockPeriodService {
     }
 
     @Override
-    public List<BlockPeriodDto> findAll() {
+    public List<ProjectPeriodDto> findAll() {
         return repository.findAll().stream()
                 .map(mapper::toDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Optional<BlockPeriodDto> findById(UUID id) {
+    public Optional<ProjectPeriodDto> findById(UUID id) {
         return Optional.ofNullable(id)
                 .flatMap(repository::findById)
                 .map(mapper::toDto);
@@ -112,23 +112,23 @@ public class BlockPeriodServiceImpl implements BlockPeriodService {
 
     @Override
     public void deleteById(UUID id) {
-        BlockPeriod entity = repository.findById(id)
-                .orElseThrow(() -> new ServiceException("BlockPeriod با این id یافت نشد: " + id));
+        ProjectPeriod entity = repository.findById(id)
+                .orElseThrow(() -> new ServiceException("ProjectPeriod با این id یافت نشد: " + id));
         repository.deleteById(id);
-        log.info("Deleted Block: id={}, title={}", entity.getId(), entity.getTitle());
+        log.info("Deleted ProjectPeriod: id={}, title={}", entity.getId(), entity.getTitle());
     }
 
-    private void validate(BlockPeriodDto dto, boolean isCreate) {
+    private void validate(ProjectPeriodDto dto, boolean isCreate) {
         if (!isCreate && (dto.getId() == null || !repository.existsById(dto.getId()))) {
-            throw new ServiceException("BlockPeriod برای بروزرسانی موجود نیست.");
+            throw new ServiceException("ProjectPeriod برای بروزرسانی موجود نیست.");
         }
 
         if (dto.getYear() == null || dto.getYear().isBlank()) {
             throw new ServiceException("سال الزامی است.");
         }
 
-        if (!blockRepository.existsById(dto.getBlockId())) {
-            throw new ServiceException("بلوک انتخاب شده موجود نیست.");
+        if (!blockRepository.existsById(dto.getProjectId())) {
+            throw new ServiceException("پروژه انتخاب شده موجود نیست.");
         }
         if (!periodRangeRepository.existsById(dto.getPeriodRangeId())) {
             throw new ServiceException("دوره بلوک انتخاب شده موجود نیست.");

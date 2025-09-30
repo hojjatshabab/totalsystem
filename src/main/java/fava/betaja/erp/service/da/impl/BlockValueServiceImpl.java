@@ -6,7 +6,7 @@ import fava.betaja.erp.dto.da.BlockValueDto;
 import fava.betaja.erp.entities.da.BlockValue;
 import fava.betaja.erp.exceptions.ServiceException;
 import fava.betaja.erp.mapper.da.BlockValueDtoMapper;
-import fava.betaja.erp.repository.da.BlockPeriodRepository;
+import fava.betaja.erp.repository.da.ProjectPeriodRepository;
 import fava.betaja.erp.repository.da.BlockValueRepository;
 import fava.betaja.erp.service.da.BlockValueService;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 public class BlockValueServiceImpl implements BlockValueService {
 
     private final BlockValueRepository repository;
-    private final BlockPeriodRepository blockPeriodRepository;
+    private final ProjectPeriodRepository projectPeriodRepository;
     private final BlockValueDtoMapper mapper;
 
     @Override
@@ -59,9 +59,33 @@ public class BlockValueServiceImpl implements BlockValueService {
     }
 
     @Override
-    public PageResponse<BlockValueDto> findByBlockPeriodId(UUID blockPeriodId, PageRequest<BlockValueDto> model) {
+    public PageResponse<BlockValueDto> findByProjectPeriodId(UUID projectPeriodId, PageRequest<BlockValueDto> model) {
         List<BlockValueDto> result = repository
-                .findByBlockPeriodId(blockPeriodId,
+                .findByProjectPeriodId(projectPeriodId,
+                        Pageable.ofSize(model.getPageSize())
+                                .withPage(model.getCurrentPage() - 1))
+                .stream().map(mapper::toDto)
+                .collect(Collectors.toList());
+        long count = repository.count();
+        return new PageResponse<>(result, model.getPageSize(), count, model.getCurrentPage(), model.getSortBy());
+    }
+
+    @Override
+    public PageResponse<BlockValueDto> findByProjectPeriodIdAndBlockId(UUID projectPeriodId, UUID blockId, PageRequest<BlockValueDto> model) {
+        List<BlockValueDto> result = repository
+                .findByProjectPeriodIdAndBlockId(projectPeriodId,blockId,
+                        Pageable.ofSize(model.getPageSize())
+                                .withPage(model.getCurrentPage() - 1))
+                .stream().map(mapper::toDto)
+                .collect(Collectors.toList());
+        long count = repository.count();
+        return new PageResponse<>(result, model.getPageSize(), count, model.getCurrentPage(), model.getSortBy());
+    }
+
+    @Override
+    public PageResponse<BlockValueDto> findByBlockId(UUID blockId, PageRequest<BlockValueDto> model) {
+        List<BlockValueDto> result = repository
+                .findByBlockId(blockId,
                         Pageable.ofSize(model.getPageSize())
                                 .withPage(model.getCurrentPage() - 1))
                 .stream().map(mapper::toDto)
@@ -97,8 +121,8 @@ public class BlockValueServiceImpl implements BlockValueService {
             throw new ServiceException("BlockValue برای بروزرسانی موجود نیست.");
         }
 
-        if (!blockPeriodRepository.existsById(dto.getBlockPeriodId())) {
-            throw new ServiceException("پروژه انتخاب شده موجود نیست.");
+        if (!projectPeriodRepository.existsById(dto.getProjectPeriodId())) {
+            throw new ServiceException("دوره پروژه انتخاب شده موجود نیست.");
         }
 
     }

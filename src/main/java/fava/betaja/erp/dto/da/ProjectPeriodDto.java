@@ -11,7 +11,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BlockPeriodDto {
+public class ProjectPeriodDto {
 
     private UUID id;
     private String title;
@@ -19,7 +19,7 @@ public class BlockPeriodDto {
     private Boolean isActive;
     private UUID periodRangeId;
     private String periodRangeName;
-    private UUID blockId;
-    private String blockName;
+    private UUID projectId;
+    private String projectName;
 
 }

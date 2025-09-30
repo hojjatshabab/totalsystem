@@ -86,10 +86,17 @@ public class BlockValue extends AbstractAuditingEntity {
     @Comment("خلاصه مشکلات و موانع")
     private String issueSummary;
 
-    @NotNull(message = "دوره بلوک الزامی هست")
-    @JoinColumn(name = "block_period", referencedColumnName = "id", nullable = false)
+    @NotNull(message = "دوره پروژه الزامی هست")
+    @JoinColumn(name = "project_period_id", referencedColumnName = "id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JsonIgnore
-    @Comment("دوره بلوک")
-    private BlockPeriod blockPeriod;
+    @Comment("دوره پروژه")
+    private ProjectPeriod projectPeriod;
+
+    @NotNull(message = "بلوک الزامی هست")
+    @JoinColumn(name = "block_id", referencedColumnName = "id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JsonIgnore
+    @Comment("بلوک")
+    private Block block;
 }

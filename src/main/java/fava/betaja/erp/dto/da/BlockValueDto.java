@@ -1,6 +1,5 @@
 package fava.betaja.erp.dto.da;
 
-import fava.betaja.erp.entities.AbstractAuditingEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +13,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BlockValueDto extends AbstractAuditingEntity {
+public class BlockValueDto {
 
     private UUID id;
     private String name;
@@ -31,6 +30,8 @@ public class BlockValueDto extends AbstractAuditingEntity {
     private BigDecimal progressPlanInPeriod;
     private String activitySummary;
     private String issueSummary;
-    private UUID blockPeriodId;
-    private String blockPeriodTitle;
+    private UUID projectPeriodId;
+    private String projectPeriodTitle;
+    private UUID blockId;
+    private String blockName;
 }

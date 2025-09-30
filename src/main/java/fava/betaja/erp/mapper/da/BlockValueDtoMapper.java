@@ -15,7 +15,8 @@ import java.util.List;
 public interface BlockValueDtoMapper extends BaseMapper<BlockValueDto, BlockValue> {
 
     @Override
-    @Mapping(target = "blockPeriod.id", source = "blockPeriodId")
+    @Mapping(target = "projectPeriod.id", source = "projectPeriodId")
+    @Mapping(target = "block.id", source = "blockId")
     BlockValue toEntity(BlockValueDto dto);
 
     @Override
@@ -23,8 +24,10 @@ public interface BlockValueDtoMapper extends BaseMapper<BlockValueDto, BlockValu
     List<BlockValue> toEntityList(List<BlockValueDto> dtoList);
 
     @Override
-    @Mapping(source = "blockPeriod.id", target = "blockPeriodId")
-    @Mapping(source = "blockPeriod.title", target = "blockPeriodTitle")
+    @Mapping(source = "projectPeriod.id", target = "projectPeriodId")
+    @Mapping(source = "projectPeriod.title", target = "projectPeriodTitle")
+    @Mapping(source = "block.id", target = "blockId")
+    @Mapping(source = "block.name", target = "blockName")
     BlockValueDto toDto(BlockValue entity);
 
     @Override
