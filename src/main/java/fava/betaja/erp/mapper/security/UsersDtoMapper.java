@@ -1,4 +1,4 @@
-package fava.betaja.erp.dto.security;
+package fava.betaja.erp.mapper.security;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UsersDto {
+public class UsersDtoMapper {
 
     private Long id;
     private String firstname;
@@ -19,7 +19,7 @@ public class UsersDto {
     private String username;
     private String password;
     private Boolean active = true;
-    private List<UserRoleDto> userRoles;
+    private List<UserRoleDtoMapper> userRoles;
     private Long organizationUnitId;
     private String organizationUnitName;
 }

@@ -5,17 +5,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RolePermissionDto {
+public class UserRoleDto {
 
     private Long id;
+    private Long userId;
+    private String userName;
     private Long roleId;
     private String roleName;
-    private Long permissionId;
-    private String permissionName;
 }

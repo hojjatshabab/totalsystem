@@ -1,19 +1,19 @@
-package fava.betaja.erp.dto.security;
+package fava.betaja.erp.service.security.impl;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserRole {
+public class RoleServiceImpl {
 
     private Long id;
-    private UsersDto userId;
-    private String userName;
-    private Long roleId;
-    private String roleName;
+    private String name;
+    private List<RolePermissionServiceImpl> rolePermissions;
 }
