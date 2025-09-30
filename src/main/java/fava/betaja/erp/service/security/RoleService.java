@@ -1,19 +1,26 @@
 package fava.betaja.erp.service.security;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import fava.betaja.erp.dto.PageRequest;
+import fava.betaja.erp.dto.PageResponse;
+import fava.betaja.erp.dto.security.RoleDto;
 
 import java.util.List;
+import java.util.Optional;
 
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class RoleService {
+public interface RoleService {
 
-    private Long id;
-    private String name;
-    private List<RolePermissionService> rolePermissions;
+    RoleDto save(RoleDto roleDto);
+
+    RoleDto update(RoleDto roleDto);
+
+    PageResponse<RoleDto> findAll(PageRequest<RoleDto> model);
+
+    List<RoleDto> findAll();
+
+    Optional<RoleDto> findById(Long id);
+
+    Optional<RoleDto> findByName(String name);
+
+    void deleteById(Long id);
+
 }

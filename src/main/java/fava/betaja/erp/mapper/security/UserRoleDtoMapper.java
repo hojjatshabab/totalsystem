@@ -1,7 +1,7 @@
 package fava.betaja.erp.mapper.security;
 
-import fava.betaja.erp.dto.security.RolePermissionDto;
-import fava.betaja.erp.entities.security.RolePermission;
+import fava.betaja.erp.dto.security.UserRoleDto;
+import fava.betaja.erp.entities.security.UserRole;
 import fava.betaja.erp.mapper.BaseMapper;
 import org.mapstruct.*;
 
@@ -12,25 +12,27 @@ import java.util.List;
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
 )
-public interface UserRoleDtoMapper extends BaseMapper<RolePermissionDto, RolePermission> {
+public interface UserRoleDtoMapper extends BaseMapper<UserRoleDto, UserRole> {
 
     @Override
     @Mapping(target = "role.id", source = "roleId")
-    @Mapping(target = "permission.id", source = "permissionId")
-    RolePermission toEntity(RolePermissionDto dto);
+    @Mapping(target = "user.id", source = "userId")
+    UserRole toEntity(UserRoleDto dto);
 
     @Override
     @IterableMapping(nullValueMappingStrategy = NullValueMappingStrategy.RETURN_NULL)
-    List<RolePermission> toEntityList(List<RolePermissionDto> dtoList);
+    List<UserRole> toEntityList(List<UserRoleDto> dtoList);
 
     @Override
     @Mapping(source = "role.id", target = "roleId")
     @Mapping(source = "role.name", target = "roleName")
-    @Mapping(source = "permission.id", target = "permissionId")
-    @Mapping(source = "permission.name", target = "permissionName")
-    RolePermissionDto toDto(RolePermission entity);
+    @Mapping(source = "user.id", target = "userId")
+    @Mapping(source = "user.username", target = "username")
+    @Mapping(source = "user.firstname", target = "firstname")
+    @Mapping(source = "user.lastname", target = "lastname")
+    UserRoleDto toDto(UserRole entity);
 
     @Override
     @IterableMapping(nullValueMappingStrategy = NullValueMappingStrategy.RETURN_NULL)
-    List<RolePermissionDto> toDtoList(List<RolePermission> entityList);
+    List<UserRoleDto> toDtoList(List<UserRole> entityList);
 }

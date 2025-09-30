@@ -1,17 +1,31 @@
 package fava.betaja.erp.service.security;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import fava.betaja.erp.dto.PageRequest;
+import fava.betaja.erp.dto.PageResponse;
+import fava.betaja.erp.dto.security.RolePermissionDto;
+import fava.betaja.erp.entities.security.RolePermission;
 
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class RolePermissionService {
+import java.util.List;
+import java.util.Optional;
 
-    private Long id;
-    private Long roleId;
-    private PermissionService permission;
+public interface RolePermissionService {
+
+    RolePermissionDto save(RolePermissionDto rolePermissionDto);
+
+    RolePermissionDto update(RolePermissionDto rolePermissionDto);
+
+    PageResponse<RolePermissionDto> findAll(PageRequest<RolePermissionDto> model);
+
+    List<RolePermissionDto> findAll();
+
+    List<RolePermissionDto> findByPermissionId(Long permissionId);
+
+    List<RolePermissionDto> findByRoleId(Long roleId);
+
+    List<RolePermissionDto> findByRoleIdAndPermissionId(Long roleId, Long permissionId);
+
+    Optional<RolePermissionDto> findById(Long id);
+
+    void deleteById(Long id);
+
 }

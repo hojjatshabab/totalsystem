@@ -2,7 +2,6 @@ package fava.betaja.erp.service.security;
 
 import fava.betaja.erp.dto.PageRequest;
 import fava.betaja.erp.dto.PageResponse;
-import fava.betaja.erp.dto.common.OrganizationUnitDto;
 import fava.betaja.erp.dto.security.UsersDto;
 import fava.betaja.erp.entities.common.OrganizationUnit;
 
