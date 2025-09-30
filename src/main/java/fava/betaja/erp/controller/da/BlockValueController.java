@@ -54,7 +54,7 @@ public class BlockValueController extends BaseController {
     }
 
     @GetMapping("find-by-project-period")
-    public ActionResult<PageResponse<BlockValueDto>> findByProjectId(@RequestParam int currentPage,
+    public ActionResult<PageResponse<BlockValueDto>> findByProjectPeriodId(@RequestParam int currentPage,
                                                                      @RequestParam int pageSize,
                                                                      @RequestParam UUID projectPeriodId,
                                                                      Locale locale) {

@@ -3,11 +3,14 @@ package fava.betaja.erp.service.da.impl;
 import fava.betaja.erp.dto.PageRequest;
 import fava.betaja.erp.dto.PageResponse;
 import fava.betaja.erp.dto.da.BlockValueDto;
+import fava.betaja.erp.entities.da.Block;
 import fava.betaja.erp.entities.da.BlockValue;
+import fava.betaja.erp.entities.da.ProjectPeriod;
 import fava.betaja.erp.exceptions.ServiceException;
 import fava.betaja.erp.mapper.da.BlockValueDtoMapper;
-import fava.betaja.erp.repository.da.ProjectPeriodRepository;
+import fava.betaja.erp.repository.da.BlockRepository;
 import fava.betaja.erp.repository.da.BlockValueRepository;
+import fava.betaja.erp.repository.da.ProjectPeriodRepository;
 import fava.betaja.erp.service.da.BlockValueService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,14 +31,34 @@ public class BlockValueServiceImpl implements BlockValueService {
 
     private final BlockValueRepository repository;
     private final ProjectPeriodRepository projectPeriodRepository;
+    private final BlockRepository blockRepository;
     private final BlockValueDtoMapper mapper;
 
     @Override
     public BlockValueDto save(BlockValueDto dto) {
         validate(dto, true);
+        Block block = blockRepository.findById(dto.getBlockId()).get();
+        Optional<ProjectPeriod> optionalProjectPeriod = projectPeriodRepository
+                .findByProjectIdAndIsActiveTrue(block.getProject().getId());
+        if (!optionalProjectPeriod.isPresent()){
+            throw new ServiceException("دوره زمانی فعالی موجود نیست.");
+        }
+        dto.setProjectPeriodId(optionalProjectPeriod.get().getId());
+        dto.setName(block.getName());
         log.info("Saving BlockValue: {}", dto.getName());
         BlockValue entity = mapper.toEntity(dto);
-        return mapper.toDto(repository.save(entity));
+        BlockValueDto result = mapper.toDto(repository.save(entity));
+
+        block.setBlockCount(result.getBlockCount());
+        block.setDeliveryDate(result.getDeliveryDate());
+        block.setStartDate(result.getStartDate());
+        block.setFloorCount(result.getFloorCount());
+        block.setUnitCount(result.getUnitCount());
+        block.setTotalArea(result.getTotalArea());
+
+        blockRepository.save(block);
+
+        return result;
     }
 
     @Override
@@ -73,7 +96,7 @@ public class BlockValueServiceImpl implements BlockValueService {
     @Override
     public PageResponse<BlockValueDto> findByProjectPeriodIdAndBlockId(UUID projectPeriodId, UUID blockId, PageRequest<BlockValueDto> model) {
         List<BlockValueDto> result = repository
-                .findByProjectPeriodIdAndBlockId(projectPeriodId,blockId,
+                .findByProjectPeriodIdAndBlockId(projectPeriodId, blockId,
                         Pageable.ofSize(model.getPageSize())
                                 .withPage(model.getCurrentPage() - 1))
                 .stream().map(mapper::toDto)
@@ -120,9 +143,8 @@ public class BlockValueServiceImpl implements BlockValueService {
         if (!isCreate && (dto.getId() == null || !repository.existsById(dto.getId()))) {
             throw new ServiceException("BlockValue برای بروزرسانی موجود نیست.");
         }
-
-        if (!projectPeriodRepository.existsById(dto.getProjectPeriodId())) {
-            throw new ServiceException("دوره پروژه انتخاب شده موجود نیست.");
+        if (!blockRepository.existsById(dto.getBlockId())) {
+            throw new ServiceException("بلوک انتخاب شده موجود نیست.");
         }
 
     }

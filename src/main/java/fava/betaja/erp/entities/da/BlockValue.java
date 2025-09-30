@@ -17,7 +17,10 @@ import java.time.LocalDate;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "block_value", schema = "da")
+@Table(name = "block_value", schema = "da",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"project_period_id","block_id"})
+        })
 public class BlockValue extends AbstractAuditingEntity {
 
     @NotBlank(message = "نام نمی‌تواند خالی باشد")

@@ -3,6 +3,7 @@ package fava.betaja.erp.service.da;
 import fava.betaja.erp.dto.PageRequest;
 import fava.betaja.erp.dto.PageResponse;
 import fava.betaja.erp.dto.da.ProjectPeriodDto;
+import fava.betaja.erp.entities.da.ProjectPeriod;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +14,8 @@ public interface ProjectPeriodService {
     ProjectPeriodDto save(ProjectPeriodDto dto);
 
     ProjectPeriodDto update(ProjectPeriodDto dto);
+
+    Optional<ProjectPeriodDto> findByProjectIdAndIsActiveTrue(UUID projectId);
 
     PageResponse<ProjectPeriodDto> findAll(PageRequest<ProjectPeriodDto> model);
 

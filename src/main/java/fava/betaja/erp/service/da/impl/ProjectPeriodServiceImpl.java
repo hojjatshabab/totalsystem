@@ -7,8 +7,8 @@ import fava.betaja.erp.entities.da.ProjectPeriod;
 import fava.betaja.erp.exceptions.ServiceException;
 import fava.betaja.erp.mapper.da.ProjectPeriodDtoMapper;
 import fava.betaja.erp.repository.da.ProjectPeriodRepository;
-import fava.betaja.erp.repository.da.BlockRepository;
 import fava.betaja.erp.repository.da.PeriodRangeRepository;
+import fava.betaja.erp.repository.da.ProjectRepository;
 import fava.betaja.erp.service.da.ProjectPeriodService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,13 +28,20 @@ import java.util.stream.Collectors;
 public class ProjectPeriodServiceImpl implements ProjectPeriodService {
 
     private final ProjectPeriodRepository repository;
-    private final BlockRepository blockRepository;
+    private final ProjectRepository projectRepository;
     private final PeriodRangeRepository periodRangeRepository;
     private final ProjectPeriodDtoMapper mapper;
 
     @Override
     public ProjectPeriodDto save(ProjectPeriodDto dto) {
         validate(dto, true);
+        StringBuilder title = new StringBuilder();
+        title.append(periodRangeRepository.findById(dto.getPeriodRangeId()).get().getName())
+                        .append("، ")
+                                .append(dto.getYear())
+                                        .append(" - پروژه ")
+                                                .append(projectRepository.findById(dto.getProjectId()).get().getName());
+        dto.setTitle(title.toString());
         log.info("Saving ProjectPeriod: {}", dto.getTitle());
         ProjectPeriod entity = mapper.toEntity(dto);
         return mapper.toDto(repository.save(entity));
@@ -46,6 +53,13 @@ public class ProjectPeriodServiceImpl implements ProjectPeriodService {
         log.info("Updating ProjectPeriod: id={}, title={}", dto.getId(), dto.getTitle());
         ProjectPeriod entity = mapper.toEntity(dto);
         return mapper.toDto(repository.save(entity));
+    }
+
+    @Override
+    public Optional<ProjectPeriodDto> findByProjectIdAndIsActiveTrue(UUID projectId) {
+        return Optional.ofNullable(projectId)
+                .flatMap(repository::findByProjectIdAndIsActiveTrue)
+                .map(mapper::toDto);
     }
 
     @Override
@@ -127,7 +141,7 @@ public class ProjectPeriodServiceImpl implements ProjectPeriodService {
             throw new ServiceException("سال الزامی است.");
         }
 
-        if (!blockRepository.existsById(dto.getProjectId())) {
+        if (!projectRepository.existsById(dto.getProjectId())) {
             throw new ServiceException("پروژه انتخاب شده موجود نیست.");
         }
         if (!periodRangeRepository.existsById(dto.getPeriodRangeId())) {

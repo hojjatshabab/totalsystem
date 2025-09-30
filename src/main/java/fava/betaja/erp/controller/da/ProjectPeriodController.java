@@ -54,7 +54,7 @@ public class ProjectPeriodController extends BaseController {
     }
 
     @GetMapping("find-by-project")
-    public ActionResult<PageResponse<ProjectPeriodDto>> findByBlockId(@RequestParam int currentPage,
+    public ActionResult<PageResponse<ProjectPeriodDto>> findByProjectId(@RequestParam int currentPage,
                                                                       @RequestParam int pageSize,
                                                                       @RequestParam UUID projectId,
                                                                       Locale locale) {
@@ -114,6 +114,16 @@ public class ProjectPeriodController extends BaseController {
         }
         ProjectPeriodDto dto = service.findById(id)
                 .orElseThrow(() -> new ServiceException("ProjectPeriod با این id یافت نشد: " + id));
+        return RESULT(dto, locale);
+    }
+
+    @GetMapping("/find-by-project-active-true/{projectId}")
+    public ActionResult<ProjectPeriodDto> findByProjectIdAndIsActiveTrue(@PathVariable UUID projectId, Locale locale) {
+        if (projectId == null) {
+            return NO_CONTENT("id", locale);
+        }
+        ProjectPeriodDto dto = service.findByProjectIdAndIsActiveTrue(projectId)
+                .orElseThrow(() -> new ServiceException("ProjectPeriod با این id یافت نشد: " + projectId));
         return RESULT(dto, locale);
     }
 
