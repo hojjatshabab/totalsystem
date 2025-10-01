@@ -92,7 +92,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"سالانه\",\r\n    \"key\": \"yearly\",\r\n    \"durationDays\": 365\r\n}",
+							"raw": "{\r\n    \"name\": \"فروردین\",\r\n    \"orderNo\": 1,\r\n    \"rangeType\": \"MONTHLY\",\r\n    \"key\": \"farvardin\",\r\n    \"durationDays\": 31\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -391,6 +391,661 @@
 								"api",
 								"attribute",
 								"e81819d7-e623-4c07-b8eb-7e26f3503a25"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ProjectPeriod",
+			"item": [
+				{
+					"name": "finadAll",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/project-period?currentPage=1&pageSize=10",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"project-period"
+							],
+							"query": [
+								{
+									"key": "currentPage",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findByProjectId",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/project-period/find-by-project?currentPage=1&pageSize=10&projectId=ba3a7d7b-e552-4cb2-9598-9805709fe869",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"project-period",
+								"find-by-project"
+							],
+							"query": [
+								{
+									"key": "currentPage",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								},
+								{
+									"key": "projectId",
+									"value": "ba3a7d7b-e552-4cb2-9598-9805709fe869"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findByBlockIdAndPeriodRangeIdAndYear",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/project-period/find-by-project-range-year?currentPage=1&pageSize=10&projectId=ba3a7d7b-e552-4cb2-9598-9805709fe869&periodRangeId=1e8de289-3299-4083-9842-86f13d3cd54d&year=1404",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"project-period",
+								"find-by-project-range-year"
+							],
+							"query": [
+								{
+									"key": "currentPage",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								},
+								{
+									"key": "projectId",
+									"value": "ba3a7d7b-e552-4cb2-9598-9805709fe869"
+								},
+								{
+									"key": "periodRangeId",
+									"value": "1e8de289-3299-4083-9842-86f13d3cd54d"
+								},
+								{
+									"key": "year",
+									"value": "1404"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findByPeriodRangeIdAndYear",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/project-period/find-by-range-year?currentPage=1&pageSize=10&periodRangeId=1e8de289-3299-4083-9842-86f13d3cd54d&year=1404",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"project-period",
+								"find-by-range-year"
+							],
+							"query": [
+								{
+									"key": "currentPage",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								},
+								{
+									"key": "periodRangeId",
+									"value": "1e8de289-3299-4083-9842-86f13d3cd54d"
+								},
+								{
+									"key": "year",
+									"value": "1404"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findByProjectIdAndIsActiveTrue",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/project-period/find-by-project-active-true/ba3a7d7b-e552-4cb2-9598-9805709fe869",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"project-period",
+								"find-by-project-active-true",
+								"ba3a7d7b-e552-4cb2-9598-9805709fe869"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "finadAllList",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/project-period/list",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"project-period",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "save",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"year\": \"1404\",\r\n    \"isActive\": true,\r\n    \"periodRangeId\": \"1e8de289-3299-4083-9842-86f13d3cd54d\",\r\n    \"projectId\": \"ba3a7d7b-e552-4cb2-9598-9805709fe869\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/api/project-period",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"project-period"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"6cde068a-320a-4d5f-abba-74346ef6a171\",\r\n    \"title\": \"دوره فروردین سال 1404 - پروژه چیتگر\",\r\n    \"year\": \"1404\",\r\n    \"isActive\": true,\r\n    \"periodRangeId\": \"1e8de289-3299-4083-9842-86f13d3cd54d\",\r\n    \"projectId\": \"ba3a7d7b-e552-4cb2-9598-9805709fe869\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/api/project-period",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"project-period"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/project-period/6cde068a-320a-4d5f-abba-74346ef6a171",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"project-period",
+								"6cde068a-320a-4d5f-abba-74346ef6a171"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "BlockValue",
+			"item": [
+				{
+					"name": "finadAll",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/block-value/?currentPage=1&pageSize=10",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"block-value",
+								""
+							],
+							"query": [
+								{
+									"key": "currentPage",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findByProjectPeriodId",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/block-value/find-by-project-period?currentPage=1&pageSize=10&projectPeriodId=a59e23a1-291f-4469-8de5-7ef2a9dc5905",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"block-value",
+								"find-by-project-period"
+							],
+							"query": [
+								{
+									"key": "currentPage",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								},
+								{
+									"key": "projectPeriodId",
+									"value": "a59e23a1-291f-4469-8de5-7ef2a9dc5905"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findByBlockId",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/block-value/find-by-block?currentPage=1&pageSize=10&blockId=946f0eae-90c3-494b-83cf-ab469b56e830",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"block-value",
+								"find-by-block"
+							],
+							"query": [
+								{
+									"key": "currentPage",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								},
+								{
+									"key": "blockId",
+									"value": "946f0eae-90c3-494b-83cf-ab469b56e830"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findByProjectPeriodIdAndBlockId Copy",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/block-value/find-by-project-period-block?currentPage=1&pageSize=10&projectPeriodId=a59e23a1-291f-4469-8de5-7ef2a9dc5905&blockId=946f0eae-90c3-494b-83cf-ab469b56e830",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"block-value",
+								"find-by-project-period-block"
+							],
+							"query": [
+								{
+									"key": "currentPage",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								},
+								{
+									"key": "projectPeriodId",
+									"value": "a59e23a1-291f-4469-8de5-7ef2a9dc5905"
+								},
+								{
+									"key": "blockId",
+									"value": "946f0eae-90c3-494b-83cf-ab469b56e830"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "finadAllList",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/block-value/list",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"block-value",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "save",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"blockCount\": 100,\r\n  \"floorCount\": 5,\r\n  \"unitCount\": 1000,\r\n  \"totalArea\": 123.5,\r\n  \"startDate\": \"2025-09-30\",\r\n  \"deliveryDate\": \"2027-02-10\",\r\n  \"progressActual\": 65.5,\r\n  \"progressPlan\": 83.3,\r\n  \"deviation\": 17.8,\r\n  \"progressActualInPeriod\": 22.9,\r\n  \"progressPlanInPeriod\": 19.8,\r\n  \"activitySummary\": \"فعالیت های بسیار خوبی در این بازه صورت گرفته است.\",\r\n  \"issueSummary\": \"در انجام کار مشکلاتی داشتیم.\",\r\n  \"blockId\": \"20bb1042-d0c1-4551-bf54-40fd6681aa04\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/api/block-value",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"block-value"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"6cde068a-320a-4d5f-abba-74346ef6a171\",\r\n    \"title\": \"دوره فروردین سال 1404 - پروژه چیتگر\",\r\n    \"year\": \"1404\",\r\n    \"isActive\": true,\r\n    \"periodRangeId\": \"1e8de289-3299-4083-9842-86f13d3cd54d\",\r\n    \"projectId\": \"ba3a7d7b-e552-4cb2-9598-9805709fe869\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server_url}}/api/block-value",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"block-value"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{server_url}}/api/block-value/6cde068a-320a-4d5f-abba-74346ef6a171",
+							"host": [
+								"{{server_url}}"
+							],
+							"path": [
+								"api",
+								"block-value",
+								"6cde068a-320a-4d5f-abba-74346ef6a171"
 							]
 						}
 					},
@@ -835,7 +1490,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"flowRuleId\": \"04b26cc2-421b-4779-b8cd-658ec31260bd\",\r\n    \"stepOrder\": 1,\r\n    \"organizationUnitId\": 0,\r\n    \"roleId\": 0,\r\n    \"actionType\": \"SUBMIT\",\r\n    \"conditionExpression\": \"\",\r\n    \"previousStep\": null,\r\n    \"finalStep\": false\r\n}",
+							"raw": "{\r\n    \"flowRuleId\": \"04b26cc2-421b-4779-b8cd-658ec31260bd\",\r\n    \"stepOrder\": 2,\r\n    \"roleId\": 5,\r\n    \"actionType\": \"SUBMIT\",\r\n    \"previousStep\": \"55c7a71e-34b2-42a6-b376-93fa348f6f53\",\r\n    \"finalStep\": true\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1271,7 +1926,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"پهنه D\",\r\n    \"planId\": \"38edd53b-a2e3-4e4d-89b6-4e3d02eef3d6\"\r\n}",
+							"raw": "{\r\n    \"name\": \"چیتگر\",\r\n    \"planId\": \"751254c5-8a8e-4b7c-9379-088af050092c\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1489,7 +2144,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"name\": \"بلوک A\",\r\n  \"blockCount\": 20,\r\n  \"floorCount\": 90,\r\n  \"unitCount\": 120,\r\n  \"totalArea\": 5850,\r\n  \"startDate\": \"2025-09-24\",\r\n  \"deliveryDate\": \"2026-09-24\",\r\n  \"projectId\": \"53c94e44-a272-4ecb-b93c-85ad4ce3ae3f\"\r\n}",
+							"raw": "{\r\n  \"name\": \"D2\",\r\n  \"projectId\": \"ba3a7d7b-e552-4cb2-9598-9805709fe869\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -3089,28 +3744,15 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{server_url}}/api/block/find-by-project?currentPage=1&pageSize=10&projectId=53c94e44-a272-4ecb-b93c-85ad4ce3ae3f",
+									"raw": "{{server_url}}/api/role/name/ROLE_COMPANY",
 									"host": [
 										"{{server_url}}"
 									],
 									"path": [
 										"api",
-										"block",
-										"find-by-project"
-									],
-									"query": [
-										{
-											"key": "currentPage",
-											"value": "1"
-										},
-										{
-											"key": "pageSize",
-											"value": "10"
-										},
-										{
-											"key": "projectId",
-											"value": "53c94e44-a272-4ecb-b93c-85ad4ce3ae3f"
-										}
+										"role",
+										"name",
+										"ROLE_COMPANY"
 									]
 								}
 							},
@@ -3132,13 +3774,13 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{server_url}}/api/block/list",
+									"raw": "{{server_url}}/api/role/list",
 									"host": [
 										"{{server_url}}"
 									],
 									"path": [
 										"api",
-										"block",
+										"role",
 										"list"
 									]
 								}
@@ -3162,7 +3804,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n  \"name\": \"بلوک A\",\r\n  \"blockCount\": 20,\r\n  \"floorCount\": 90,\r\n  \"unitCount\": 120,\r\n  \"totalArea\": 5850,\r\n  \"startDate\": \"2025-09-24\",\r\n  \"deliveryDate\": \"2026-09-24\",\r\n  \"projectId\": \"53c94e44-a272-4ecb-b93c-85ad4ce3ae3f\"\r\n}",
+									"raw": "{\r\n    \"name\": \"ROLE_CEO\",\r\n    \"title\": \"امیر مدیرعامل محترم\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -3170,13 +3812,13 @@
 									}
 								},
 								"url": {
-									"raw": "{{server_url}}/api/block",
+									"raw": "{{server_url}}/api/role",
 									"host": [
 										"{{server_url}}"
 									],
 									"path": [
 										"api",
-										"block"
+										"role"
 									]
 								}
 							},
@@ -3199,7 +3841,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"id\": \"bd08b5fd-82a7-46d6-b77a-2f44aab78f52\",\r\n    \"name\": \"بلوک A\",\r\n    \"blockCount\": 20,\r\n    \"floorCount\": 90,\r\n    \"unitCount\": 120,\r\n    \"totalArea\": 5850,\r\n    \"startDate\": \"2025-09-24\",\r\n    \"deliveryDate\": \"2026-09-24\",\r\n    \"projectId\": \"53c94e44-a272-4ecb-b93c-85ad4ce3ae3f\"\r\n}",
+									"raw": "{\r\n    \"id\": 1,\r\n    \"name\": \"ROLE_COMPANY\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -3207,13 +3849,13 @@
 									}
 								},
 								"url": {
-									"raw": "{{server_url}}/api/block",
+									"raw": "{{server_url}}/api/role",
 									"host": [
 										"{{server_url}}"
 									],
 									"path": [
 										"api",
-										"block"
+										"role"
 									]
 								}
 							},
@@ -3235,99 +3877,14 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "{{server_url}}/api/block/bd08b5fd-82a7-46d6-b77a-2f44aab78f52",
+									"raw": "{{server_url}}/api/role/1",
 									"host": [
 										"{{server_url}}"
 									],
 									"path": [
 										"api",
-										"block",
-										"bd08b5fd-82a7-46d6-b77a-2f44aab78f52"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "registerUser",
-							"request": {
-								"auth": {
-									"type": "noauth"
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"firstname\": \"حجت\",\r\n    \"lastname\": \"شباب\",\r\n    \"username\": \"hojat\",\r\n    \"password\": \"123\",\r\n    \"organizationUnitId\": 1\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{server_url}}/api/v1/auth/register",
-									"host": [
-										"{{server_url}}"
-									],
-									"path": [
-										"api",
-										"v1",
-										"auth",
-										"register"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "UserInfo",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											""
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"protocolProfileBehavior": {
-								"disableBodyPruning": true
-							},
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{access_token}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"username\": \"hojat\",\r\n    \"password\": \"123\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{server_url}}/api/v1/auth/info",
-									"host": [
-										"{{server_url}}"
-									],
-									"path": [
-										"api",
-										"v1",
-										"auth",
-										"info"
+										"role",
+										"1"
 									]
 								}
 							},
