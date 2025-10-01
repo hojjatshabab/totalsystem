@@ -2,13 +2,12 @@ package fava.betaja.erp.mapper.baseinfo;
 
 import fava.betaja.erp.dto.baseinfo.FlowRuleStepDto;
 import fava.betaja.erp.entities.baseinfo.FlowRuleStep;
+import fava.betaja.erp.entities.common.OrganizationUnit;
 import fava.betaja.erp.mapper.BaseMapper;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.NullValuePropertyMappingStrategy;
-import org.mapstruct.ReportingPolicy;
+import org.mapstruct.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @Mapper(
         componentModel = "spring",
@@ -34,4 +33,13 @@ public interface FlowRuleStepDtoMapper extends BaseMapper<FlowRuleStepDto, FlowR
 
     List<FlowRuleStepDto> toDtoList(List<FlowRuleStep> entities);
 
+    @AfterMapping
+    default void convertToNull(@MappingTarget FlowRuleStep entity) {
+        if (Objects.isNull(entity.getOrganizationUnit())) {
+            entity.setOrganizationUnit(null);
+        } else {
+            if (Objects.isNull(entity.getOrganizationUnit().getId()))
+                entity.setOrganizationUnit(null);
+        }
+    }
 }

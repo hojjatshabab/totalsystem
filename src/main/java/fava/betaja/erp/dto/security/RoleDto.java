@@ -15,5 +15,6 @@ public class RoleDto {
 
     private Long id;
     private String name;
+    private String title;
     private List<RolePermissionDto> rolePermissions;
 }
