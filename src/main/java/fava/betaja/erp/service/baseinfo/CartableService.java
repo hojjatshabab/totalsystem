@@ -14,6 +14,10 @@ public interface CartableService {
 
     CartableDto update(CartableDto cartableDto);
 
+    CartableDto nextStepCartable(CartableDto cartableDto);
+
+    CartableDto acceptCartable(CartableDto cartableDto);
+
     PageResponse<CartableDto> findAll(PageRequest<CartableDto> model);
 
     List<CartableDto> findAll();

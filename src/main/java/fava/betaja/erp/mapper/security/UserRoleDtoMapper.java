@@ -26,6 +26,7 @@ public interface UserRoleDtoMapper extends BaseMapper<UserRoleDto, UserRole> {
     @Override
     @Mapping(source = "role.id", target = "roleId")
     @Mapping(source = "role.name", target = "roleName")
+    @Mapping(source = "role.title", target = "roleTitle")
     @Mapping(source = "user.id", target = "userId")
     @Mapping(source = "user.username", target = "username")
     @Mapping(source = "user.firstname", target = "firstname")

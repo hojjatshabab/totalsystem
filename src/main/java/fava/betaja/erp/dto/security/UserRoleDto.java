@@ -18,4 +18,5 @@ public class UserRoleDto {
     private String lastname;
     private Long roleId;
     private String roleName;
+    private String roleTitle;
 }

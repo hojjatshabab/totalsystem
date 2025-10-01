@@ -33,13 +33,13 @@ public class CartableDto {
     private LocalDate sendDate;
     private UUID flowRuleDomainId;
     private String flowRuleDomainEntityName;
+    private UUID flowRuleId;
     private String flowRuleName;
     private UUID currentStepId;
     private UUID nextStepId;
-    private Priority priority = Priority.NORMAL;
-    private Boolean read = false;
+    private Priority priority;
+    private Boolean read;
     private Date dueDate;
-    private List<FileStorageDto> attachments;
 
 }
 

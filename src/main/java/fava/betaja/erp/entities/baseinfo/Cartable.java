@@ -19,7 +19,8 @@ import java.util.UUID;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "cartable", schema = "base_info")
+@Table(name = "cartable", schema = "base_info",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"document_id", "sender_id","flow_rule_domain_id","recipient_id"}))
 public class Cartable extends AbstractAuditingEntity {
 
     @Column(name = "title", nullable = false, length = 500)
@@ -30,7 +31,7 @@ public class Cartable extends AbstractAuditingEntity {
     @Comment("شناسه یکتا سند/مستند مرتبط")
     private UUID documentId;
 
-    @Column(name = "document_number", length = 50, nullable = false, unique = true)
+    @Column(name = "document_number")
     @Comment("شماره پیگیری کارتابل")
     private String documentNumber;
 
@@ -84,11 +85,6 @@ public class Cartable extends AbstractAuditingEntity {
     @Column(name = "due_date")
     @Comment("تاریخ سررسید")
     private Date dueDate;
-
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "record_id", referencedColumnName = "document_id")
-    @Comment("فایل‌های پیوست شده به این کارتابل")
-    private List<FileStorage> attachments;
 
 }
 

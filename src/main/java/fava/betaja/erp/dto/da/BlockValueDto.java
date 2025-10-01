@@ -1,5 +1,6 @@
 package fava.betaja.erp.dto.da;
 
+import fava.betaja.erp.enums.da.BlockValueState;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -32,6 +33,7 @@ public class BlockValueDto {
     private String issueSummary;
     private UUID projectPeriodId;
     private String projectPeriodTitle;
+    private BlockValueState blockValueState;
     private UUID blockId;
     private String blockName;
 }

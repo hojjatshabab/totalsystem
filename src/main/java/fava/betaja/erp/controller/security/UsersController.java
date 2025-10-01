@@ -6,6 +6,7 @@ import fava.betaja.erp.dto.PageRequest;
 import fava.betaja.erp.dto.PageResponse;
 import fava.betaja.erp.dto.security.UsersDto;
 import fava.betaja.erp.entities.common.OrganizationUnit;
+import fava.betaja.erp.entities.security.Users;
 import fava.betaja.erp.exceptions.ServiceException;
 import fava.betaja.erp.service.security.UsersService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -72,6 +73,12 @@ public class UsersController extends BaseController {
     @GetMapping("/current-org")
     public ActionResult<OrganizationUnit> getCurrentUserOrganizationUnit(Locale locale) {
         OrganizationUnit entity = usersService.getCurrentUserOrganizationUnit();
+        return RESULT(entity, locale);
+    }
+
+    @GetMapping("/current-user")
+    public ActionResult<Users> getCurrentUser(Locale locale) {
+        Users entity = usersService.getCurrentUser();
         return RESULT(entity, locale);
     }
 

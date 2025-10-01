@@ -4,6 +4,7 @@ import fava.betaja.erp.dto.PageRequest;
 import fava.betaja.erp.dto.PageResponse;
 import fava.betaja.erp.dto.security.UsersDto;
 import fava.betaja.erp.entities.common.OrganizationUnit;
+import fava.betaja.erp.entities.security.Users;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,5 +26,7 @@ public interface UsersService {
     void deleteById(Long id);
 
     OrganizationUnit getCurrentUserOrganizationUnit();
+
+    Users getCurrentUser();
 
 }

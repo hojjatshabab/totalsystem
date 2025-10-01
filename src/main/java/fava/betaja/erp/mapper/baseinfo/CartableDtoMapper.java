@@ -34,6 +34,7 @@ public interface CartableDtoMapper extends BaseMapper<CartableDto, Cartable> {
     @Mapping(target = "recipientLastname", source = "recipient.lastname")
     @Mapping(target = "flowRuleDomainId", source = "flowRuleDomain.id")
     @Mapping(target = "flowRuleDomainEntityName", source = "flowRuleDomain.entityName")
+    @Mapping(target = "flowRuleId", source = "flowRuleDomain.flowRule.id")
     @Mapping(target = "flowRuleName", source = "flowRuleDomain.flowRule.name")
     @Mapping(target = "currentStepId", source = "currentStep.id")
     CartableDto toDto(Cartable entity);

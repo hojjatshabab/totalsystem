@@ -6,6 +6,7 @@ import fava.betaja.erp.dto.da.BlockValueDto;
 import fava.betaja.erp.entities.da.Block;
 import fava.betaja.erp.entities.da.BlockValue;
 import fava.betaja.erp.entities.da.ProjectPeriod;
+import fava.betaja.erp.enums.da.BlockValueState;
 import fava.betaja.erp.exceptions.ServiceException;
 import fava.betaja.erp.mapper.da.BlockValueDtoMapper;
 import fava.betaja.erp.repository.da.BlockRepository;
@@ -40,11 +41,12 @@ public class BlockValueServiceImpl implements BlockValueService {
         Block block = blockRepository.findById(dto.getBlockId()).get();
         Optional<ProjectPeriod> optionalProjectPeriod = projectPeriodRepository
                 .findByProjectIdAndIsActiveTrue(block.getProject().getId());
-        if (!optionalProjectPeriod.isPresent()){
+        if (!optionalProjectPeriod.isPresent()) {
             throw new ServiceException("دوره زمانی فعالی موجود نیست.");
         }
         dto.setProjectPeriodId(optionalProjectPeriod.get().getId());
         dto.setName(block.getName());
+        dto.setBlockValueState(BlockValueState.IN_PROGRESS);
         log.info("Saving BlockValue: {}", dto.getName());
         BlockValue entity = mapper.toEntity(dto);
         BlockValueDto result = mapper.toDto(repository.save(entity));

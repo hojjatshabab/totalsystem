@@ -3,6 +3,8 @@ package fava.betaja.erp.entities.da;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import fava.betaja.erp.entities.AbstractAuditingEntity;
+import fava.betaja.erp.enums.da.BlockValueState;
+import fava.betaja.erp.enums.da.RangeType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -88,6 +90,11 @@ public class BlockValue extends AbstractAuditingEntity {
     @Column(name = "issue_summary", length = 1000)
     @Comment("خلاصه مشکلات و موانع")
     private String issueSummary;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "block_value_state")
+    @Comment("وضعیت تایید")
+    private BlockValueState blockValueState;
 
     @NotNull(message = "دوره پروژه الزامی هست")
     @JoinColumn(name = "project_period_id", referencedColumnName = "id", nullable = false)

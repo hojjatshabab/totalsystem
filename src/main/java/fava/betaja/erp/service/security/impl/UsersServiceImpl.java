@@ -95,6 +95,15 @@ public class UsersServiceImpl implements UsersService {
         return null;
     }
 
+    @Override
+    public Users getCurrentUser() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof Users user) {
+            return user;
+        }
+        return null;
+    }
+
     private void validate(UsersDto dto, boolean isCreate) {
         if (!isCreate && (dto.getId() == null || !repository.existsById(dto.getId()))) {
             throw new ServiceException("کاربر برای بروزرسانی موجود نیست.");

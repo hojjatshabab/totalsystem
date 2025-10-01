@@ -39,6 +39,26 @@ public class CartableController extends BaseController {
         return RESULT(cartableService.update(cartableDto), locale);
     }
 
+    @PutMapping("/next-step-cartable")
+    public ActionResult<CartableDto> nextStepCartable(@RequestBody @Valid CartableDto cartableDto, Locale locale) {
+        if (cartableDto.getId() == null) {
+            return NO_CONTENT("id", locale);
+        }
+        cartableService.findById(cartableDto.getId())
+                .orElseThrow(() -> new ServiceException("Cartable با این id یافت نشد: " + cartableDto.getId()));
+        return RESULT(cartableService.nextStepCartable(cartableDto), locale);
+    }
+
+    @PutMapping("/accept-cartable")
+    public ActionResult<CartableDto> acceptCartable(@RequestBody @Valid CartableDto cartableDto, Locale locale) {
+        if (cartableDto.getId() == null) {
+            return NO_CONTENT("id", locale);
+        }
+        cartableService.findById(cartableDto.getId())
+                .orElseThrow(() -> new ServiceException("Cartable با این id یافت نشد: " + cartableDto.getId()));
+        return RESULT(cartableService.acceptCartable(cartableDto), locale);
+    }
+
     @GetMapping
     public ActionResult<PageResponse<CartableDto>> findAll(@RequestParam int currentPage,
                                                            @RequestParam int pageSize,
