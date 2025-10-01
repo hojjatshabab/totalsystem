@@ -12,6 +12,7 @@ import fava.betaja.erp.entities.security.Role;
 import fava.betaja.erp.entities.security.Users;
 import fava.betaja.erp.enums.baseinfo.CartableState;
 import fava.betaja.erp.enums.baseinfo.Priority;
+import fava.betaja.erp.enums.da.BlockValueState;
 import fava.betaja.erp.exceptions.ServiceException;
 import fava.betaja.erp.mapper.baseinfo.CartableDtoMapper;
 import fava.betaja.erp.repository.baseinfo.CartableRepository;
@@ -117,6 +118,11 @@ public class CartableServiceImpl implements CartableService {
     public CartableDto acceptCartable(CartableDto dto) {
         validate(dto, false);
 
+        dto.setState(CartableState.APPROVED);
+
+        BlockValue blockValue = blockValueRepository.findById(dto.getDocumentId()).get();
+        blockValue.setBlockValueState(BlockValueState.APPROVED);
+        blockValueRepository.save(blockValue);
 
 
         Cartable entity = mapper.toEntity(dto);
@@ -154,6 +160,17 @@ public class CartableServiceImpl implements CartableService {
     }
 
     @Override
+    public PageResponse<CartableDto> findByStatePage(CartableState state, PageRequest<CartableDto> model) {
+        List<CartableDto> result = repository
+                .findByState(state,Pageable.ofSize(model.getPageSize()).withPage(model.getCurrentPage() - 1))
+                .stream()
+                .map(mapper::toDto)
+                .collect(Collectors.toList());
+        long count = repository.count();
+        return new PageResponse<>(result, model.getPageSize(), count, model.getCurrentPage(), model.getSortBy());
+    }
+
+    @Override
     public List<CartableDto> findAll() {
         return repository.findAll().stream()
                 .map(mapper::toDto)
@@ -177,7 +194,7 @@ public class CartableServiceImpl implements CartableService {
     }
 
     @Override
-    public List<CartableDto> findByState(String state) {
+    public List<CartableDto> findByStatePage(String state) {
         return repository.findByState(state)
                 .stream()
                 .map(mapper::toDto)
