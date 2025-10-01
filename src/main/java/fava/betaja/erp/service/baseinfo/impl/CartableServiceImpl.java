@@ -45,7 +45,6 @@ public class CartableServiceImpl implements CartableService {
     private final FlowRuleDomainRepository flowRuleDomainRepository;
     private final FlowRuleStepRepository flowRuleStepRepository;
     private final BlockValueRepository blockValueRepository;
-    private final UserRepository userRepository;
     private final UserRoleRepository userRoleRepository;
     private final UsersService usersService;
     private final CartableDtoMapper mapper;
@@ -91,7 +90,9 @@ public class CartableServiceImpl implements CartableService {
 
         StringBuilder title = new StringBuilder();
         title.append(flowRule.getName())
-                .append("، ")
+                .append(" ")
+                .append(blockValue.getName())
+                .append(" ،")
                 .append(blockValue.getProjectPeriod().getPeriodRange().getName())
                 .append(" - ")
                 .append(blockValue.getProjectPeriod().getYear());
@@ -162,7 +163,7 @@ public class CartableServiceImpl implements CartableService {
     @Override
     public PageResponse<CartableDto> findByStatePage(CartableState state, PageRequest<CartableDto> model) {
         List<CartableDto> result = repository
-                .findByState(state,Pageable.ofSize(model.getPageSize()).withPage(model.getCurrentPage() - 1))
+                .findByState(state, Pageable.ofSize(model.getPageSize()).withPage(model.getCurrentPage() - 1))
                 .stream()
                 .map(mapper::toDto)
                 .collect(Collectors.toList());
