@@ -31,6 +31,13 @@ public class CartableServiceImpl implements CartableService {
     @Override
     public CartableDto save(CartableDto dto) {
         validate(dto, true);
+        StringBuilder title = new StringBuilder();
+   /*     title.append(periodRangeRepository.findById(dto.getPeriodRangeId()).get().getName())
+                .append("، ")
+                .append(dto.getYear())
+                .append(" - پروژه ")
+                .append(projectRepository.findById(dto.getProjectId()).get().getName());
+        dto.setTitle(title.toString());*/
         log.info("Saving Cartable: documentNumber={}", dto.getDocumentNumber());
         Cartable entity = mapper.toEntity(dto);
         return mapper.toDto(repository.save(entity));

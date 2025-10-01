@@ -23,10 +23,11 @@ public class FlowRuleStepDto {
     private String organizationUnitName;
     private Long roleId;
     private String roleName;
-    private ActionTypeEnum actionType = ActionTypeEnum.APPROVE;
+    private ActionTypeEnum actionType;
     private String conditionExpression;
-    private FlowRuleStepDto previousStep;
+  //  private FlowRuleStepDto previousStep;
+    private UUID previousStepId;
     private List<FlowRuleStepDto> nextSteps;
-    private Boolean finalStep = false;
+    private Boolean finalStep;
 
 }

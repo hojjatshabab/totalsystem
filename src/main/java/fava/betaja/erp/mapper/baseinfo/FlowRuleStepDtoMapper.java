@@ -19,10 +19,12 @@ public interface FlowRuleStepDtoMapper extends BaseMapper<FlowRuleStepDto, FlowR
     @Mapping(target = "flowRule.id", source = "flowRuleId")
     @Mapping(target = "role.id", source = "roleId")
     @Mapping(target = "organizationUnit.id", source = "organizationUnitId")
+    @Mapping(target = "previousStep.id", source = "previousStepId")
     FlowRuleStep toEntity(FlowRuleStepDto dto);
 
     List<FlowRuleStep> toEntityList(List<FlowRuleStepDto> dtos);
 
+    @Mapping(target = "previousStepId", source = "previousStep.id")
     @Mapping(target = "flowRuleId", source = "flowRule.id")
     @Mapping(target = "flowRuleName", source = "flowRule.name")
     @Mapping(target = "roleId", source = "role.id")
