@@ -27,7 +27,7 @@ public class Role implements GrantedAuthority {
     @Column(name = "title")
     private String title;
 
-    @OneToMany(mappedBy = "role", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "role", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<RolePermission> rolePermissions;
 
     @Override
