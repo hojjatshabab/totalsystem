@@ -4,6 +4,7 @@ import fava.betaja.erp.dto.PageRequest;
 import fava.betaja.erp.dto.PageResponse;
 import fava.betaja.erp.dto.da.BlockDto;
 import fava.betaja.erp.dto.da.ProjectDto;
+import fava.betaja.erp.entities.da.Block;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +19,8 @@ public interface BlockService {
     PageResponse<BlockDto> findAll(PageRequest<BlockDto> model);
 
     PageResponse<BlockDto> findByProjectId(UUID projectId, PageRequest<BlockDto> model);
+
+    List<BlockDto> findAllListByProjectId(UUID projectId);
 
     List<BlockDto> findAll();
 

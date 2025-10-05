@@ -5,7 +5,6 @@ import fava.betaja.erp.controller.BaseController;
 import fava.betaja.erp.dto.PageRequest;
 import fava.betaja.erp.dto.PageResponse;
 import fava.betaja.erp.dto.da.BlockDto;
-import fava.betaja.erp.dto.da.ProjectDto;
 import fava.betaja.erp.exceptions.ServiceException;
 import fava.betaja.erp.service.da.BlockService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -42,8 +41,8 @@ public class BlockController extends BaseController {
 
     @GetMapping
     public ActionResult<PageResponse<BlockDto>> findAll(@RequestParam int currentPage,
-                                                            @RequestParam int pageSize,
-                                                            Locale locale) {
+                                                        @RequestParam int pageSize,
+                                                        Locale locale) {
         if (currentPage <= 0 || pageSize <= 0) {
             return NOT_ACCEPTABLE("{ currentPage <= 0 || pageSize <= 0 }", locale);
         }
@@ -56,9 +55,9 @@ public class BlockController extends BaseController {
 
     @GetMapping("find-by-project")
     public ActionResult<PageResponse<BlockDto>> findByProjectId(@RequestParam int currentPage,
-                                                                             @RequestParam int pageSize,
-                                                                             @RequestParam UUID projectId,
-                                                                             Locale locale) {
+                                                                @RequestParam int pageSize,
+                                                                @RequestParam UUID projectId,
+                                                                Locale locale) {
         if (currentPage <= 0 || pageSize <= 0) {
             return NOT_ACCEPTABLE("{ currentPage <= 0 || pageSize <= 0 }", locale);
         }
@@ -67,6 +66,13 @@ public class BlockController extends BaseController {
         request.setCurrentPage(currentPage);
         PageResponse<BlockDto> response = service.findByProjectId(projectId, request);
         return RESULT(response, locale);
+    }
+
+    @GetMapping("find-by-project-list/{projectId}")
+    public ActionResult<List<BlockDto>> findByProjectId(@PathVariable UUID projectId,
+                                                        Locale locale) {
+        List<BlockDto> result = service.findAllListByProjectId(projectId);
+        return RESULT(result, locale);
     }
 
     @GetMapping("/list")

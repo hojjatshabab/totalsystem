@@ -83,6 +83,13 @@ public class BlockServiceImpl implements BlockService {
     }
 
     @Override
+    public List<BlockDto> findAllListByProjectId(UUID projectId) {
+        return repository.findByProjectId(projectId).stream()
+                .map(mapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public Optional<BlockDto> findById(UUID id) {
         return Optional.ofNullable(id)
                 .flatMap(repository::findById)
