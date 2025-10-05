@@ -50,6 +50,10 @@ public class BlockValue extends AbstractAuditingEntity {
     @Comment("متراژ کلی (مترمربع)")
     private BigDecimal totalArea;
 
+    @Column(name = "useful_area", nullable = false)
+    @Comment("متراژ مفید")
+    private BigDecimal usefulArea;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", locale = "IR", timezone = "Asia/Tehran")
     @NotNull(message = "تاریخ شروع الزامی است")
     @Column(name = "start_date", nullable = false)

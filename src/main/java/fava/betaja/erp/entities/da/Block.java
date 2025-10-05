@@ -46,6 +46,10 @@ public class Block extends AbstractAuditingEntity {
     @Comment("متراژ کلی (مترمربع)")
     private BigDecimal totalArea;
 
+    @Column(name = "useful_area")
+    @Comment("متراژ مفید")
+    private BigDecimal usefulArea;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", locale = "IR", timezone = "Asia/Tehran")
     @Column(name = "start_date")
     @Comment("تاریخ شروع")
