@@ -3,6 +3,7 @@ package fava.betaja.erp.service.baseinfo.impl;
 import fava.betaja.erp.dto.PageRequest;
 import fava.betaja.erp.dto.PageResponse;
 import fava.betaja.erp.dto.baseinfo.CartableDto;
+import fava.betaja.erp.dto.security.UsersDto;
 import fava.betaja.erp.entities.baseinfo.Cartable;
 import fava.betaja.erp.entities.baseinfo.FlowRule;
 import fava.betaja.erp.entities.baseinfo.FlowRuleDomain;
@@ -82,7 +83,7 @@ public class CartableServiceImpl implements CartableService {
         Role role = flowRuleStep.getRole();
 
         Users recipientUser = userRoleRepository.findByRoleId(role.getId()).stream().findFirst().get().getUser();
-        Users senderUser = usersService.getCurrentUser();
+        UsersDto senderUser = usersService.getCurrentUser();
 
         dto.setSenderId(senderUser.getId());
         dto.setRecipientId(recipientUser.getId());

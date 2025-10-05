@@ -77,8 +77,8 @@ public class UsersController extends BaseController {
     }
 
     @GetMapping("/current-user")
-    public ActionResult<Users> getCurrentUser(Locale locale) {
-        Users entity = usersService.getCurrentUser();
+    public ActionResult<UsersDto> getCurrentUser(Locale locale) {
+        UsersDto entity = usersService.getCurrentUser();
         return RESULT(entity, locale);
     }
 

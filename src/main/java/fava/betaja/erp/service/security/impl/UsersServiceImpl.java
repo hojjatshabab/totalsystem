@@ -96,10 +96,10 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public Users getCurrentUser() {
+    public UsersDto getCurrentUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof Users user) {
-            return user;
+            return mapper.toDto(user);
         }
         return null;
     }
