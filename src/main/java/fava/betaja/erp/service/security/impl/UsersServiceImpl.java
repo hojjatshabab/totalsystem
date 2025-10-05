@@ -6,9 +6,11 @@ import fava.betaja.erp.dto.security.UsersDto;
 import fava.betaja.erp.entities.common.OrganizationUnit;
 import fava.betaja.erp.entities.security.Users;
 import fava.betaja.erp.exceptions.ServiceException;
+import fava.betaja.erp.mapper.security.UserRoleDtoMapper;
 import fava.betaja.erp.mapper.security.UsersDtoMapper;
 import fava.betaja.erp.repository.common.OrganizationUnitRepository;
 import fava.betaja.erp.repository.security.UserRepository;
+import fava.betaja.erp.repository.security.UserRoleRepository;
 import fava.betaja.erp.service.security.UsersService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +30,8 @@ import java.util.stream.Collectors;
 public class UsersServiceImpl implements UsersService {
 
     private final UserRepository repository;
+    private final UserRoleRepository userRoleRepository;
+    private final UserRoleDtoMapper userRoleDtoMapper;
     private final OrganizationUnitRepository organizationUnitRepository;
     private final UsersDtoMapper mapper;
 
@@ -90,16 +94,20 @@ public class UsersServiceImpl implements UsersService {
     public OrganizationUnit getCurrentUserOrganizationUnit() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof Users user) {
-           return user.getOrganizationUnit();
+            return user.getOrganizationUnit();
         }
         return null;
     }
 
     @Override
     public UsersDto getCurrentUser() {
+        UsersDto result = new UsersDto();
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof Users user) {
-            return mapper.toDto(user);
+            result = mapper.toDto(user);
+            result.setUserRoles(userRoleDtoMapper.toDtoList(userRoleRepository.findByUserId(user.getId())));
+
+            return result;
         }
         return null;
     }
