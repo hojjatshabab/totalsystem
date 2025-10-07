@@ -21,6 +21,7 @@ public class BlockDto {
     private Integer floorCount;
     private Integer unitCount;
     private BigDecimal totalArea;
+    private BigDecimal usefulArea;
     private LocalDate startDate;
     private LocalDate deliveryDate;
     private UUID projectId;

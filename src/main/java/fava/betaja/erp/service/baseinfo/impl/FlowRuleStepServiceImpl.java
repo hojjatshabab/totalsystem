@@ -51,7 +51,7 @@ public class FlowRuleStepServiceImpl implements FlowRuleStepService {
                 .stream()
                 .map(mapper::toDto)
                 .collect(Collectors.toList());
-        long count = repository.count();
+        long count = result.size();
         return new PageResponse<>(result, model.getPageSize(), count, model.getCurrentPage(), model.getSortBy());
     }
 

@@ -46,15 +46,15 @@ public class PeriodRangeServiceImpl implements PeriodRangeService {
 
     @Override
     public PageResponse<PeriodRangeDto> findAll(PageRequest<PeriodRangeDto> model) {
-        List<PeriodRangeDto> dtos = repository
+        List<PeriodRangeDto> result = repository
                 .findAll(Pageable.ofSize(model.getPageSize())
                         .withPage(model.getCurrentPage() - 1))
                 .stream()
                 .map(mapper::toDto)
                 .collect(Collectors.toList());
 
-        long count = repository.count();
-        return new PageResponse<>(dtos, model.getPageSize(), count, model.getCurrentPage(), model.getSortBy());
+        long count = result.size();
+        return new PageResponse<>(result, model.getPageSize(), count, model.getCurrentPage(), model.getSortBy());
     }
 
     @Override
