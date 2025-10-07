@@ -49,7 +49,7 @@ public class CommonBaseDataServiceImpl implements CommonBaseDataService {
                 .findAll(Pageable.ofSize(model.getPageSize()).withPage(model.getCurrentPage() - 1))
                 .stream().map(mapper::toDto)
                 .collect(Collectors.toList());
-        long count = repository.count();
+        long count = result.size();
         return new PageResponse<>(result, model.getPageSize(), count, model.getCurrentPage(), model.getSortBy());
     }
 
@@ -60,7 +60,7 @@ public class CommonBaseDataServiceImpl implements CommonBaseDataService {
                         commonBaseTypeId,
                         Pageable.ofSize(model.getPageSize()).withPage(model.getCurrentPage() - 1))
                 .stream().collect(Collectors.toList());
-        long count = repository.count();
+        long count = result.size();
         return new PageResponse<>(result, model.getPageSize(), count, model.getCurrentPage(), model.getSortBy());
     }
 
@@ -81,7 +81,7 @@ public class CommonBaseDataServiceImpl implements CommonBaseDataService {
                         value, commonBaseTypeId,
                         Pageable.ofSize(model.getPageSize()).withPage(model.getCurrentPage() - 1))
                 .stream().collect(Collectors.toList());
-        long count = repository.count();
+        long count = result.size();
         return new PageResponse<>(result, model.getPageSize(), count, model.getCurrentPage(), model.getSortBy());
     }
 
