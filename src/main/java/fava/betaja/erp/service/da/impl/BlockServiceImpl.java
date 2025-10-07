@@ -3,19 +3,15 @@ package fava.betaja.erp.service.da.impl;
 import fava.betaja.erp.dto.PageRequest;
 import fava.betaja.erp.dto.PageResponse;
 import fava.betaja.erp.dto.da.BlockDto;
-import fava.betaja.erp.dto.da.ProjectDto;
 import fava.betaja.erp.entities.da.Block;
-import fava.betaja.erp.entities.da.Project;
 import fava.betaja.erp.exceptions.ServiceException;
 import fava.betaja.erp.mapper.da.BlockDtoMapper;
-import fava.betaja.erp.mapper.da.ProjectDtoMapper;
 import fava.betaja.erp.repository.da.BlockRepository;
-import fava.betaja.erp.repository.da.PlanRepository;
 import fava.betaja.erp.repository.da.ProjectRepository;
 import fava.betaja.erp.service.da.BlockService;
-import fava.betaja.erp.service.da.ProjectService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,14 +60,20 @@ public class BlockServiceImpl implements BlockService {
     }
 
     @Override
-    public PageResponse<BlockDto> findByProjectId(UUID planId, PageRequest<BlockDto> model) {
-        List<BlockDto> result = repository
-                .findByProjectId(planId,
-                        Pageable.ofSize(model.getPageSize())
-                                .withPage(model.getCurrentPage() - 1))
-                .stream().map(mapper::toDto)
+    public PageResponse<BlockDto> findByProjectId(UUID projectId, PageRequest<BlockDto> model) {
+        Page<Block> page = repository.findByProjectId(
+                projectId,
+                Pageable.ofSize(model.getPageSize())
+                        .withPage(model.getCurrentPage() - 1)
+        );
+
+        List<BlockDto> result = page.getContent()
+                .stream()
+                .map(mapper::toDto)
                 .collect(Collectors.toList());
-        long count = result.size();
+
+        long count = page.getTotalElements();
+
         return new PageResponse<>(result, model.getPageSize(), count, model.getCurrentPage(), model.getSortBy());
     }
 
