@@ -3,8 +3,11 @@ package fava.betaja.erp.service.common.impl;
 import fava.betaja.erp.dto.PageRequest;
 import fava.betaja.erp.dto.PageResponse;
 import fava.betaja.erp.dto.common.OrganizationUnitDto;
+import fava.betaja.erp.entities.common.CommonBaseData;
+import fava.betaja.erp.entities.common.CommonBaseType;
 import fava.betaja.erp.entities.common.OrganizationUnit;
 import fava.betaja.erp.entities.security.Users;
+import fava.betaja.erp.exceptions.ServiceException;
 import fava.betaja.erp.mapper.common.OrganizationUnitDtoMapper;
 import fava.betaja.erp.repository.common.CommonBaseDataRepository;
 import fava.betaja.erp.repository.common.CommonBaseTypeRepository;
@@ -34,6 +37,8 @@ public class OrganizationUnitServiceImpl implements OrganizationUnitService {
 
 
     private final OrganizationUnitRepository organizationUnitRepository;
+    private final CommonBaseTypeRepository commonBaseTypeRepository;
+    private final CommonBaseDataRepository commonBaseDataRepository;
     private final OrganizationUnitDtoMapper organizationUnitDtoMapper;
 
     @Override
@@ -148,6 +153,23 @@ public class OrganizationUnitServiceImpl implements OrganizationUnitService {
         if (organizationUnit.get().size() > 0)
             return Optional.ofNullable(setChildrenOrganizationDto(organizationUnitDtoMapper.toDtoList(organizationUnit.get())));
         return Optional.empty();
+    }
+
+    @Override
+    public List<OrganizationUnitDto> findByCommonBase(String type, String data) {
+        Optional<CommonBaseType> optionalCommonBaseType = commonBaseTypeRepository.findByClassNameIgnoreCase(type);
+        if (!optionalCommonBaseType.isPresent()) {
+            throw new ServiceException("نوع اطلاعات الزامی هست.");
+        }
+        Optional<CommonBaseData> optionalCommonBaseData = commonBaseDataRepository.findByCommonBaseTypeIdAndKey(
+                optionalCommonBaseType.get().getId(), data
+        );
+        if (!optionalCommonBaseData.isPresent()) {
+            throw new ServiceException("مقدار اطلاعات یافت نشد.");
+        }
+
+        List<OrganizationUnit> organizationUnitList = organizationUnitRepository.findByCommonBaseDataOrgTypeId(optionalCommonBaseData.get().getId());
+        return organizationUnitDtoMapper.toDtoList(organizationUnitList);
     }
 
     @Override

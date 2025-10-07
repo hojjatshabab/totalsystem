@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,12 +33,14 @@ public class UsersServiceImpl implements UsersService {
     private final UserRepository repository;
     private final UserRoleRepository userRoleRepository;
     private final UserRoleDtoMapper userRoleDtoMapper;
+    private final PasswordEncoder passwordEncoder;
     private final OrganizationUnitRepository organizationUnitRepository;
     private final UsersDtoMapper mapper;
 
     @Override
     public UsersDto save(UsersDto dto) {
         validate(dto, true);
+        dto.setPassword(passwordEncoder.encode(dto.getPassword()));
         log.info("Saving User: {}", dto.getUsername());
         Users entity = mapper.toEntity(dto);
         return mapper.toDto(repository.save(entity));
@@ -46,6 +49,8 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public UsersDto update(UsersDto dto) {
         validate(dto, false);
+        if (!passwordEncoder.matches(dto.getPassword(), repository.findById(dto.getId()).get().getPassword()))
+            dto.setPassword(passwordEncoder.encode(dto.getPassword()));
         log.info("Updating User: id={}, username={}", dto.getId(), dto.getUsername());
         Users entity = mapper.toEntity(dto);
         return mapper.toDto(repository.save(entity));

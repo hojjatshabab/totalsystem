@@ -28,6 +28,8 @@ public interface OrganizationUnitService {
 
     Optional<List<OrganizationUnitDto>> findByNameContains(String name);
 
+    List<OrganizationUnitDto> findByCommonBase(String type,String data);
+
     Optional<List<OrganizationUnitDto>> findChildrenById(Long id);
 
     List<OrganizationUnitDto> findAllForceWithOutChildren();

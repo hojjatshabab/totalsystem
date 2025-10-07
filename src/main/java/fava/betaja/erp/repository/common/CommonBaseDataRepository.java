@@ -8,14 +8,17 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
-public interface CommonBaseDataRepository extends JpaRepository<CommonBaseData, Long> , CommonBaseDataExtraRepository {
+public interface CommonBaseDataRepository extends JpaRepository<CommonBaseData, Long>, CommonBaseDataExtraRepository {
     Page<CommonBaseData> findByCommonBaseTypeIdAndActiveTrue(Long commonBaseTypeId, Pageable pageable);
 
     List<CommonBaseData> findByCommonBaseTypeIdOrderByOrderNoAsc(Long commonBaseTypeId);
 
     List<CommonBaseData> findByCommonBaseTypeIdAndActiveTrue(Long commonBaseTypeId);
+
+    Optional<CommonBaseData> findByCommonBaseTypeIdAndKey(Long commonBaseTypeId, String key);
 
     Page<CommonBaseData> findByValueContainingIgnoreCaseAndCommonBaseTypeIdAndActiveTrue(String value, Long commonBaseTypeId, Pageable pageable);
 }

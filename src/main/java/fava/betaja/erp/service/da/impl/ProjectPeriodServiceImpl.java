@@ -2,7 +2,9 @@ package fava.betaja.erp.service.da.impl;
 
 import fava.betaja.erp.dto.PageRequest;
 import fava.betaja.erp.dto.PageResponse;
+import fava.betaja.erp.dto.da.BlockDto;
 import fava.betaja.erp.dto.da.ProjectPeriodDto;
+import fava.betaja.erp.entities.da.Block;
 import fava.betaja.erp.entities.da.ProjectPeriod;
 import fava.betaja.erp.exceptions.ServiceException;
 import fava.betaja.erp.mapper.da.ProjectPeriodDtoMapper;
@@ -12,6 +14,7 @@ import fava.betaja.erp.repository.da.ProjectRepository;
 import fava.betaja.erp.service.da.ProjectPeriodService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,43 +73,60 @@ public class ProjectPeriodServiceImpl implements ProjectPeriodService {
                                 .withPage(model.getCurrentPage() - 1))
                 .stream().map(mapper::toDto)
                 .collect(Collectors.toList());
-        long count = result.size();
+        long count = repository.count();
         return new PageResponse<>(result, model.getPageSize(), count, model.getCurrentPage(), model.getSortBy());
     }
 
     @Override
     public PageResponse<ProjectPeriodDto> findByProjectId(UUID projectId, PageRequest<ProjectPeriodDto> model) {
-        List<ProjectPeriodDto> result = repository
-                .findByProjectId(projectId,
-                        Pageable.ofSize(model.getPageSize())
-                                .withPage(model.getCurrentPage() - 1))
-                .stream().map(mapper::toDto)
+        Page<ProjectPeriod> page = repository.findByProjectId(
+                projectId,
+                Pageable.ofSize(model.getPageSize())
+                        .withPage(model.getCurrentPage() - 1)
+        );
+
+        List<ProjectPeriodDto> result = page.getContent()
+                .stream()
+                .map(mapper::toDto)
                 .collect(Collectors.toList());
-        long count = result.size();
+
+        long count = page.getTotalElements();
+
         return new PageResponse<>(result, model.getPageSize(), count, model.getCurrentPage(), model.getSortBy());
     }
 
     @Override
     public PageResponse<ProjectPeriodDto> findByProjectIdAndPeriodRangeIdAndYear(UUID projectId, UUID periodId, String year, PageRequest<ProjectPeriodDto> model) {
-        List<ProjectPeriodDto> result = repository
-                .findByProjectIdAndPeriodRangeIdAndYear(projectId, periodId, year,
-                        Pageable.ofSize(model.getPageSize())
-                                .withPage(model.getCurrentPage() - 1))
-                .stream().map(mapper::toDto)
+        Page<ProjectPeriod> page = repository.findByProjectIdAndPeriodRangeIdAndYear(
+                projectId, periodId, year,
+                Pageable.ofSize(model.getPageSize())
+                        .withPage(model.getCurrentPage() - 1)
+        );
+
+        List<ProjectPeriodDto> result = page.getContent()
+                .stream()
+                .map(mapper::toDto)
                 .collect(Collectors.toList());
-        long count = result.size();
+
+        long count = page.getTotalElements();
+
         return new PageResponse<>(result, model.getPageSize(), count, model.getCurrentPage(), model.getSortBy());
     }
 
     @Override
     public PageResponse<ProjectPeriodDto> findByPeriodRangeIdAndYear(UUID periodId, String year, PageRequest<ProjectPeriodDto> model) {
-        List<ProjectPeriodDto> result = repository
-                .findByPeriodRangeIdAndYear(periodId, year,
-                        Pageable.ofSize(model.getPageSize())
-                                .withPage(model.getCurrentPage() - 1))
-                .stream().map(mapper::toDto)
+        Page<ProjectPeriod> page = repository.findByPeriodRangeIdAndYear(
+                periodId, year,
+                Pageable.ofSize(model.getPageSize())
+                        .withPage(model.getCurrentPage() - 1)
+        );
+
+        List<ProjectPeriodDto> result = page.getContent()
+                .stream()
+                .map(mapper::toDto)
                 .collect(Collectors.toList());
-        long count = result.size();
+
+        long count = page.getTotalElements();
         return new PageResponse<>(result, model.getPageSize(), count, model.getCurrentPage(), model.getSortBy());
     }
 

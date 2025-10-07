@@ -3,13 +3,16 @@ package fava.betaja.erp.service.common.impl;
 import fava.betaja.erp.dto.PageRequest;
 import fava.betaja.erp.dto.PageResponse;
 import fava.betaja.erp.dto.common.CommonBaseTypeDto;
+import fava.betaja.erp.dto.da.BlockDto;
 import fava.betaja.erp.entities.common.CommonBaseType;
+import fava.betaja.erp.entities.da.Block;
 import fava.betaja.erp.exceptions.ServiceException;
 import fava.betaja.erp.mapper.common.CommonBaseTypeDtoMapper;
 import fava.betaja.erp.repository.common.CommonBaseTypeRepository;
 import fava.betaja.erp.service.common.CommonBaseTypeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,13 +60,19 @@ public class CommonBaseTypeServiceImpl implements CommonBaseTypeService {
 
     @Override
     public PageResponse<CommonBaseTypeDto> findByClassNameContainingOrTitleContaining(String className, String title, PageRequest<CommonBaseTypeDto> model) {
-        List<CommonBaseTypeDto> result = repository
-                .findByClassNameContainingIgnoreCaseOrTitleContainingIgnoreCase(
-                        className, title,
-                        Pageable.ofSize(model.getPageSize()).withPage(model.getCurrentPage() - 1))
-                .stream().map(mapper::toDto)
+        Page<CommonBaseType> page = repository.findByClassNameContainingIgnoreCaseOrTitleContainingIgnoreCase(
+                className,title,
+                Pageable.ofSize(model.getPageSize())
+                        .withPage(model.getCurrentPage() - 1)
+        );
+
+        List<CommonBaseTypeDto> result = page.getContent()
+                .stream()
+                .map(mapper::toDto)
                 .collect(Collectors.toList());
-        long count = result.size();
+
+        long count = page.getTotalElements();
+
         return new PageResponse<>(result, model.getPageSize(), count, model.getCurrentPage(), model.getSortBy());
     }
 

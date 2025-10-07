@@ -20,6 +20,8 @@ public interface OrganizationUnitRepository extends JpaRepository<OrganizationUn
 
     Optional<OrganizationUnit> findByName(String name);
 
+    List<OrganizationUnit> findByCommonBaseDataOrgTypeId(Long id);
+
     Optional<OrganizationUnit> findByCodePath(String codePath);
 
     Optional<List<OrganizationUnit>> findByParentIdOrderByCodePathDesc(Long parentId);

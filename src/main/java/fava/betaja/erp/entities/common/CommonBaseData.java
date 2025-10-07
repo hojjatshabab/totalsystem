@@ -47,9 +47,9 @@ public class CommonBaseData  {
     private String value;
 
     @Size(max = 500, message = "توضیحات نباید بیشتر از ۵۰۰ کاراکتر باشد")
-    @Column(name = "description", length = 500)
+    @Column(name = "key", length = 500)
     @Comment("توضیحات تکمیلی")
-    private String description;
+    private String key;
 
     @Column(name = "order_no")
     @Comment("شماره ترتیب نمایش")

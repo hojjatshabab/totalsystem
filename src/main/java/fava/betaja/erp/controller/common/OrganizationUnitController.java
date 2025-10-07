@@ -5,21 +5,17 @@ import fava.betaja.erp.controller.BaseController;
 import fava.betaja.erp.dto.PageRequest;
 import fava.betaja.erp.dto.PageResponse;
 import fava.betaja.erp.dto.common.OrganizationUnitDto;
-import fava.betaja.erp.entities.common.OrganizationUnit;
-import fava.betaja.erp.entities.security.Users;
 import fava.betaja.erp.enums.ModeType;
-import fava.betaja.erp.exceptions.ServiceException;
 import fava.betaja.erp.service.common.OrganizationUnitService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.util.*;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/organization")
@@ -245,18 +241,14 @@ public class OrganizationUnitController extends BaseController {
         return RESULT(organizationUnitsDto, locale);
     }
 
-    @GetMapping("/complete-name/{name}")
-    public ActionResult<Optional<List<OrganizationUnitDto>>> findByCompleteNameContains(@PathVariable String name, Locale locale) {
-        Optional<List<OrganizationUnitDto>> organizationUnitsDto;
-        if (name.equals(null) || name.isEmpty() || name.isBlank()) {
-            return NO_CONTENT("name =" + name, locale);
-        }
+    @GetMapping("/find-by-type")
+    public ActionResult<List<OrganizationUnitDto>> findByCommonBaseData(@RequestParam String type,
+                                                                                  @RequestParam String data, Locale locale) {
         try {
-            organizationUnitsDto = organizationUnitService.findByNameContains(name);
+            return RESULT(organizationUnitService.findByCommonBase(type, data), locale);
         } catch (Exception exception) {
             return INTERNAL_SERVER_ERROR(exception.getMessage(), locale);
         }
-        return RESULT(organizationUnitsDto, locale);
     }
 
     @DeleteMapping("/{id}")
