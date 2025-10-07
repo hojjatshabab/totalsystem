@@ -45,6 +45,15 @@ public class FlowRuleDomainServiceImpl implements FlowRuleDomainService {
     }
 
     @Override
+    public FlowRuleDomainDto getFlowDomain(String entityName, String flowCode) {
+        FlowRuleDomain flowRuleDomain = repository.findFirstCandidate(entityName, flowCode);
+        if (flowRuleDomain == null) {
+            throw new ServiceException("هیچ دامنه فعالی برای " + entityName + " یافت نشد");
+        }
+        return mapper.toDto(flowRuleDomain);
+    }
+
+    @Override
     public PageResponse<FlowRuleDomainDto> findAll(PageRequest<FlowRuleDomainDto> model) {
         List<FlowRuleDomainDto> result = repository
                 .findAll(Pageable.ofSize(model.getPageSize()).withPage(model.getCurrentPage() - 1))

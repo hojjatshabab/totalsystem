@@ -22,6 +22,7 @@ public class CartableDto {
     private String title;
     private UUID documentId;
     private String documentNumber;
+    private String entityName;
     private CartableState state;
     private Long senderId;
     private String senderName;

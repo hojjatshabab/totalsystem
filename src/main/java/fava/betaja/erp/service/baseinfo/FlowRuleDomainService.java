@@ -14,6 +14,8 @@ public interface FlowRuleDomainService {
 
     FlowRuleDomainDto update(FlowRuleDomainDto flowRuleDomainDto);
 
+    FlowRuleDomainDto getFlowDomain(String entityName, String flowCode);
+
     PageResponse<FlowRuleDomainDto> findAll(PageRequest<FlowRuleDomainDto> model);
 
     List<FlowRuleDomainDto> findAll();

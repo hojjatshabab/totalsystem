@@ -28,4 +28,11 @@ public class FlowRuleDomain extends AbstractAuditingEntity {
     @Comment("فعال/غیرفعال")
     private Boolean active = true;
 
+    @Column(name = "is_default")
+    private Boolean isDefault = false;
+
+    @Column(name = "flow_code")
+    private String flowCode;
+
+
 }

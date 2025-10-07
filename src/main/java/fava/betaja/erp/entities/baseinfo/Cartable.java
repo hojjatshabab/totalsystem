@@ -35,6 +35,9 @@ public class Cartable extends AbstractAuditingEntity {
     @Comment("شماره پیگیری کارتابل")
     private String documentNumber;
 
+    @Column(name = "entity_name")
+    private String entityName;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "state", nullable = false, length = 50)
     @Comment("وضعیت کارتابل")
