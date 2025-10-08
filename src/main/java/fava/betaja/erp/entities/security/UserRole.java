@@ -8,7 +8,9 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "user_role")
+@Table(name = "user_role", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"user_id", "role_id"})
+})
 public class UserRole {
 
     @Id

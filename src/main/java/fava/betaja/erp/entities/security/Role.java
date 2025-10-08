@@ -14,7 +14,9 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "role")
+@Table(name = "role", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"role_name"})
+})
 public class Role implements GrantedAuthority {
 
     @Id

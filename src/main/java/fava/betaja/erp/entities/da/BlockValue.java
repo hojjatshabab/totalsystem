@@ -50,7 +50,7 @@ public class BlockValue extends AbstractAuditingEntity {
     @Comment("متراژ کلی (مترمربع)")
     private BigDecimal totalArea;
 
-    @Column(name = "useful_area", nullable = false)
+    @Column(name = "useful_area")
     @Comment("متراژ مفید")
     private BigDecimal usefulArea;
 

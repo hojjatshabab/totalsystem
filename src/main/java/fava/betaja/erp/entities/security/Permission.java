@@ -8,13 +8,15 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "permission")
+@Table(name = "permission", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"name"})
+})
 public class Permission {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "name",nullable = false, unique = true)
     private String name;
 }
