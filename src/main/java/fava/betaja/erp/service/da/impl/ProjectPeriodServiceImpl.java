@@ -40,10 +40,12 @@ public class ProjectPeriodServiceImpl implements ProjectPeriodService {
         validate(dto, true);
         StringBuilder title = new StringBuilder();
         title.append(periodRangeRepository.findById(dto.getPeriodRangeId()).get().getName())
-                        .append("، ")
-                                .append(dto.getYear())
-                                        .append(" - پروژه ")
-                                                .append(projectRepository.findById(dto.getProjectId()).get().getName());
+                .append("، ")
+                .append(dto.getYear())
+                .append(" - ")
+                .append(projectRepository.findById(dto.getProjectId()).get().getPlan().getName())
+                .append(" - ")
+                .append(projectRepository.findById(dto.getProjectId()).get().getName());
         dto.setTitle(title.toString());
         log.info("Saving ProjectPeriod: {}", dto.getTitle());
         ProjectPeriod entity = mapper.toEntity(dto);

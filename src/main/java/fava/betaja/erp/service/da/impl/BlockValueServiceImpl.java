@@ -78,7 +78,7 @@ public class BlockValueServiceImpl implements BlockValueService {
 
         //  مقداردهی فیلدهای اولیه
         dto.setProjectPeriodId(projectPeriod.getId());
-        dto.setName(block.getName());
+        dto.setName(projectPeriod.getTitle());
         dto.setBlockValueState(BlockValueState.IN_PROGRESS);
 
         //  ذخیره مقدار جدید بلوک
@@ -96,7 +96,7 @@ public class BlockValueServiceImpl implements BlockValueService {
 
         // پیدا کردن مرحله اول جریان (FlowRuleStep)
         FlowRuleDomain flowRuleDomain = flowRuleDomainRepository
-                .findFirstCandidate("BlockValue", "company");
+                .findFirstCandidate("block-value", "company");
         if (flowRuleDomain == null) {
             throw new ServiceException("جریان کاری برای BlockValue تعریف نشده است.");
         }
@@ -118,15 +118,7 @@ public class BlockValueServiceImpl implements BlockValueService {
 
         // ساخت کارتابل
         Cartable cartable = new Cartable();
-        StringBuilder title = new StringBuilder();
-        title.append(flowRuleDomain.getFlowRule().getName())
-                .append(" ")
-                .append(saved.getName())
-                .append(" ،")
-                .append(saved.getProjectPeriod().getPeriodRange().getName())
-                .append(" - ")
-                .append(saved.getProjectPeriod().getYear());
-        cartable.setTitle(title.toString());
+        cartable.setTitle(saved.getName());
         cartable.setDocumentId(saved.getId());
         cartable.setDocumentNumber("BV-" + saved.getId().toString().substring(0, 8));
         cartable.setState(CartableState.PENDING);

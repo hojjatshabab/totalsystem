@@ -12,6 +12,7 @@ import java.util.UUID;
 @Repository
 public interface ProjectPeriodRepository extends JpaRepository<ProjectPeriod, UUID> {
     Page<ProjectPeriod> findByProjectId(UUID projectId, Pageable pageable);
+
     Optional<ProjectPeriod> findByProjectIdAndIsActiveTrue(UUID projectId);
 
     Page<ProjectPeriod> findByProjectIdAndPeriodRangeIdAndYear(UUID projectId, UUID periodId, String year, Pageable pageable);
