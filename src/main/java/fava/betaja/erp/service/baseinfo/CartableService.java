@@ -17,6 +17,8 @@ public interface CartableService {
 
     CartableDto nextStepCartable(CartableDto cartableDto);
 
+    CartableDto cartableToNextStep(UUID cartableId, String comment);
+
     CartableDto acceptCartable(CartableDto cartableDto);
 
     PageResponse<CartableDto> findAll(PageRequest<CartableDto> model);

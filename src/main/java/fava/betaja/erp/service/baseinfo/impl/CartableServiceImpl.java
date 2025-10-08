@@ -4,19 +4,26 @@ import fava.betaja.erp.dto.PageRequest;
 import fava.betaja.erp.dto.PageResponse;
 import fava.betaja.erp.dto.baseinfo.CartableDto;
 import fava.betaja.erp.entities.baseinfo.Cartable;
+import fava.betaja.erp.entities.baseinfo.CartableHistory;
+import fava.betaja.erp.entities.baseinfo.FlowRule;
 import fava.betaja.erp.entities.baseinfo.FlowRuleStep;
 import fava.betaja.erp.entities.da.BlockValue;
 import fava.betaja.erp.entities.security.Role;
 import fava.betaja.erp.entities.security.Users;
+import fava.betaja.erp.enums.baseinfo.ActionTypeEnum;
 import fava.betaja.erp.enums.baseinfo.CartableState;
 import fava.betaja.erp.enums.da.BlockValueState;
 import fava.betaja.erp.exceptions.ServiceException;
 import fava.betaja.erp.mapper.baseinfo.CartableDtoMapper;
+import fava.betaja.erp.mapper.security.UsersDtoMapper;
+import fava.betaja.erp.repository.baseinfo.CartableHistoryRepository;
 import fava.betaja.erp.repository.baseinfo.CartableRepository;
 import fava.betaja.erp.repository.baseinfo.FlowRuleStepRepository;
 import fava.betaja.erp.repository.da.BlockValueRepository;
+import fava.betaja.erp.repository.security.UserRepository;
 import fava.betaja.erp.repository.security.UserRoleRepository;
 import fava.betaja.erp.service.baseinfo.CartableService;
+import fava.betaja.erp.service.security.UsersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +31,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -36,7 +44,11 @@ import java.util.stream.Collectors;
 public class CartableServiceImpl implements CartableService {
 
     private final CartableRepository repository;
+    private final UserRepository userRepository;
     private final FlowRuleStepRepository flowRuleStepRepository;
+    private final UsersService usersService;
+    private final UsersDtoMapper usersDtoMapper;
+    private final CartableHistoryRepository cartableHistoryRepository;
     private final BlockValueRepository blockValueRepository;
     private final UserRoleRepository userRoleRepository;
     private final CartableDtoMapper mapper;
@@ -91,16 +103,16 @@ public class CartableServiceImpl implements CartableService {
         return mapper.toDto(repository.save(entity));
     }
 
-    public CartableDto approveCartable(UUID cartableId, String comment) {
-        Cartable cartable = cartableRepository.findById(cartableId)
-                .orElseThrow(() -> new ServiceException("کارتابل یافت نشد"));
+    @Override
+    public CartableDto cartableToNextStep(UUID cartableId, String comment) {
+        // 1. واکشی کارتابل
+        Cartable cartable = repository.findById(cartableId)
+                .orElseThrow(() -> new ServiceException("Cartable not found: " + cartableId));
 
-        // ثبت توضیحات کاربر در description
-        if (comment != null && !comment.isBlank()) {
-            cartable.setDescription(comment);
-        }
+        // 2. کاربر فعلی
+        Users currentUser = usersDtoMapper.toEntity(usersService.getCurrentUser());
 
-        // ثبت تاریخ اقدام و کاربر در CartableHistory
+        // 3. ثبت تاریخچه اقدام
         CartableHistory history = new CartableHistory();
         history.setCartable(cartable);
         history.setUser(currentUser);
@@ -109,30 +121,72 @@ public class CartableServiceImpl implements CartableService {
         history.setActionDate(new Date());
         cartableHistoryRepository.save(history);
 
-        // بررسی مرحله بعدی
-        FlowRuleStep nextStep = cartable.getNextStep();
-        if (nextStep != null) {
-            // پیدا کردن دریافت‌کننده جدید
-            Users nextRecipient = userExtraRepository.findFirstByRoleIdAndOrganizationUnitId(
-                    nextStep.getRole().getId(),
-                    cartable.getFlowRuleDomain().getFlowRule().getOrganizationUnit().getId()
-            );
+        // 4. گام جاری را از کارتابل یا جریان پیدا کن
+        FlowRule flowRule = cartable.getFlowRuleDomain().getFlowRule();
+        FlowRuleStep currentStep = cartable.getCurrentStep();
 
-            if (nextRecipient == null) {
-                throw new ServiceException("کاربری با نقش و یگان مشخص شده برای مرحله بعدی یافت نشد.");
-            }
-
-            cartable.setRecipient(nextRecipient);
-            cartable.setCurrentStep(nextStep);
-            cartable.setNextStep(nextStep.getNextSteps().isEmpty() ? null : nextStep.getNextSteps().get(0));
-            cartable.setState(CartableState.IN_PROGRESS);
-        } else {
-            // اگر مرحله بعدی وجود نداشت، کارتابل تمام شده
-            cartable.setState(CartableState.COMPLETED);
-            cartable.setRecipient(null);
+        if (currentStep == null) {
+            // اگر جریان تازه شروع شده
+            currentStep = flowRuleStepRepository.findFirstByFlowRuleIdOrderByStepOrder(flowRule.getId())
+                    .orElseThrow(() -> new ServiceException("No steps defined for flow: " + flowRule.getName()));
+            cartable.setCurrentStep(currentStep);
         }
 
-        return cartableRepository.save(cartable);
+        // 5. بررسی آیا مرحله فعلی، آخرین مرحله است؟
+        if (Boolean.TRUE.equals(currentStep.getFinalStep())) {
+            // پایان جریان
+            cartable.setState(CartableState.COMPLETED);
+            cartable.setRecipient(null);
+            cartable.setNextStep(null);
+            if (comment != null && !comment.isEmpty()) {
+                cartable.setDescription(appendDescription(cartable.getDescription(), currentUser.getUsername(), comment));
+            } else {
+                cartable.setDescription(null);
+            }
+            repository.save(cartable);
+            return mapper.toDto(cartable);
+        }
+
+        // 6. مرحله بعدی را بر اساس stepOrder پیدا کن
+        FlowRuleStep nextStep = flowRuleStepRepository
+                .findFirstByFlowRuleIdAndStepOrderGreaterThanOrderByStepOrderAsc(
+                        flowRule.getId(), currentStep.getStepOrder())
+                .orElseThrow(() -> new ServiceException("Next step not found after step: "));
+
+        // 7. پیدا کردن گیرنده مرحله بعدی
+        Long orgUnitId = cartable.getSender() != null && cartable.getSender().getOrganizationUnit() != null
+                ? cartable.getSender().getOrganizationUnit().getId()
+                : null;
+
+        Users recipient = userRepository.findFirstByRoleIdAndOrganizationUnitId(
+                nextStep.getRole().getId(), orgUnitId);
+
+        if (recipient == null) {
+            throw new ServiceException("No recipient found for role=" + nextStep.getRole().getName());
+        }
+
+        // 8. بروزرسانی کارتابل
+        cartable.setCurrentStep(nextStep);
+        cartable.setRecipient(recipient);
+        cartable.setState(CartableState.IN_PROGRESS);
+        cartable.setDescription(appendDescription(cartable.getDescription(), currentUser.getUsername(), comment));
+
+        // 9. اگر مرحله بعدی finalStep دارد، nextStep=null بگذار
+        cartable.setNextStep(Boolean.TRUE.equals(nextStep.getFinalStep()) ? null :
+                flowRuleStepRepository
+                        .findFirstByFlowRuleIdAndStepOrderGreaterThanOrderByStepOrderAsc(
+                                flowRule.getId(), nextStep.getStepOrder())
+                        .orElse(null));
+
+        // 10. ذخیره و بازگشت
+        repository.save(cartable);
+        return mapper.toDto(cartable);
+    }
+
+    private String appendDescription(String existing, String username, String comment) {
+        if (comment == null || comment.isBlank()) return existing;
+        String prefix = existing == null ? "" : existing + "\n";
+        return prefix + "[" + username + "] " + comment;
     }
 
 
