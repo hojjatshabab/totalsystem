@@ -3,22 +3,40 @@ package fava.betaja.erp.service.da.impl;
 import fava.betaja.erp.dto.PageRequest;
 import fava.betaja.erp.dto.PageResponse;
 import fava.betaja.erp.dto.da.BlockValueDto;
+import fava.betaja.erp.entities.baseinfo.Cartable;
+import fava.betaja.erp.entities.baseinfo.CartableHistory;
+import fava.betaja.erp.entities.baseinfo.FlowRuleDomain;
+import fava.betaja.erp.entities.baseinfo.FlowRuleStep;
 import fava.betaja.erp.entities.da.Block;
 import fava.betaja.erp.entities.da.BlockValue;
+import fava.betaja.erp.entities.da.Project;
 import fava.betaja.erp.entities.da.ProjectPeriod;
+import fava.betaja.erp.entities.security.Users;
+import fava.betaja.erp.enums.baseinfo.ActionTypeEnum;
+import fava.betaja.erp.enums.baseinfo.CartableState;
+import fava.betaja.erp.enums.baseinfo.Priority;
 import fava.betaja.erp.enums.da.BlockValueState;
 import fava.betaja.erp.exceptions.ServiceException;
 import fava.betaja.erp.mapper.da.BlockValueDtoMapper;
+import fava.betaja.erp.mapper.security.UsersDtoMapper;
+import fava.betaja.erp.repository.baseinfo.CartableHistoryRepository;
+import fava.betaja.erp.repository.baseinfo.CartableRepository;
+import fava.betaja.erp.repository.baseinfo.FlowRuleDomainRepository;
+import fava.betaja.erp.repository.baseinfo.FlowRuleStepRepository;
 import fava.betaja.erp.repository.da.BlockRepository;
 import fava.betaja.erp.repository.da.BlockValueRepository;
 import fava.betaja.erp.repository.da.ProjectPeriodRepository;
+import fava.betaja.erp.repository.security.UserRepository;
 import fava.betaja.erp.service.da.BlockValueService;
+import fava.betaja.erp.service.security.UsersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -31,37 +49,110 @@ import java.util.stream.Collectors;
 public class BlockValueServiceImpl implements BlockValueService {
 
     private final BlockValueRepository repository;
+    private final UserRepository userRepository;
+    private final UsersService usersService;
+    private final UsersDtoMapper usersDtoMapper;
     private final ProjectPeriodRepository projectPeriodRepository;
     private final BlockRepository blockRepository;
+    private final CartableRepository cartableRepository;
+    private final CartableHistoryRepository cartableHistoryRepository;
+    private final FlowRuleStepRepository flowRuleStepRepository;
+    private final FlowRuleDomainRepository flowRuleDomainRepository;
     private final BlockValueDtoMapper mapper;
 
     @Override
+    @Transactional
     public BlockValueDto save(BlockValueDto dto) {
         validate(dto, true);
-        Block block = blockRepository.findById(dto.getBlockId()).get();
-        Optional<ProjectPeriod> optionalProjectPeriod = projectPeriodRepository
-                .findByProjectIdAndIsActiveTrue(block.getProject().getId());
-        if (!optionalProjectPeriod.isPresent()) {
-            throw new ServiceException("دوره زمانی فعالی موجود نیست.");
-        }
-        dto.setProjectPeriodId(optionalProjectPeriod.get().getId());
+
+        // پیدا کردن بلوک
+        Block block = blockRepository.findById(dto.getBlockId())
+                .orElseThrow(() -> new ServiceException("بلوک مورد نظر یافت نشد."));
+
+        //  پیدا کردن دوره فعال پروژه
+        Project project = block.getProject();
+        ProjectPeriod projectPeriod = projectPeriodRepository
+                .findByProjectIdAndIsActiveTrue(project.getId())
+                .orElseThrow(() -> new ServiceException("دوره زمانی فعالی برای این پروژه وجود ندارد."));
+
+        //  مقداردهی فیلدهای اولیه
+        dto.setProjectPeriodId(projectPeriod.getId());
         dto.setName(block.getName());
         dto.setBlockValueState(BlockValueState.IN_PROGRESS);
-        log.info("Saving BlockValue: {}", dto.getName());
+
+        //  ذخیره مقدار جدید بلوک
         BlockValue entity = mapper.toEntity(dto);
-        BlockValueDto result = mapper.toDto(repository.save(entity));
+        BlockValue saved = repository.save(entity);
 
-        block.setBlockCount(result.getBlockCount());
-        block.setDeliveryDate(result.getDeliveryDate());
-        block.setStartDate(result.getStartDate());
-        block.setFloorCount(result.getFloorCount());
-        block.setUnitCount(result.getUnitCount());
-        block.setTotalArea(result.getTotalArea());
-
+        // آپدیت اطلاعات بلوک اصلی
+        block.setBlockCount(saved.getBlockCount());
+        block.setFloorCount(saved.getFloorCount());
+        block.setUnitCount(saved.getUnitCount());
+        block.setTotalArea(saved.getTotalArea());
+        block.setDeliveryDate(saved.getDeliveryDate());
+        block.setStartDate(saved.getStartDate());
         blockRepository.save(block);
 
-        return result;
+        // پیدا کردن مرحله اول جریان (FlowRuleStep)
+        FlowRuleDomain flowRuleDomain = flowRuleDomainRepository
+                .findFirstCandidate("BlockValue","company");
+        if (flowRuleDomain == null){
+            throw new ServiceException("جریان کاری برای BlockValue تعریف نشده است.");
+        }
+
+        FlowRuleStep firstStep = flowRuleStepRepository
+                .findFirstByFlowRuleIdOrderByStepOrder(flowRuleDomain.getFlowRule().getId())
+                .orElseThrow(() -> new ServiceException("مرحله اول جریان یافت نشد."));
+
+        //  پیدا کردن کاربر گیرنده با توجه به نقش و یگان پروژه
+        Users recipient = userRepository.findFirstByRoleIdAndOrganizationUnitId(
+                firstStep.getRole().getId(),
+                block.getProject().getPlan().getOrganizationUnit().getId()
+        );
+
+        if (recipient == null) {
+            throw new ServiceException("کاربری با نقش " + firstStep.getRole().getName() +
+                    " در یگان " + block.getProject().getPlan().getOrganizationUnit().getName() + " یافت نشد.");
+        }
+
+        // ساخت کارتابل
+        Cartable cartable = new Cartable();
+        StringBuilder title = new StringBuilder();
+        title.append(flowRuleDomain.getFlowRule().getName())
+                .append(" ")
+                .append(saved.getName())
+                .append(" ،")
+                .append(saved.getProjectPeriod().getPeriodRange().getName())
+                .append(" - ")
+                .append(saved.getProjectPeriod().getYear());
+        cartable.setTitle(title.toString());
+        cartable.setDocumentId(saved.getId());
+        cartable.setDocumentNumber("BV-" + saved.getId().toString().substring(0, 8));
+        cartable.setState(CartableState.PENDING);
+        cartable.setSender(usersDtoMapper.toEntity(usersService.getCurrentUser()));
+        cartable.setRecipient(recipient);
+        cartable.setFlowRuleDomain(flowRuleDomain);
+        cartable.setCurrentStep(firstStep);
+        cartable.setPriority(Priority.NORMAL);
+        cartable.setRead(false);
+        cartable.setSendDate(LocalDate.now());
+
+        cartableRepository.save(cartable);
+
+        // ثبت تاریخچه
+        CartableHistory history = new CartableHistory();
+        history.setCartable(cartable);
+        history.setUser(cartable.getSender());
+        history.setActionType(ActionTypeEnum.SUBMIT);
+        history.setActionDate(new Date());
+        history.setComment("ایجاد مقدار جدید بلوک و ارسال به مرحله اول جریان کاری");
+        cartableHistoryRepository.save(history);
+
+        log.info("BlockValue '{}' created and sent to cartable for recipient '{}'", saved.getName(), recipient.getUsername());
+
+        return mapper.toDto(saved);
     }
+
 
     @Override
     public BlockValueDto update(BlockValueDto dto) {

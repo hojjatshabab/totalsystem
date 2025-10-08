@@ -3,27 +3,20 @@ package fava.betaja.erp.service.baseinfo.impl;
 import fava.betaja.erp.dto.PageRequest;
 import fava.betaja.erp.dto.PageResponse;
 import fava.betaja.erp.dto.baseinfo.CartableDto;
-import fava.betaja.erp.dto.security.UsersDto;
 import fava.betaja.erp.entities.baseinfo.Cartable;
-import fava.betaja.erp.entities.baseinfo.FlowRule;
-import fava.betaja.erp.entities.baseinfo.FlowRuleDomain;
 import fava.betaja.erp.entities.baseinfo.FlowRuleStep;
 import fava.betaja.erp.entities.da.BlockValue;
 import fava.betaja.erp.entities.security.Role;
 import fava.betaja.erp.entities.security.Users;
 import fava.betaja.erp.enums.baseinfo.CartableState;
-import fava.betaja.erp.enums.baseinfo.Priority;
 import fava.betaja.erp.enums.da.BlockValueState;
 import fava.betaja.erp.exceptions.ServiceException;
 import fava.betaja.erp.mapper.baseinfo.CartableDtoMapper;
 import fava.betaja.erp.repository.baseinfo.CartableRepository;
-import fava.betaja.erp.repository.baseinfo.FlowRuleDomainRepository;
 import fava.betaja.erp.repository.baseinfo.FlowRuleStepRepository;
 import fava.betaja.erp.repository.da.BlockValueRepository;
-import fava.betaja.erp.repository.security.UserRepository;
 import fava.betaja.erp.repository.security.UserRoleRepository;
 import fava.betaja.erp.service.baseinfo.CartableService;
-import fava.betaja.erp.service.security.UsersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -43,66 +36,14 @@ import java.util.stream.Collectors;
 public class CartableServiceImpl implements CartableService {
 
     private final CartableRepository repository;
-    private final FlowRuleDomainRepository flowRuleDomainRepository;
     private final FlowRuleStepRepository flowRuleStepRepository;
     private final BlockValueRepository blockValueRepository;
     private final UserRoleRepository userRoleRepository;
-    private final UsersService usersService;
     private final CartableDtoMapper mapper;
 
     @Override
     public CartableDto save(CartableDto dto) {
         validate(dto, true);
-
-        if (dto.getDocumentId() == null) {
-            throw new ServiceException("documentId is empty");
-        }
-        BlockValue blockValue = Optional.ofNullable(dto.getDocumentId())
-                .flatMap(blockValueRepository::findById).get();
-
-        if (dto.getFlowRuleDomainEntityName() == null || dto.getFlowRuleDomainEntityName() == "") {
-            throw new ServiceException("entity name is empty");
-        }
-        Optional<FlowRuleDomain> optionalFlowRule = flowRuleDomainRepository
-                .findByEntityNameIgnoreCase(dto.getFlowRuleDomainEntityName())
-                .stream().findFirst();
-        if (!optionalFlowRule.isPresent()) {
-            throw new ServiceException("Flow rule domain not found");
-        }
-
-        FlowRule flowRule = optionalFlowRule.get().getFlowRule();
-
-        List<FlowRuleStep> flowRuleSteplist = flowRuleStepRepository
-                .findByFlowRuleIdOrderByStepOrderAsc(flowRule.getId());
-
-        FlowRuleStep flowRuleStep = flowRuleSteplist.stream().findFirst().get();
-
-        dto.setCurrentStepId(flowRuleStep.getId());
-        dto.setNextStepId(flowRuleSteplist.get(1).getId());
-
-        Role role = flowRuleStep.getRole();
-
-        Users recipientUser = userRoleRepository.findByRoleId(role.getId()).stream().findFirst().get().getUser();
-        UsersDto senderUser = usersService.getCurrentUser();
-
-        dto.setSenderId(senderUser.getId());
-        dto.setRecipientId(recipientUser.getId());
-        dto.setFlowRuleDomainId(optionalFlowRule.get().getId());
-
-        StringBuilder title = new StringBuilder();
-        title.append(flowRule.getName())
-                .append(" ")
-                .append(blockValue.getName())
-                .append(" ،")
-                .append(blockValue.getProjectPeriod().getPeriodRange().getName())
-                .append(" - ")
-                .append(blockValue.getProjectPeriod().getYear());
-        dto.setTitle(title.toString());
-        dto.setState(CartableState.PENDING);
-        dto.setSendDate(LocalDate.now());
-        dto.setPriority(Priority.NORMAL);
-        dto.setRead(false);
-
         log.info("Saving Cartable: documentNumber={}", dto.getDocumentNumber());
         Cartable entity = mapper.toEntity(dto);
         return mapper.toDto(repository.save(entity));
@@ -149,6 +90,51 @@ public class CartableServiceImpl implements CartableService {
         Cartable entity = mapper.toEntity(dto);
         return mapper.toDto(repository.save(entity));
     }
+
+    public CartableDto approveCartable(UUID cartableId, String comment) {
+        Cartable cartable = cartableRepository.findById(cartableId)
+                .orElseThrow(() -> new ServiceException("کارتابل یافت نشد"));
+
+        // ثبت توضیحات کاربر در description
+        if (comment != null && !comment.isBlank()) {
+            cartable.setDescription(comment);
+        }
+
+        // ثبت تاریخ اقدام و کاربر در CartableHistory
+        CartableHistory history = new CartableHistory();
+        history.setCartable(cartable);
+        history.setUser(currentUser);
+        history.setActionType(ActionTypeEnum.APPROVE);
+        history.setComment(comment);
+        history.setActionDate(new Date());
+        cartableHistoryRepository.save(history);
+
+        // بررسی مرحله بعدی
+        FlowRuleStep nextStep = cartable.getNextStep();
+        if (nextStep != null) {
+            // پیدا کردن دریافت‌کننده جدید
+            Users nextRecipient = userExtraRepository.findFirstByRoleIdAndOrganizationUnitId(
+                    nextStep.getRole().getId(),
+                    cartable.getFlowRuleDomain().getFlowRule().getOrganizationUnit().getId()
+            );
+
+            if (nextRecipient == null) {
+                throw new ServiceException("کاربری با نقش و یگان مشخص شده برای مرحله بعدی یافت نشد.");
+            }
+
+            cartable.setRecipient(nextRecipient);
+            cartable.setCurrentStep(nextStep);
+            cartable.setNextStep(nextStep.getNextSteps().isEmpty() ? null : nextStep.getNextSteps().get(0));
+            cartable.setState(CartableState.IN_PROGRESS);
+        } else {
+            // اگر مرحله بعدی وجود نداشت، کارتابل تمام شده
+            cartable.setState(CartableState.COMPLETED);
+            cartable.setRecipient(null);
+        }
+
+        return cartableRepository.save(cartable);
+    }
+
 
     @Override
     public PageResponse<CartableDto> findAll(PageRequest<CartableDto> model) {
