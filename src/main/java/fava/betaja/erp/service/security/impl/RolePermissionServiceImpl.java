@@ -55,7 +55,7 @@ public class RolePermissionServiceImpl implements RolePermissionService {
                                 .withPage(model.getCurrentPage() - 1))
                 .stream().map(mapper::toDto)
                 .collect(Collectors.toList());
-        long count = result.size();
+        long count = repository.count();
         return new PageResponse<>(result, model.getPageSize(), count, model.getCurrentPage(), model.getSortBy());
     }
 

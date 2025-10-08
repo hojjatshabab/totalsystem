@@ -4,8 +4,10 @@ import fava.betaja.erp.dto.PageRequest;
 import fava.betaja.erp.dto.PageResponse;
 import fava.betaja.erp.dto.da.AttributeDto;
 import fava.betaja.erp.dto.da.PlanDto;
+import fava.betaja.erp.dto.da.ProjectDto;
 import fava.betaja.erp.entities.da.Attribute;
 import fava.betaja.erp.entities.da.Plan;
+import fava.betaja.erp.entities.da.Project;
 import fava.betaja.erp.exceptions.ServiceException;
 import fava.betaja.erp.mapper.da.AttributeDtoMapper;
 import fava.betaja.erp.mapper.da.PlanDtoMapper;
@@ -16,6 +18,7 @@ import fava.betaja.erp.service.da.AttributeService;
 import fava.betaja.erp.service.da.PlanService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,19 +62,25 @@ public class PlanServiceImpl implements PlanService {
                                 .withPage(model.getCurrentPage() - 1))
                 .stream().map(mapper::toDto)
                 .collect(Collectors.toList());
-        long count = result.size();
+        long count = repository.count();
         return new PageResponse<>(result, model.getPageSize(), count, model.getCurrentPage(), model.getSortBy());
     }
 
     @Override
     public PageResponse<PlanDto> findByOrganizationUnitId(Long organizationUnitId, PageRequest<PlanDto> model) {
-        List<PlanDto> result = repository
-                .findByOrganizationUnitId(organizationUnitId,
-                        Pageable.ofSize(model.getPageSize())
-                                .withPage(model.getCurrentPage() - 1))
-                .stream().map(mapper::toDto)
+        Page<Plan> page = repository.findByOrganizationUnitId(
+                organizationUnitId,
+                Pageable.ofSize(model.getPageSize())
+                        .withPage(model.getCurrentPage() - 1)
+        );
+
+        List<PlanDto> result = page.getContent()
+                .stream()
+                .map(mapper::toDto)
                 .collect(Collectors.toList());
-        long count = result.size();
+
+        long count = page.getTotalElements();
+
         return new PageResponse<>(result, model.getPageSize(), count, model.getCurrentPage(), model.getSortBy());
     }
 

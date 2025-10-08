@@ -68,6 +68,19 @@ public class BlockValueController extends BaseController {
         return RESULT(response, locale);
     }
 
+/*    @GetMapping("find-by-period-company-project")
+    public ActionResult<PageResponse<BlockValueDto>> findByProdCompanyProject(@RequestParam UUID projectPeriodId,
+                                                                     Locale locale) {
+        if (currentPage <= 0 || pageSize <= 0) {
+            return NOT_ACCEPTABLE("{ currentPage <= 0 || pageSize <= 0 }", locale);
+        }
+        PageRequest<BlockValueDto> request = new PageRequest<>();
+        request.setPageSize(pageSize);
+        request.setCurrentPage(currentPage);
+        PageResponse<BlockValueDto> response = service.findByProjectPeriodId(projectPeriodId, request);
+        return RESULT(response, locale);
+    }*/
+
     @GetMapping("find-by-project-period-block")
     public ActionResult<PageResponse<BlockValueDto>> findByProjectPeriodIdAndBlockId(@RequestParam int currentPage,
                                                                                      @RequestParam int pageSize,

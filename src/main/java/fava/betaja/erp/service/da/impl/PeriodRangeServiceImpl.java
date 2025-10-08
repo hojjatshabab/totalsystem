@@ -53,7 +53,7 @@ public class PeriodRangeServiceImpl implements PeriodRangeService {
                 .map(mapper::toDto)
                 .collect(Collectors.toList());
 
-        long count = result.size();
+        long count = repository.count();
         return new PageResponse<>(result, model.getPageSize(), count, model.getCurrentPage(), model.getSortBy());
     }
 

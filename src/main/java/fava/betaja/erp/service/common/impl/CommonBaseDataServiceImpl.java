@@ -3,17 +3,21 @@ package fava.betaja.erp.service.common.impl;
 import fava.betaja.erp.dto.PageRequest;
 import fava.betaja.erp.dto.PageResponse;
 import fava.betaja.erp.dto.common.CommonBaseDataDto;
+import fava.betaja.erp.dto.da.BlockValueDto;
 import fava.betaja.erp.entities.common.CommonBaseData;
+import fava.betaja.erp.entities.da.BlockValue;
 import fava.betaja.erp.exceptions.ServiceException;
 import fava.betaja.erp.mapper.common.CommonBaseDataDtoMapper;
 import fava.betaja.erp.repository.common.CommonBaseDataRepository;
 import fava.betaja.erp.service.common.CommonBaseDataService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -49,18 +53,23 @@ public class CommonBaseDataServiceImpl implements CommonBaseDataService {
                 .findAll(Pageable.ofSize(model.getPageSize()).withPage(model.getCurrentPage() - 1))
                 .stream().map(mapper::toDto)
                 .collect(Collectors.toList());
-        long count = result.size();
+        long count = repository.count();
         return new PageResponse<>(result, model.getPageSize(), count, model.getCurrentPage(), model.getSortBy());
     }
 
     @Override
     public PageResponse<CommonBaseData> findByCommonBaseTypeIdAndActiveTrue(Long commonBaseTypeId, PageRequest<CommonBaseDataDto> model) {
-        List<CommonBaseData> result = repository
-                .findByCommonBaseTypeIdAndActiveTrue(
-                        commonBaseTypeId,
-                        Pageable.ofSize(model.getPageSize()).withPage(model.getCurrentPage() - 1))
-                .stream().collect(Collectors.toList());
-        long count = result.size();
+
+        Page<CommonBaseData> page = repository.findByCommonBaseTypeIdAndActiveTrue(
+                commonBaseTypeId,
+                Pageable.ofSize(model.getPageSize())
+                        .withPage(model.getCurrentPage() - 1)
+        );
+
+        List<CommonBaseData> result = new ArrayList<>(page.getContent());
+
+        long count = page.getTotalElements();
+
         return new PageResponse<>(result, model.getPageSize(), count, model.getCurrentPage(), model.getSortBy());
     }
 
@@ -76,12 +85,17 @@ public class CommonBaseDataServiceImpl implements CommonBaseDataService {
 
     @Override
     public PageResponse<CommonBaseData> findByValueContainsAndCommonBaseTypeIdAndActiveTrue(String value, Long commonBaseTypeId, PageRequest<CommonBaseDataDto> model) {
-        List<CommonBaseData> result = repository
-                .findByValueContainingIgnoreCaseAndCommonBaseTypeIdAndActiveTrue(
-                        value, commonBaseTypeId,
-                        Pageable.ofSize(model.getPageSize()).withPage(model.getCurrentPage() - 1))
-                .stream().collect(Collectors.toList());
-        long count = result.size();
+
+        Page<CommonBaseData> page = repository.findByValueContainingIgnoreCaseAndCommonBaseTypeIdAndActiveTrue(
+                value, commonBaseTypeId,
+                Pageable.ofSize(model.getPageSize())
+                        .withPage(model.getCurrentPage() - 1)
+        );
+
+        List<CommonBaseData> result = new ArrayList<>(page.getContent());
+
+        long count = page.getTotalElements();
+
         return new PageResponse<>(result, model.getPageSize(), count, model.getCurrentPage(), model.getSortBy());
     }
 
