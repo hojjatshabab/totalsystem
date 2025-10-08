@@ -6,11 +6,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.UUID;
 
 @Repository
 public interface BlockValueRepository extends JpaRepository<BlockValue, UUID> {
     Page<BlockValue> findByProjectPeriodId(UUID projectPeriodId, Pageable pageable);
+
+    List<BlockValue> findByProjectPeriodId(UUID projectPeriodId);
 
     Page<BlockValue> findByProjectPeriodIdAndBlockId(UUID projectPeriodId, UUID blockId, Pageable pageable);
 

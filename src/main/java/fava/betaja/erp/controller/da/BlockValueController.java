@@ -55,9 +55,9 @@ public class BlockValueController extends BaseController {
 
     @GetMapping("find-by-project-period")
     public ActionResult<PageResponse<BlockValueDto>> findByProjectPeriodId(@RequestParam int currentPage,
-                                                                     @RequestParam int pageSize,
-                                                                     @RequestParam UUID projectPeriodId,
-                                                                     Locale locale) {
+                                                                           @RequestParam int pageSize,
+                                                                           @RequestParam UUID projectPeriodId,
+                                                                           Locale locale) {
         if (currentPage <= 0 || pageSize <= 0) {
             return NOT_ACCEPTABLE("{ currentPage <= 0 || pageSize <= 0 }", locale);
         }
@@ -68,18 +68,11 @@ public class BlockValueController extends BaseController {
         return RESULT(response, locale);
     }
 
-/*    @GetMapping("find-by-period-company-project")
-    public ActionResult<PageResponse<BlockValueDto>> findByProdCompanyProject(@RequestParam UUID projectPeriodId,
-                                                                     Locale locale) {
-        if (currentPage <= 0 || pageSize <= 0) {
-            return NOT_ACCEPTABLE("{ currentPage <= 0 || pageSize <= 0 }", locale);
-        }
-        PageRequest<BlockValueDto> request = new PageRequest<>();
-        request.setPageSize(pageSize);
-        request.setCurrentPage(currentPage);
-        PageResponse<BlockValueDto> response = service.findByProjectPeriodId(projectPeriodId, request);
+    @GetMapping("find-by-company")
+    public ActionResult<List<BlockValueDto>> findByCompany(Locale locale) {
+        List<BlockValueDto> response = service.findByCompany();
         return RESULT(response, locale);
-    }*/
+    }
 
     @GetMapping("find-by-project-period-block")
     public ActionResult<PageResponse<BlockValueDto>> findByProjectPeriodIdAndBlockId(@RequestParam int currentPage,
@@ -99,9 +92,9 @@ public class BlockValueController extends BaseController {
 
     @GetMapping("find-by-block")
     public ActionResult<PageResponse<BlockValueDto>> findByBlockId(@RequestParam int currentPage,
-                                                                     @RequestParam int pageSize,
-                                                                     @RequestParam UUID blockId,
-                                                                     Locale locale) {
+                                                                   @RequestParam int pageSize,
+                                                                   @RequestParam UUID blockId,
+                                                                   Locale locale) {
         if (currentPage <= 0 || pageSize <= 0) {
             return NOT_ACCEPTABLE("{ currentPage <= 0 || pageSize <= 0 }", locale);
         }

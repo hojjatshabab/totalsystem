@@ -3,14 +3,12 @@ package fava.betaja.erp.service.da.impl;
 import fava.betaja.erp.dto.PageRequest;
 import fava.betaja.erp.dto.PageResponse;
 import fava.betaja.erp.dto.da.BlockValueDto;
+import fava.betaja.erp.dto.security.UsersDto;
 import fava.betaja.erp.entities.baseinfo.Cartable;
 import fava.betaja.erp.entities.baseinfo.CartableHistory;
 import fava.betaja.erp.entities.baseinfo.FlowRuleDomain;
 import fava.betaja.erp.entities.baseinfo.FlowRuleStep;
-import fava.betaja.erp.entities.da.Block;
-import fava.betaja.erp.entities.da.BlockValue;
-import fava.betaja.erp.entities.da.Project;
-import fava.betaja.erp.entities.da.ProjectPeriod;
+import fava.betaja.erp.entities.da.*;
 import fava.betaja.erp.entities.security.Users;
 import fava.betaja.erp.enums.baseinfo.ActionTypeEnum;
 import fava.betaja.erp.enums.baseinfo.CartableState;
@@ -23,9 +21,7 @@ import fava.betaja.erp.repository.baseinfo.CartableHistoryRepository;
 import fava.betaja.erp.repository.baseinfo.CartableRepository;
 import fava.betaja.erp.repository.baseinfo.FlowRuleDomainRepository;
 import fava.betaja.erp.repository.baseinfo.FlowRuleStepRepository;
-import fava.betaja.erp.repository.da.BlockRepository;
-import fava.betaja.erp.repository.da.BlockValueRepository;
-import fava.betaja.erp.repository.da.ProjectPeriodRepository;
+import fava.betaja.erp.repository.da.*;
 import fava.betaja.erp.repository.security.UserRepository;
 import fava.betaja.erp.service.da.BlockValueService;
 import fava.betaja.erp.service.security.UsersService;
@@ -37,10 +33,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -51,6 +44,8 @@ public class BlockValueServiceImpl implements BlockValueService {
 
     private final BlockValueRepository repository;
     private final UserRepository userRepository;
+    private final ProjectRepository projectRepository;
+    private final PlanRepository planRepository;
     private final UsersService usersService;
     private final UsersDtoMapper usersDtoMapper;
     private final ProjectPeriodRepository projectPeriodRepository;
@@ -165,6 +160,33 @@ public class BlockValueServiceImpl implements BlockValueService {
                 .collect(Collectors.toList());
         long count = repository.count();
         return new PageResponse<>(result, model.getPageSize(), count, model.getCurrentPage(), model.getSortBy());
+    }
+
+    @Override
+    public List<BlockValueDto> findByCompany() {
+        UsersDto usersDto = usersService.getCurrentUser();
+        if (usersDto.getOrganizationUnitId() == null) {
+            throw new ServiceException(" یگان کاربر یافت نشد. ");
+        }
+        List<Plan> plans = planRepository.findByOrganizationUnitId(usersDto.getOrganizationUnitId());
+        if (plans.size() == 0) {
+            throw new ServiceException(" هیچ طرحی وجود ندارد. ");
+        }
+        List<ProjectPeriod> projectPeriods = new ArrayList<>();
+        for (Plan plan : plans) {
+            List<Project> projects = projectRepository.findByPlanId(plan.getId());
+            if (projects.size() != 0) {
+                for (Project project : projects) {
+                    projectPeriods.addAll(projectPeriodRepository.findByProjectId(project.getId()));
+                }
+            }
+        }
+        List<BlockValue> result = new ArrayList<>();
+        for (ProjectPeriod projectPeriod : projectPeriods) {
+            result.addAll(repository.findByProjectPeriodId(projectPeriod.getId()));
+        }
+
+        return mapper.toDtoList(result);
     }
 
     @Override

@@ -16,6 +16,8 @@ public interface BlockValueService {
 
     PageResponse<BlockValueDto> findAll(PageRequest<BlockValueDto> model);
 
+    List<BlockValueDto> findByCompany();
+
     PageResponse<BlockValueDto> findByProjectPeriodId(UUID projectPeriodId, PageRequest<BlockValueDto> model);
 
     PageResponse<BlockValueDto> findByProjectPeriodIdAndBlockId(UUID projectPeriodId, UUID blockId, PageRequest<BlockValueDto> model);
