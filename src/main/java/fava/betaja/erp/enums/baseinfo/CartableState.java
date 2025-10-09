@@ -5,6 +5,5 @@ public enum CartableState {
     IN_PROGRESS,
     APPROVED,
     REJECTED,
-    RETURNED,
-    COMPLETED
+    RETURNED
 }

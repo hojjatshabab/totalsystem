@@ -32,4 +32,5 @@ public interface CartableHistoryDtoMapper extends BaseMapper<CartableHistoryDto,
 
     List<CartableHistoryDto> toDtoList(List<CartableHistory> entities);
 
+
 }

@@ -23,6 +23,7 @@ import fava.betaja.erp.repository.baseinfo.FlowRuleDomainRepository;
 import fava.betaja.erp.repository.baseinfo.FlowRuleStepRepository;
 import fava.betaja.erp.repository.da.*;
 import fava.betaja.erp.repository.security.UserRepository;
+import fava.betaja.erp.repository.security.UserRoleRepository;
 import fava.betaja.erp.service.da.BlockValueService;
 import fava.betaja.erp.service.security.UsersService;
 import lombok.RequiredArgsConstructor;
@@ -51,6 +52,7 @@ public class BlockValueServiceImpl implements BlockValueService {
     private final ProjectPeriodRepository projectPeriodRepository;
     private final BlockRepository blockRepository;
     private final CartableRepository cartableRepository;
+    private final UserRoleRepository userRoleRepository;
     private final CartableHistoryRepository cartableHistoryRepository;
     private final FlowRuleStepRepository flowRuleStepRepository;
     private final FlowRuleDomainRepository flowRuleDomainRepository;
@@ -95,6 +97,15 @@ public class BlockValueServiceImpl implements BlockValueService {
                 .findFirstByFlowRuleIdOrderByStepOrder(flowRuleDomain.getFlowRule().getId())
                 .orElseThrow(() -> new ServiceException("مرحله اول جریان یافت نشد."));
 
+        Users currentUser = usersDtoMapper.toEntity(usersService.getCurrentUser());
+
+        boolean validRole = userRoleRepository.findByUserId(currentUser.getId()).stream()
+                .anyMatch(userRole -> userRole.getRole().getName().contains("ROLE_COMPANY"));
+
+        if (!validRole) {
+            throw new ServiceException("شما مجاز به انجام اقدام در این مرحله نیستید.");
+        }
+
         Users recipient = userRepository.findFirstByRoleIdAndOrganizationUnitId(
                 firstStep.getRole().getId(),
                 block.getProject().getPlan().getOrganizationUnit().getId()
@@ -110,7 +121,7 @@ public class BlockValueServiceImpl implements BlockValueService {
         cartable.setDocumentId(saved.getId());
         cartable.setDocumentNumber("BV-" + saved.getId().toString().substring(0, 8));
         cartable.setState(CartableState.PENDING);
-        cartable.setSender(usersDtoMapper.toEntity(usersService.getCurrentUser()));
+        cartable.setSender(currentUser);
         cartable.setRecipient(recipient);
         cartable.setFlowRuleDomain(flowRuleDomain);
         cartable.setCurrentStep(firstStep);
@@ -132,7 +143,6 @@ public class BlockValueServiceImpl implements BlockValueService {
 
         return mapper.toDto(saved);
     }
-
 
     @Override
     public BlockValueDto update(BlockValueDto dto) {

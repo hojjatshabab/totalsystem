@@ -8,7 +8,6 @@ import fava.betaja.erp.entities.baseinfo.CartableHistory;
 import fava.betaja.erp.entities.baseinfo.FlowRule;
 import fava.betaja.erp.entities.baseinfo.FlowRuleStep;
 import fava.betaja.erp.entities.da.BlockValue;
-import fava.betaja.erp.entities.security.Role;
 import fava.betaja.erp.entities.security.Users;
 import fava.betaja.erp.enums.baseinfo.ActionTypeEnum;
 import fava.betaja.erp.enums.baseinfo.CartableState;
@@ -30,7 +29,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -87,9 +85,15 @@ public class CartableServiceImpl implements CartableService {
     @Override
     public CartableDto cartableToNextStep(UUID cartableId, String comment) {
         Cartable cartable = repository.findById(cartableId)
-                .orElseThrow(() -> new ServiceException("Cartable not found: " + cartableId));
+                .orElseThrow(() -> new ServiceException("  کارتابل یافت نشد.  "));
+
+        if (cartable.getState().equals(CartableState.APPROVED)){
+            throw new ServiceException(" وضعیت کارتابل تایید نهایی می باشد. ");
+        }
 
         Users currentUser = usersDtoMapper.toEntity(usersService.getCurrentUser());
+
+        validateUserCanProceed(cartable, currentUser);
 
         CartableHistory history = new CartableHistory();
         history.setCartable(cartable);
@@ -109,11 +113,10 @@ public class CartableServiceImpl implements CartableService {
         }
 
         if (Boolean.TRUE.equals(currentStep.getFinalStep())) {
-            cartable.setState(CartableState.COMPLETED);
-            cartable.setRecipient(null);
+            cartable.setState(CartableState.APPROVED);
             cartable.setNextStep(null);
             if (comment != null && !comment.isEmpty()) {
-                cartable.setDescription(appendDescription(cartable.getDescription(), currentUser.getUsername(), comment));
+                cartable.setDescription(comment);
             } else {
                 cartable.setDescription(null);
             }
@@ -126,9 +129,14 @@ public class CartableServiceImpl implements CartableService {
                         flowRule.getId(), currentStep.getStepOrder())
                 .orElseThrow(() -> new ServiceException("Next step not found after step: "));
 
-        Long orgUnitId = cartable.getSender() != null && cartable.getSender().getOrganizationUnit() != null
-                ? cartable.getSender().getOrganizationUnit().getId()
-                : null;
+        Long orgUnitId;
+        if (nextStep.getOrganizationUnit() == null) {
+            orgUnitId = cartable.getSender() != null && cartable.getSender().getOrganizationUnit() != null
+                    ? cartable.getSender().getOrganizationUnit().getId()
+                    : null;
+        } else {
+            orgUnitId = nextStep.getOrganizationUnit().getId();
+        }
 
         Users recipient = userRepository.findFirstByRoleIdAndOrganizationUnitId(
                 nextStep.getRole().getId(), orgUnitId);
@@ -138,9 +146,10 @@ public class CartableServiceImpl implements CartableService {
         }
 
         cartable.setCurrentStep(nextStep);
+        cartable.setSender(currentUser);
         cartable.setRecipient(recipient);
         cartable.setState(CartableState.IN_PROGRESS);
-        cartable.setDescription(appendDescription(cartable.getDescription(), currentUser.getUsername(), comment));
+        cartable.setDescription(comment);
 
         cartable.setNextStep(Boolean.TRUE.equals(nextStep.getFinalStep()) ? null :
                 flowRuleStepRepository
@@ -152,10 +161,23 @@ public class CartableServiceImpl implements CartableService {
         return mapper.toDto(cartable);
     }
 
-    private String appendDescription(String existing, String username, String comment) {
-        if (comment == null || comment.isBlank()) return existing;
-        String prefix = existing == null ? "" : existing + "\n";
-        return prefix + "[" + username + "] " + comment;
+
+    private void validateUserCanProceed(Cartable cartable, Users currentUser) {
+        FlowRuleStep currentStep = cartable.getCurrentStep();
+        if (currentStep == null) {
+            throw new ServiceException("Current step is not defined for this cartable.");
+        }
+
+        boolean validRole = userRoleRepository.findByUserId(currentUser.getId()).stream().map(userRole -> userRole.getRole().getId())
+                .anyMatch(ur -> ur == currentStep.getRole().getId());
+
+        boolean validOrgUnit = currentUser.getOrganizationUnit() != null
+                && cartable.getRecipient().getOrganizationUnit() != null
+                && currentUser.getOrganizationUnit().getId().equals(cartable.getRecipient().getOrganizationUnit().getId());
+
+        if (!validRole || !validOrgUnit) {
+            throw new ServiceException("شما مجاز به انجام اقدام در این مرحله نیستید.");
+        }
     }
 
 
