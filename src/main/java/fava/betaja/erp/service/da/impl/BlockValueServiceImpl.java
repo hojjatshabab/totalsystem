@@ -61,26 +61,22 @@ public class BlockValueServiceImpl implements BlockValueService {
     public BlockValueDto save(BlockValueDto dto) {
         validate(dto, true);
 
-        // پیدا کردن بلوک
         Block block = blockRepository.findById(dto.getBlockId())
                 .orElseThrow(() -> new ServiceException("بلوک مورد نظر یافت نشد."));
 
-        //  پیدا کردن دوره فعال پروژه
-        Project project = block.getProject();
+        if (dto.getProjectPeriodId() == null) {
+            throw new ServiceException("اطلاعات دوره زمانی نمیتواند خالی باشد.");
+        }
         ProjectPeriod projectPeriod = projectPeriodRepository
-                .findByProjectIdAndIsActiveTrue(project.getId())
+                .findById(dto.getProjectPeriodId())
                 .orElseThrow(() -> new ServiceException("دوره زمانی فعالی برای این پروژه وجود ندارد."));
-
-        //  مقداردهی فیلدهای اولیه
         dto.setProjectPeriodId(projectPeriod.getId());
         dto.setName(projectPeriod.getTitle());
         dto.setBlockValueState(BlockValueState.IN_PROGRESS);
 
-        //  ذخیره مقدار جدید بلوک
         BlockValue entity = mapper.toEntity(dto);
         BlockValue saved = repository.save(entity);
 
-        // آپدیت اطلاعات بلوک اصلی
         block.setBlockCount(saved.getBlockCount());
         block.setFloorCount(saved.getFloorCount());
         block.setUnitCount(saved.getUnitCount());
@@ -89,7 +85,6 @@ public class BlockValueServiceImpl implements BlockValueService {
         block.setStartDate(saved.getStartDate());
         blockRepository.save(block);
 
-        // پیدا کردن مرحله اول جریان (FlowRuleStep)
         FlowRuleDomain flowRuleDomain = flowRuleDomainRepository
                 .findFirstCandidate("block-value", "company");
         if (flowRuleDomain == null) {
@@ -100,7 +95,6 @@ public class BlockValueServiceImpl implements BlockValueService {
                 .findFirstByFlowRuleIdOrderByStepOrder(flowRuleDomain.getFlowRule().getId())
                 .orElseThrow(() -> new ServiceException("مرحله اول جریان یافت نشد."));
 
-        //  پیدا کردن کاربر گیرنده با توجه به نقش و یگان پروژه
         Users recipient = userRepository.findFirstByRoleIdAndOrganizationUnitId(
                 firstStep.getRole().getId(),
                 block.getProject().getPlan().getOrganizationUnit().getId()
@@ -111,7 +105,6 @@ public class BlockValueServiceImpl implements BlockValueService {
                     " در یگان " + block.getProject().getPlan().getOrganizationUnit().getName() + " یافت نشد.");
         }
 
-        // ساخت کارتابل
         Cartable cartable = new Cartable();
         cartable.setTitle(saved.getName());
         cartable.setDocumentId(saved.getId());
@@ -127,7 +120,6 @@ public class BlockValueServiceImpl implements BlockValueService {
 
         cartableRepository.save(cartable);
 
-        // ثبت تاریخچه
         CartableHistory history = new CartableHistory();
         history.setCartable(cartable);
         history.setUser(cartable.getSender());

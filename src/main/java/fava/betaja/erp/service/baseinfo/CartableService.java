@@ -15,8 +15,6 @@ public interface CartableService {
 
     CartableDto update(CartableDto cartableDto);
 
-    CartableDto nextStepCartable(CartableDto cartableDto);
-
     CartableDto cartableToNextStep(UUID cartableId, String comment);
 
     CartableDto acceptCartable(CartableDto cartableDto);
