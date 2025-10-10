@@ -4,6 +4,7 @@ import fava.betaja.erp.dto.PageRequest;
 import fava.betaja.erp.dto.PageResponse;
 import fava.betaja.erp.dto.baseinfo.CartableDto;
 import fava.betaja.erp.enums.baseinfo.CartableState;
+import fava.betaja.erp.enums.baseinfo.CartableTab;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,11 +20,9 @@ public interface CartableService {
 
     CartableDto returnCartableToPreviousStep(UUID cartableId, String comment);
 
-    CartableDto acceptCartable(CartableDto cartableDto);
+    PageResponse<CartableDto> getCartableByTab(CartableTab tab, PageRequest<CartableDto> model);
 
     PageResponse<CartableDto> findAll(PageRequest<CartableDto> model);
-
-    PageResponse<CartableDto> findByStatePage(CartableState state, PageRequest<CartableDto> model);
 
     List<CartableDto> findAll();
 

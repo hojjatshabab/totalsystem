@@ -6,6 +6,7 @@ import fava.betaja.erp.dto.PageRequest;
 import fava.betaja.erp.dto.PageResponse;
 import fava.betaja.erp.dto.baseinfo.CartableDto;
 import fava.betaja.erp.enums.baseinfo.CartableState;
+import fava.betaja.erp.enums.baseinfo.CartableTab;
 import fava.betaja.erp.exceptions.ServiceException;
 import fava.betaja.erp.service.baseinfo.CartableService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -54,14 +55,19 @@ public class CartableController extends BaseController {
         return RESULT(cartableService.returnCartableToPreviousStep(cartableId, comment), locale);
     }
 
-    @PutMapping("/accept-cartable")
-    public ActionResult<CartableDto> acceptCartable(@RequestBody @Valid CartableDto cartableDto, Locale locale) {
-        if (cartableDto.getId() == null) {
-            return NO_CONTENT("id", locale);
+    @GetMapping("/find-cartable-by-tab")
+    public ActionResult<PageResponse<CartableDto>> getCartableByTab(@RequestParam int currentPage,
+                                                                    @RequestParam int pageSize,
+                                                                    @RequestParam CartableTab tab,
+                                                                    Locale locale) {
+        if (currentPage <= 0 || pageSize <= 0) {
+            return NOT_ACCEPTABLE("{ currentPage <= 0 || pageSize <= 0 }", locale);
         }
-        cartableService.findById(cartableDto.getId())
-                .orElseThrow(() -> new ServiceException("Cartable با این id یافت نشد: " + cartableDto.getId()));
-        return RESULT(cartableService.acceptCartable(cartableDto), locale);
+        PageRequest<CartableDto> request = new PageRequest<>();
+        request.setPageSize(pageSize);
+        request.setCurrentPage(currentPage);
+        PageResponse<CartableDto> response = cartableService.getCartableByTab(tab, request);
+        return RESULT(response, locale);
     }
 
     @GetMapping
@@ -75,21 +81,6 @@ public class CartableController extends BaseController {
         request.setPageSize(pageSize);
         request.setCurrentPage(currentPage);
         PageResponse<CartableDto> response = cartableService.findAll(request);
-        return RESULT(response, locale);
-    }
-
-    @GetMapping("/find-by-state")
-    public ActionResult<PageResponse<CartableDto>> findByState(@RequestParam int currentPage,
-                                                               @RequestParam int pageSize,
-                                                               @RequestParam CartableState state,
-                                                               Locale locale) {
-        if (currentPage <= 0 || pageSize <= 0) {
-            return NOT_ACCEPTABLE("{ currentPage <= 0 || pageSize <= 0 }", locale);
-        }
-        PageRequest<CartableDto> request = new PageRequest<>();
-        request.setPageSize(pageSize);
-        request.setCurrentPage(currentPage);
-        PageResponse<CartableDto> response = cartableService.findByStatePage(state, request);
         return RESULT(response, locale);
     }
 

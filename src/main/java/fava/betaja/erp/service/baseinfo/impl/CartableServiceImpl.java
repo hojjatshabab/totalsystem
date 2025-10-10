@@ -7,32 +7,29 @@ import fava.betaja.erp.entities.baseinfo.Cartable;
 import fava.betaja.erp.entities.baseinfo.CartableHistory;
 import fava.betaja.erp.entities.baseinfo.FlowRule;
 import fava.betaja.erp.entities.baseinfo.FlowRuleStep;
-import fava.betaja.erp.entities.da.BlockValue;
 import fava.betaja.erp.entities.security.Users;
 import fava.betaja.erp.enums.baseinfo.ActionTypeEnum;
 import fava.betaja.erp.enums.baseinfo.CartableState;
-import fava.betaja.erp.enums.da.BlockValueState;
+import fava.betaja.erp.enums.baseinfo.CartableTab;
 import fava.betaja.erp.exceptions.ServiceException;
 import fava.betaja.erp.mapper.baseinfo.CartableDtoMapper;
 import fava.betaja.erp.mapper.security.UsersDtoMapper;
 import fava.betaja.erp.repository.baseinfo.CartableHistoryRepository;
 import fava.betaja.erp.repository.baseinfo.CartableRepository;
 import fava.betaja.erp.repository.baseinfo.FlowRuleStepRepository;
-import fava.betaja.erp.repository.da.BlockValueRepository;
 import fava.betaja.erp.repository.security.UserRepository;
 import fava.betaja.erp.repository.security.UserRoleRepository;
 import fava.betaja.erp.service.baseinfo.CartableService;
 import fava.betaja.erp.service.security.UsersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -47,7 +44,6 @@ public class CartableServiceImpl implements CartableService {
     private final UsersService usersService;
     private final UsersDtoMapper usersDtoMapper;
     private final CartableHistoryRepository cartableHistoryRepository;
-    private final BlockValueRepository blockValueRepository;
     private final UserRoleRepository userRoleRepository;
     private final CartableDtoMapper mapper;
 
@@ -63,21 +59,6 @@ public class CartableServiceImpl implements CartableService {
     public CartableDto update(CartableDto dto) {
         validate(dto, false);
         log.info("Updating Cartable: id={}, documentNumber={}", dto.getId(), dto.getDocumentNumber());
-        Cartable entity = mapper.toEntity(dto);
-        return mapper.toDto(repository.save(entity));
-    }
-
-    @Override
-    public CartableDto acceptCartable(CartableDto dto) {
-        validate(dto, false);
-
-        dto.setState(CartableState.APPROVED);
-
-        BlockValue blockValue = blockValueRepository.findById(dto.getDocumentId()).get();
-        blockValue.setBlockValueState(BlockValueState.APPROVED);
-        blockValueRepository.save(blockValue);
-
-
         Cartable entity = mapper.toEntity(dto);
         return mapper.toDto(repository.save(entity));
     }
@@ -278,20 +259,66 @@ public class CartableServiceImpl implements CartableService {
     }
 
     @Override
+    public PageResponse<CartableDto> getCartableByTab(CartableTab tab, PageRequest<CartableDto> model) {
+        Users currentUser = usersDtoMapper.toEntity(usersService.getCurrentUser());
+
+        List<CartableDto> cartableResultList = new ArrayList<>();
+        long count = 0l;
+
+        switch (tab) {
+            case PENDING:
+                Page<Cartable> page = repository.findByRecipientIdAndStateNot(
+                        currentUser.getId(), CartableState.APPROVED,
+                        Pageable.ofSize(model.getPageSize())
+                                .withPage(model.getCurrentPage() - 1)
+                );
+
+                cartableResultList = page.getContent()
+                        .stream()
+                        .map(mapper::toDto)
+                        .collect(Collectors.toList());
+
+                count = page.getTotalElements();
+
+                break;
+            case SENT:
+                ImmutablePair<Long, List<Cartable>> notApproveCartableByUser = repository
+                        .findNotApproveCartableByUser(currentUser.getId(), model);
+
+                count = notApproveCartableByUser.getLeft();
+
+                cartableResultList = mapper.toDtoList(notApproveCartableByUser.getRight());
+
+                break;
+            case APPROVED:
+                ImmutablePair<Long, List<Cartable>> approveCartableByUser = repository
+                        .findApproveCartableByUser(currentUser.getId(), model);
+
+                count = approveCartableByUser.getLeft();
+
+                cartableResultList = mapper.toDtoList(approveCartableByUser.getRight());
+                break;
+            case ALL:
+                ImmutablePair<Long, List<Cartable>> allCartableByUser = repository
+                        .findAllCartableByUser(currentUser.getId(), model);
+
+                count = allCartableByUser.getLeft();
+
+                cartableResultList = mapper.toDtoList(allCartableByUser.getRight());
+                break;
+            default:
+                throw new ServiceException("تب نامعتبر است.");
+        }
+
+        return new PageResponse<>((cartableResultList), model.getPageSize(), count, model.getCurrentPage(), model.getSortBy());
+
+    }
+
+
+    @Override
     public PageResponse<CartableDto> findAll(PageRequest<CartableDto> model) {
         List<CartableDto> result = repository
                 .findAll(Pageable.ofSize(model.getPageSize()).withPage(model.getCurrentPage() - 1))
-                .stream()
-                .map(mapper::toDto)
-                .collect(Collectors.toList());
-        long count = result.size();
-        return new PageResponse<>(result, model.getPageSize(), count, model.getCurrentPage(), model.getSortBy());
-    }
-
-    @Override
-    public PageResponse<CartableDto> findByStatePage(CartableState state, PageRequest<CartableDto> model) {
-        List<CartableDto> result = repository
-                .findByState(state, Pageable.ofSize(model.getPageSize()).withPage(model.getCurrentPage() - 1))
                 .stream()
                 .map(mapper::toDto)
                 .collect(Collectors.toList());
