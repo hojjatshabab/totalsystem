@@ -3,6 +3,7 @@ package fava.betaja.erp.service.baseinfo;
 import fava.betaja.erp.dto.PageRequest;
 import fava.betaja.erp.dto.PageResponse;
 import fava.betaja.erp.dto.baseinfo.CartableHistoryDto;
+import fava.betaja.erp.entities.baseinfo.CartableHistory;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +16,8 @@ public interface CartableHistoryService {
     PageResponse<CartableHistoryDto> findAll(PageRequest<CartableHistoryDto> model);
 
     List<CartableHistoryDto> findByCartableIdOrderByCreationDateTimeDesc(UUID cartableId);
+
+    List<CartableHistoryDto> findByCartableIdOrderByCreationDateTimeAsc(UUID cartableId);
 
     List<CartableHistoryDto> findAll();
 

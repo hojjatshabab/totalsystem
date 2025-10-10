@@ -42,6 +42,11 @@ public class CartableHistoryController extends BaseController {
         return RESULT(cartableHistoryService.findAll(), locale);
     }
 
+    @GetMapping("/workflow")
+    public ActionResult<List<CartableHistoryDto>> workflow(@RequestParam UUID cartableId, Locale locale) {
+        return RESULT(cartableHistoryService.findByCartableIdOrderByCreationDateTimeAsc(cartableId), locale);
+    }
+
     @GetMapping("/cartable/{cartableId}")
     public ActionResult<List<CartableHistoryDto>> findByCartableId(@PathVariable UUID cartableId, Locale locale) {
         if (cartableId == null) {

@@ -56,6 +56,14 @@ public class CartableHistoryServiceImpl implements CartableHistoryService {
     }
 
     @Override
+    public List<CartableHistoryDto> findByCartableIdOrderByCreationDateTimeAsc(UUID cartableId) {
+        return repository.findByCartableIdOrderByCreationDateTimeAsc(cartableId)
+                .stream()
+                .map(mapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<CartableHistoryDto> findAll() {
         return repository.findAll()
                 .stream()

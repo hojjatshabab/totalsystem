@@ -26,6 +26,7 @@ public interface CartableHistoryDtoMapper extends BaseMapper<CartableHistoryDto,
     @Mapping(target = "userId", source = "user.id")
     @Mapping(target = "userFirstname", source = "user.firstname")
     @Mapping(target = "userLastname", source = "user.lastname")
+    @Mapping(target = "username", source = "user.username")
     @Mapping(target = "cartableId", source = "cartable.id")
     @Mapping(target = "cartableTitle", source = "cartable.title")
     CartableHistoryDto toDto(CartableHistory entity);
