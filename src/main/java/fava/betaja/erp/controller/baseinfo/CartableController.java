@@ -47,6 +47,13 @@ public class CartableController extends BaseController {
         return RESULT(cartableService.cartableToNextStep(cartableId, comment), locale);
     }
 
+    @PutMapping("/return-to-previous-step")
+    public ActionResult<CartableDto> returnCartableToPreviousStep(@RequestParam UUID cartableId
+            , @RequestParam(required = false) String comment
+            , Locale locale) {
+        return RESULT(cartableService.returnCartableToPreviousStep(cartableId, comment), locale);
+    }
+
     @PutMapping("/accept-cartable")
     public ActionResult<CartableDto> acceptCartable(@RequestBody @Valid CartableDto cartableDto, Locale locale) {
         if (cartableDto.getId() == null) {

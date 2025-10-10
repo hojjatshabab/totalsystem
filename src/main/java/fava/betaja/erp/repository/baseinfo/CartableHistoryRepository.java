@@ -10,4 +10,5 @@ import java.util.UUID;
 @Repository
 public interface CartableHistoryRepository extends JpaRepository<CartableHistory, UUID> {
     List<CartableHistory> findByCartableIdOrderByCreationDateTimeDesc(UUID cartableId);
+    List<CartableHistory> findByCartableIdOrderByCreationDateTimeAsc(UUID cartableId);
 }

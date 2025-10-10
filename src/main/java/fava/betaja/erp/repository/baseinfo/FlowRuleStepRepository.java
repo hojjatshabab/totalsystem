@@ -14,8 +14,12 @@ public interface FlowRuleStepRepository extends JpaRepository<FlowRuleStep, UUID
 
     Optional<FlowRuleStep> findFirstByFlowRuleIdOrderByStepOrder(UUID flowRuleId);
 
+    Optional<FlowRuleStep> findByFlowRuleIdAndStepOrder(UUID flowRuleId, Integer stepOrder);
+
     List<FlowRuleStep> findByPreviousStepId(UUID previousStepId);
 
     Optional<FlowRuleStep> findFirstByFlowRuleIdAndStepOrderGreaterThanOrderByStepOrderAsc(UUID flowRuleId, Integer stepOrder);
+
+    Optional<FlowRuleStep> findFirstByFlowRuleIdAndStepOrderLessThanOrderByStepOrderDesc(UUID flowRuleId, Integer stepOrder);
 
 }

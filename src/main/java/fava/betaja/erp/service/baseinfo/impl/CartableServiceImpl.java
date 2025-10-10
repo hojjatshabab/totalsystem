@@ -82,18 +82,19 @@ public class CartableServiceImpl implements CartableService {
         return mapper.toDto(repository.save(entity));
     }
 
+    @Transactional
     @Override
     public CartableDto cartableToNextStep(UUID cartableId, String comment) {
         Cartable cartable = repository.findById(cartableId)
                 .orElseThrow(() -> new ServiceException("  کارتابل یافت نشد.  "));
 
-        if (cartable.getState().equals(CartableState.APPROVED)){
-            throw new ServiceException(" وضعیت کارتابل تایید نهایی می باشد. ");
+        if (cartable.getState().equals(CartableState.APPROVED)) {
+            throw new ServiceException(" کارتابل قبلاً تایید نهایی شده است. ");
         }
 
         Users currentUser = usersDtoMapper.toEntity(usersService.getCurrentUser());
 
-        validateUserCanProceed(cartable, currentUser);
+        validateUserCanProceedForNextStep(cartable, currentUser);
 
         CartableHistory history = new CartableHistory();
         history.setCartable(cartable);
@@ -127,9 +128,9 @@ public class CartableServiceImpl implements CartableService {
         FlowRuleStep nextStep = flowRuleStepRepository
                 .findFirstByFlowRuleIdAndStepOrderGreaterThanOrderByStepOrderAsc(
                         flowRule.getId(), currentStep.getStepOrder())
-                .orElseThrow(() -> new ServiceException("Next step not found after step: "));
-
+                .orElseThrow(() -> new ServiceException(" اطلاعات مرحله بعد یافت نشد "));
         Long orgUnitId;
+
         if (nextStep.getOrganizationUnit() == null) {
             orgUnitId = cartable.getSender() != null && cartable.getSender().getOrganizationUnit() != null
                     ? cartable.getSender().getOrganizationUnit().getId()
@@ -142,7 +143,7 @@ public class CartableServiceImpl implements CartableService {
                 nextStep.getRole().getId(), orgUnitId);
 
         if (recipient == null) {
-            throw new ServiceException("No recipient found for role=" + nextStep.getRole().getName());
+            throw new ServiceException("هیچ گیرنده ای یافت نشد با نقش =" + nextStep.getRole().getTitle());
         }
 
         cartable.setCurrentStep(nextStep);
@@ -162,24 +163,119 @@ public class CartableServiceImpl implements CartableService {
     }
 
 
-    private void validateUserCanProceed(Cartable cartable, Users currentUser) {
+    private void validateUserCanProceedForNextStep(Cartable cartable, Users currentUser) {
         FlowRuleStep currentStep = cartable.getCurrentStep();
         if (currentStep == null) {
             throw new ServiceException("Current step is not defined for this cartable.");
         }
+        boolean validRole;
+        boolean validOrgUnit;
+        if (cartable.getState().equals(CartableState.IN_PROGRESS)) {
+            validRole = userRoleRepository.findByUserId(currentUser.getId()).stream().map(userRole -> userRole.getRole().getId())
+                    .anyMatch(ur -> ur == currentStep.getRole().getId());
 
-        boolean validRole = userRoleRepository.findByUserId(currentUser.getId()).stream().map(userRole -> userRole.getRole().getId())
-                .anyMatch(ur -> ur == currentStep.getRole().getId());
-
-        boolean validOrgUnit = currentUser.getOrganizationUnit() != null
-                && cartable.getRecipient().getOrganizationUnit() != null
-                && currentUser.getOrganizationUnit().getId().equals(cartable.getRecipient().getOrganizationUnit().getId());
+            validOrgUnit = currentUser.getOrganizationUnit() != null
+                    && cartable.getRecipient().getOrganizationUnit() != null
+                    && currentUser.getOrganizationUnit().getId().equals(cartable.getRecipient().getOrganizationUnit().getId());
+        } else if (cartable.getState().equals(CartableState.RETURNED)) {
+            validRole = (currentUser.getId() == cartable.getRecipient().getId());
+            validOrgUnit = validRole;
+        } else {
+            throw new ServiceException(" کارتابل قبلاً تایید نهایی شده است. ");
+        }
 
         if (!validRole || !validOrgUnit) {
             throw new ServiceException("شما مجاز به انجام اقدام در این مرحله نیستید.");
         }
     }
 
+    @Transactional
+    @Override
+    public CartableDto returnCartableToPreviousStep(UUID cartableId, String comment) {
+        Cartable cartable = repository.findById(cartableId)
+                .orElseThrow(() -> new ServiceException("کارتابل یافت نشد."));
+
+        if (cartable.getState().equals(CartableState.APPROVED)) {
+            throw new ServiceException(" کارتابل قبلاً تایید نهایی شده است. ");
+        }
+
+        Users currentUser = usersDtoMapper.toEntity(usersService.getCurrentUser());
+
+        validateUserCanProceedForPreviousStep(cartable, currentUser);
+
+
+        CartableHistory history = new CartableHistory();
+        history.setCartable(cartable);
+        history.setUser(currentUser);
+        history.setActionType(ActionTypeEnum.REJECT);
+        history.setComment(comment);
+        history.setActionDate(new Date());
+        cartableHistoryRepository.save(history);
+
+        Users previousSender = cartable.getSender();
+        if (previousSender == null) {
+            throw new ServiceException("فرستنده قبلی برای بازگشت کارتابل یافت نشد.");
+        }
+
+        FlowRuleStep currentStep = cartable.getCurrentStep();
+
+        FlowRuleStep previousStep = cartable.getCurrentStep().getPreviousStep();
+
+        Long orgUnitId;
+        if (previousStep.getOrganizationUnit() == null) {
+            orgUnitId = cartableHistoryRepository
+                    .findByCartableIdOrderByCreationDateTimeAsc(cartableId)
+                    .get(0).getUser().getOrganizationUnit().getId();
+        } else {
+            orgUnitId = previousStep.getOrganizationUnit().getId();
+        }
+
+        Users recipient = userRepository.findFirstByRoleIdAndOrganizationUnitId(
+                previousStep.getRole().getId(), orgUnitId);
+
+        if (recipient == null) {
+            throw new ServiceException("گیرنده مرحله قبلی یافت نشد با نقش: " + previousStep.getRole().getTitle());
+        }
+
+        cartable.setCurrentStep(previousStep);
+        cartable.setRecipient(recipient);
+        cartable.setSender(currentUser);
+        cartable.setState(CartableState.RETURNED);
+
+        cartable.setDescription(comment);
+
+        cartable.setNextStep(currentStep);
+
+        repository.save(cartable);
+        return mapper.toDto(cartable);
+    }
+
+    private void validateUserCanProceedForPreviousStep(Cartable cartable, Users currentUser) {
+        FlowRuleStep currentStep = cartable.getCurrentStep();
+        if (currentStep == null) {
+            throw new ServiceException("Current step is not defined for this cartable.");
+        }
+
+        boolean validRole;
+        boolean validOrgUnit;
+        if (cartable.getState().equals(CartableState.IN_PROGRESS)) {
+            validRole = userRoleRepository.findByUserId(currentUser.getId()).stream().map(userRole -> userRole.getRole().getId())
+                    .anyMatch(ur -> ur == currentStep.getRole().getId());
+
+            validOrgUnit = currentUser.getOrganizationUnit() != null
+                    && cartable.getRecipient().getOrganizationUnit() != null
+                    && currentUser.getOrganizationUnit().getId().equals(cartable.getRecipient().getOrganizationUnit().getId());
+        } else if (cartable.getState().equals(CartableState.RETURNED)) {
+            validRole = (currentUser.getId() == cartable.getRecipient().getId()) && currentStep.getStepOrder() != 0;
+            validOrgUnit = validRole;
+        } else {
+            throw new ServiceException(" کارتابل قبلاً تایید نهایی شده است. ");
+        }
+
+        if (!validRole || !validOrgUnit) {
+            throw new ServiceException("شما مجاز به انجام اقدام در این مرحله نیستید.");
+        }
+    }
 
     @Override
     public PageResponse<CartableDto> findAll(PageRequest<CartableDto> model) {

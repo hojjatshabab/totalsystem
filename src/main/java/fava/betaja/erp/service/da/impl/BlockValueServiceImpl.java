@@ -94,7 +94,7 @@ public class BlockValueServiceImpl implements BlockValueService {
         }
 
         FlowRuleStep firstStep = flowRuleStepRepository
-                .findFirstByFlowRuleIdOrderByStepOrder(flowRuleDomain.getFlowRule().getId())
+                .findByFlowRuleIdAndStepOrder(flowRuleDomain.getFlowRule().getId(), 1)
                 .orElseThrow(() -> new ServiceException("مرحله اول جریان یافت نشد."));
 
         Users currentUser = usersDtoMapper.toEntity(usersService.getCurrentUser());
@@ -120,7 +120,7 @@ public class BlockValueServiceImpl implements BlockValueService {
         cartable.setTitle(saved.getName());
         cartable.setDocumentId(saved.getId());
         cartable.setDocumentNumber("BV-" + saved.getId().toString().substring(0, 8));
-        cartable.setState(CartableState.PENDING);
+        cartable.setState(CartableState.IN_PROGRESS);
         cartable.setSender(currentUser);
         cartable.setRecipient(recipient);
         cartable.setFlowRuleDomain(flowRuleDomain);
