@@ -5,7 +5,8 @@ import fava.betaja.erp.controller.BaseController;
 import fava.betaja.erp.dto.PageRequest;
 import fava.betaja.erp.dto.PageResponse;
 import fava.betaja.erp.dto.baseinfo.CartableDto;
-import fava.betaja.erp.enums.baseinfo.CartableState;
+import fava.betaja.erp.dto.baseinfo.CartableOverviewDto;
+import fava.betaja.erp.entities.security.Users;
 import fava.betaja.erp.enums.baseinfo.CartableTab;
 import fava.betaja.erp.exceptions.ServiceException;
 import fava.betaja.erp.service.baseinfo.CartableService;
@@ -69,6 +70,12 @@ public class CartableController extends BaseController {
         PageResponse<CartableDto> response = cartableService.getCartableByTab(tab, request);
         return RESULT(response, locale);
     }
+
+    @GetMapping("/overview")
+    public ActionResult<CartableOverviewDto> getOverview(Locale locale) {
+        return RESULT(cartableService.getCartableOverview(), locale);
+    }
+
 
     @GetMapping
     public ActionResult<PageResponse<CartableDto>> findAll(@RequestParam int currentPage,

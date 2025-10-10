@@ -17,6 +17,9 @@ public interface CartableRepository extends JpaRepository<Cartable, UUID>, Carta
 
     Page<Cartable> findByRecipientIdAndStateNot(Long recipientId, CartableState state, Pageable pageable);
 
+    Long countByRecipientIdAndStateNot(Long recipientId, CartableState state);
+    Long countByRecipientIdAndState(Long recipientId, CartableState state);
+
     List<Cartable> findByCurrentStepId(UUID currentStepId);
 
     List<Cartable> findByState(String state);

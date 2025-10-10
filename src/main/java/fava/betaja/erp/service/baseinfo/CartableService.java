@@ -3,7 +3,7 @@ package fava.betaja.erp.service.baseinfo;
 import fava.betaja.erp.dto.PageRequest;
 import fava.betaja.erp.dto.PageResponse;
 import fava.betaja.erp.dto.baseinfo.CartableDto;
-import fava.betaja.erp.enums.baseinfo.CartableState;
+import fava.betaja.erp.dto.baseinfo.CartableOverviewDto;
 import fava.betaja.erp.enums.baseinfo.CartableTab;
 
 import java.util.List;
@@ -21,6 +21,8 @@ public interface CartableService {
     CartableDto returnCartableToPreviousStep(UUID cartableId, String comment);
 
     PageResponse<CartableDto> getCartableByTab(CartableTab tab, PageRequest<CartableDto> model);
+
+    CartableOverviewDto getCartableOverview();
 
     PageResponse<CartableDto> findAll(PageRequest<CartableDto> model);
 

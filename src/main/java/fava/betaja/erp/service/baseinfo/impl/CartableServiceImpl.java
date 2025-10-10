@@ -3,6 +3,7 @@ package fava.betaja.erp.service.baseinfo.impl;
 import fava.betaja.erp.dto.PageRequest;
 import fava.betaja.erp.dto.PageResponse;
 import fava.betaja.erp.dto.baseinfo.CartableDto;
+import fava.betaja.erp.dto.baseinfo.CartableOverviewDto;
 import fava.betaja.erp.entities.baseinfo.Cartable;
 import fava.betaja.erp.entities.baseinfo.CartableHistory;
 import fava.betaja.erp.entities.baseinfo.FlowRule;
@@ -273,8 +274,8 @@ public class CartableServiceImpl implements CartableService {
     public PageResponse<CartableDto> getCartableByTab(CartableTab tab, PageRequest<CartableDto> model) {
         Users currentUser = usersDtoMapper.toEntity(usersService.getCurrentUser());
 
-        List<CartableDto> cartableResultList = new ArrayList<>();
-        long count = 0l;
+        List<CartableDto> cartableResultList;
+        long count;
 
         switch (tab) {
             case PENDING:
@@ -324,6 +325,33 @@ public class CartableServiceImpl implements CartableService {
         return new PageResponse<>((cartableResultList), model.getPageSize(), count, model.getCurrentPage(), model.getSortBy());
 
     }
+
+    @Override
+    public CartableOverviewDto getCartableOverview() {
+        Users currentUser = usersDtoMapper.toEntity(usersService.getCurrentUser());
+        Long currentUserId = currentUser.getId();
+
+        Long pendingCount = repository.countByRecipientIdAndStateNot(currentUserId, CartableState.APPROVED);
+        Long returnedCount = repository.countByRecipientIdAndState(currentUserId, CartableState.RETURNED);
+        Long inProgressCount = repository.countByRecipientIdAndState(currentUserId, CartableState.IN_PROGRESS);
+        Long approvedCount = repository.countByRecipientIdAndState(currentUserId, CartableState.APPROVED);
+
+        Long total = pendingCount + returnedCount + inProgressCount + approvedCount;
+
+        CartableHistory lastAction = cartableHistoryRepository.findTopByUserIdOrderByCreationDateTimeDesc(currentUserId);
+
+        return CartableOverviewDto.builder()
+                .pendingCount(pendingCount.intValue())
+                .returnedCount(returnedCount.intValue())
+                .inProgressCount(inProgressCount.intValue())
+                .approvedCount(approvedCount.intValue())
+                .totalCount(total.intValue())
+                .lastActionDate(lastAction != null ? lastAction.getCreationDateTime() : null)
+                .lastActionTitle(lastAction != null ? lastAction.getCartable().getTitle() : null)
+                .hasCriticalTasks(pendingCount > 0 || returnedCount > 0)
+                .build();
+    }
+
 
 
     @Override
