@@ -7,16 +7,19 @@ import fava.betaja.erp.entities.baseinfo.Cartable;
 import fava.betaja.erp.entities.baseinfo.CartableHistory;
 import fava.betaja.erp.entities.baseinfo.FlowRule;
 import fava.betaja.erp.entities.baseinfo.FlowRuleStep;
+import fava.betaja.erp.entities.da.BlockValue;
 import fava.betaja.erp.entities.security.Users;
 import fava.betaja.erp.enums.baseinfo.ActionTypeEnum;
 import fava.betaja.erp.enums.baseinfo.CartableState;
 import fava.betaja.erp.enums.baseinfo.CartableTab;
+import fava.betaja.erp.enums.da.BlockValueState;
 import fava.betaja.erp.exceptions.ServiceException;
 import fava.betaja.erp.mapper.baseinfo.CartableDtoMapper;
 import fava.betaja.erp.mapper.security.UsersDtoMapper;
 import fava.betaja.erp.repository.baseinfo.CartableHistoryRepository;
 import fava.betaja.erp.repository.baseinfo.CartableRepository;
 import fava.betaja.erp.repository.baseinfo.FlowRuleStepRepository;
+import fava.betaja.erp.repository.da.BlockValueRepository;
 import fava.betaja.erp.repository.security.UserRepository;
 import fava.betaja.erp.repository.security.UserRoleRepository;
 import fava.betaja.erp.service.baseinfo.CartableService;
@@ -40,6 +43,7 @@ public class CartableServiceImpl implements CartableService {
 
     private final CartableRepository repository;
     private final UserRepository userRepository;
+    private final BlockValueRepository blockValueRepository;
     private final FlowRuleStepRepository flowRuleStepRepository;
     private final UsersService usersService;
     private final UsersDtoMapper usersDtoMapper;
@@ -103,6 +107,13 @@ public class CartableServiceImpl implements CartableService {
                 cartable.setDescription(null);
             }
             repository.save(cartable);
+
+            //todo  نیاز به یک متد کلی دارد و باید با نام انتیتی چک شود
+            Optional<BlockValue> optionalBlockValue = blockValueRepository.findById(cartable.getDocumentId());
+            if (optionalBlockValue.isPresent()) {
+                optionalBlockValue.get().setBlockValueState(BlockValueState.APPROVED);
+                blockValueRepository.save(optionalBlockValue.get());
+            }
             return mapper.toDto(cartable);
         }
 
