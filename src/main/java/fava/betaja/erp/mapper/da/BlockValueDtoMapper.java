@@ -28,6 +28,10 @@ public interface BlockValueDtoMapper extends BaseMapper<BlockValueDto, BlockValu
     @Mapping(source = "projectPeriod.title", target = "projectPeriodTitle")
     @Mapping(source = "block.id", target = "blockId")
     @Mapping(source = "block.name", target = "blockName")
+    @Mapping(source = "projectPeriod.project.id", target = "projectId")
+    @Mapping(source = "projectPeriod.project.name", target = "projectName")
+    @Mapping(source = "projectPeriod.project.plan.id", target = "planId")
+    @Mapping(source = "projectPeriod.project.plan.name", target = "planName")
     BlockValueDto toDto(BlockValue entity);
 
     @Override

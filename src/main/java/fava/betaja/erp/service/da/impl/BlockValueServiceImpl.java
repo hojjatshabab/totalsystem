@@ -3,11 +3,15 @@ package fava.betaja.erp.service.da.impl;
 import fava.betaja.erp.dto.PageRequest;
 import fava.betaja.erp.dto.PageResponse;
 import fava.betaja.erp.dto.da.BlockValueDto;
+import fava.betaja.erp.dto.da.BlockValueGeneralReport;
+import fava.betaja.erp.dto.da.PlanRepot;
+import fava.betaja.erp.dto.da.ProjectReport;
 import fava.betaja.erp.dto.security.UsersDto;
 import fava.betaja.erp.entities.baseinfo.Cartable;
 import fava.betaja.erp.entities.baseinfo.CartableHistory;
 import fava.betaja.erp.entities.baseinfo.FlowRuleDomain;
 import fava.betaja.erp.entities.baseinfo.FlowRuleStep;
+import fava.betaja.erp.entities.common.OrganizationUnit;
 import fava.betaja.erp.entities.da.*;
 import fava.betaja.erp.entities.security.Users;
 import fava.betaja.erp.enums.baseinfo.ActionTypeEnum;
@@ -21,6 +25,7 @@ import fava.betaja.erp.repository.baseinfo.CartableHistoryRepository;
 import fava.betaja.erp.repository.baseinfo.CartableRepository;
 import fava.betaja.erp.repository.baseinfo.FlowRuleDomainRepository;
 import fava.betaja.erp.repository.baseinfo.FlowRuleStepRepository;
+import fava.betaja.erp.repository.common.OrganizationUnitRepository;
 import fava.betaja.erp.repository.da.*;
 import fava.betaja.erp.repository.security.UserRepository;
 import fava.betaja.erp.repository.security.UserRoleRepository;
@@ -48,6 +53,7 @@ public class BlockValueServiceImpl implements BlockValueService {
     private final ProjectRepository projectRepository;
     private final PlanRepository planRepository;
     private final UsersService usersService;
+    private final OrganizationUnitRepository organizationUnitRepository;
     private final UsersDtoMapper usersDtoMapper;
     private final ProjectPeriodRepository projectPeriodRepository;
     private final BlockRepository blockRepository;
@@ -207,6 +213,51 @@ public class BlockValueServiceImpl implements BlockValueService {
         long count = page.getTotalElements();
 
         return new PageResponse<>(result, model.getPageSize(), count, model.getCurrentPage(), model.getSortBy());
+    }
+
+
+    @Override
+    public BlockValueGeneralReport blockValueGeneralReport(String year
+            , UUID periodRangeId, Long companyId, UUID planId) {
+        BlockValueGeneralReport report = new BlockValueGeneralReport();
+
+        OrganizationUnit company = organizationUnitRepository.findById(companyId).get();
+        report.setCompanyName(company.getName());
+
+        List<Plan> plans = new ArrayList<>();
+        if (planId == null) {
+            plans = planRepository.findByOrganizationUnitId(companyId);
+        } else {
+            plans.add(planRepository.findById(planId).get());
+        }
+        List<PlanRepot> planRepots = new ArrayList<>();
+        for (Plan plan : plans) {
+            planRepots = new ArrayList<>();
+            List<Project> projects = projectRepository.findByPlanId(plan.getId());
+            if (projects.size() != 0) {
+                List<ProjectReport> projectReports = new ArrayList<>();
+                for (Project project : projects) {
+                    Optional<ProjectPeriod> optionalProjectPeriod = projectPeriodRepository
+                            .findByProjectIdAndPeriodRangeIdAndYear(project.getId()
+                                    , periodRangeId, year);
+                    if (optionalProjectPeriod.isPresent()) {
+                       List<BlockValue> blockValues = repository.findByProjectPeriodId(optionalProjectPeriod.get().getId());
+                        ProjectReport projectReport = new ProjectReport();
+                        projectReport.setProjectName(project.getName());
+                        projectReport.setBlocks(mapper.toDtoList(blockValues));
+                    }
+                }
+                if (projectReports.size() != 0) {
+                    PlanRepot planRepot = new PlanRepot();
+                    planRepot.setPlanName(plan.getName());
+                    planRepot.setProjectReports(projectReports);
+                    planRepots.add(planRepot);
+                }
+
+            }
+        }
+        report.setPlanRepots(planRepots);
+        return null;
     }
 
     @Override
