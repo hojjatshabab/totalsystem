@@ -20,5 +20,7 @@ public interface ProjectPeriodRepository extends JpaRepository<ProjectPeriod, UU
 
     Page<ProjectPeriod> findByProjectIdAndPeriodRangeIdAndYear(UUID projectId, UUID periodId, String year, Pageable pageable);
 
+    Optional<ProjectPeriod> findByProjectIdAndPeriodRangeIdAndYear(UUID projectId, UUID periodId, String year);
+
     Page<ProjectPeriod> findByPeriodRangeIdAndYear(UUID periodId, String year, Pageable pageable);
 }

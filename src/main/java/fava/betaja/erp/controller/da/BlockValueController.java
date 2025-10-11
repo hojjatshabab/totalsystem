@@ -5,6 +5,7 @@ import fava.betaja.erp.controller.BaseController;
 import fava.betaja.erp.dto.PageRequest;
 import fava.betaja.erp.dto.PageResponse;
 import fava.betaja.erp.dto.da.BlockValueDto;
+import fava.betaja.erp.dto.da.BlockValueGeneralReport;
 import fava.betaja.erp.exceptions.ServiceException;
 import fava.betaja.erp.service.da.BlockValueService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -68,22 +69,13 @@ public class BlockValueController extends BaseController {
         return RESULT(response, locale);
     }
 
-    @GetMapping("find-by-period-company-plan")
-    public ActionResult<PageResponse<BlockValueDto>> findByPeriodCompanyPlan(@RequestParam int currentPage,
-                                                                             @RequestParam int pageSize,
-                                                                             @RequestParam String year,
-                                                                             @RequestParam UUID periodRangeId,
-                                                                             @RequestParam Long companyId,
-                                                                             @RequestParam UUID planId,
-                                                                             Locale locale) {
-        if (currentPage <= 0 || pageSize <= 0) {
-            return NOT_ACCEPTABLE("{ currentPage <= 0 || pageSize <= 0 }", locale);
-        }
-        PageRequest<BlockValueDto> request = new PageRequest<>();
-        request.setPageSize(pageSize);
-        request.setCurrentPage(currentPage);
-        PageResponse<BlockValueDto> response = service.findByPeriodCompanyPlan(year,periodRangeId,companyId,planId, request);
-        return RESULT(response, locale);
+    @GetMapping("general-report")
+    public ActionResult<BlockValueGeneralReport> blockValueGeneralReport(@RequestParam String year,
+                                                                                       @RequestParam UUID periodRangeId,
+                                                                                       @RequestParam Long companyId,
+                                                                                       @RequestParam(required = false) UUID planId,
+                                                                                       Locale locale) {
+        return RESULT(service.blockValueGeneralReport(year,periodRangeId,companyId,planId), locale);
     }
 
     @GetMapping("find-by-company")
