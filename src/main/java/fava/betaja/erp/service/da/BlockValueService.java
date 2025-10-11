@@ -4,6 +4,7 @@ import fava.betaja.erp.dto.PageRequest;
 import fava.betaja.erp.dto.PageResponse;
 import fava.betaja.erp.dto.da.BlockValueDto;
 import fava.betaja.erp.dto.da.BlockValueGeneralReport;
+import fava.betaja.erp.dto.da.CompanyPerformanceReportDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +23,8 @@ public interface BlockValueService {
     PageResponse<BlockValueDto> findByProjectPeriodId(UUID projectPeriodId, PageRequest<BlockValueDto> model);
 
     BlockValueGeneralReport blockValueGeneralReport(String year, UUID periodRangeId, Long companyId, UUID planId);
+
+    List<CompanyPerformanceReportDto> getCompanyPerformanceReport(String year, UUID periodRangeId);
 
     PageResponse<BlockValueDto> findByProjectPeriodIdAndBlockId(UUID projectPeriodId, UUID blockId, PageRequest<BlockValueDto> model);
 

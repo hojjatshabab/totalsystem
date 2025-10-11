@@ -2,10 +2,7 @@ package fava.betaja.erp.service.da.impl;
 
 import fava.betaja.erp.dto.PageRequest;
 import fava.betaja.erp.dto.PageResponse;
-import fava.betaja.erp.dto.da.BlockValueDto;
-import fava.betaja.erp.dto.da.BlockValueGeneralReport;
-import fava.betaja.erp.dto.da.PlanReport;
-import fava.betaja.erp.dto.da.ProjectReport;
+import fava.betaja.erp.dto.da.*;
 import fava.betaja.erp.dto.security.UsersDto;
 import fava.betaja.erp.entities.baseinfo.Cartable;
 import fava.betaja.erp.entities.baseinfo.CartableHistory;
@@ -38,8 +35,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -263,6 +263,70 @@ public class BlockValueServiceImpl implements BlockValueService {
         report.setPlanReports(planReports);
         return report;
     }
+
+
+    @Override
+    public List<CompanyPerformanceReportDto> getCompanyPerformanceReport(String year, UUID periodRangeId) {
+
+        List<OrganizationUnit> companies = organizationUnitRepository.findByCommonBaseDataOrgTypeId(52l);
+
+        List<CompanyPerformanceReportDto> reportList = new ArrayList<>();
+
+        for (OrganizationUnit company : companies) {
+
+            List<Project> projects = projectRepository.findByOrganizationUnitId(company.getId());
+
+            if (projects.isEmpty()) continue;
+
+            List<BlockValue> allBlockValues = new ArrayList<>();
+
+            for (Project project : projects) {
+                Optional<ProjectPeriod> optionalProjectPeriod =
+                        projectPeriodRepository.findByProjectIdAndPeriodRangeIdAndYear(project.getId(), periodRangeId, year);
+
+                if (optionalProjectPeriod.isPresent()) {
+                    allBlockValues.addAll(repository.findByProjectPeriodId(optionalProjectPeriod.get().getId()));
+                }
+            }
+
+            if (allBlockValues.isEmpty()) continue;
+
+            BigDecimal avgPlan = average(allBlockValues, BlockValue::getProgressPlan);
+            BigDecimal avgActual = average(allBlockValues, BlockValue::getProgressActual);
+            BigDecimal avgDeviation = average(allBlockValues, BlockValue::getDeviation);
+
+            long delayedCount = allBlockValues.stream()
+                    .filter(b -> b.getDeviation() != null && b.getDeviation().compareTo(BigDecimal.ZERO) < 0)
+                    .count();
+
+            CompanyPerformanceReportDto dto = CompanyPerformanceReportDto.builder()
+                    .companyId(company.getId())
+                    .companyName(company.getName())
+                    .totalProjects(projects.size())
+                    .delayedProjects((int) delayedCount)
+                    .avgProgressPlan(avgPlan)
+                    .avgProgressActual(avgActual)
+                    .avgDeviation(avgDeviation)
+                    .build();
+
+            reportList.add(dto);
+        }
+
+        return reportList;
+    }
+
+    private BigDecimal average(List<BlockValue> values, Function<BlockValue, BigDecimal> extractor) {
+        List<BigDecimal> nums = values.stream()
+                .map(extractor)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+
+        if (nums.isEmpty()) return BigDecimal.ZERO;
+
+        BigDecimal sum = nums.stream().reduce(BigDecimal.ZERO, BigDecimal::add);
+        return sum.divide(BigDecimal.valueOf(nums.size()), 2, RoundingMode.HALF_UP);
+    }
+
 
     @Override
     public PageResponse<BlockValueDto> findByProjectPeriodIdAndBlockId(UUID projectPeriodId, UUID blockId, PageRequest<BlockValueDto> model) {

@@ -6,6 +6,7 @@ import fava.betaja.erp.dto.PageRequest;
 import fava.betaja.erp.dto.PageResponse;
 import fava.betaja.erp.dto.da.BlockValueDto;
 import fava.betaja.erp.dto.da.BlockValueGeneralReport;
+import fava.betaja.erp.dto.da.CompanyPerformanceReportDto;
 import fava.betaja.erp.exceptions.ServiceException;
 import fava.betaja.erp.service.da.BlockValueService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -71,11 +72,19 @@ public class BlockValueController extends BaseController {
 
     @GetMapping("/general-report")
     public ActionResult<BlockValueGeneralReport> blockValueGeneralReport(@RequestParam String year,
-                                                                                       @RequestParam UUID periodRangeId,
-                                                                                       @RequestParam Long companyId,
-                                                                                       @RequestParam(required = false) UUID planId,
-                                                                                       Locale locale) {
-        return RESULT(service.blockValueGeneralReport(year,periodRangeId,companyId,planId), locale);
+                                                                         @RequestParam UUID periodRangeId,
+                                                                         @RequestParam Long companyId,
+                                                                         @RequestParam(required = false) UUID planId,
+                                                                         Locale locale) {
+        return RESULT(service.blockValueGeneralReport(year, periodRangeId, companyId, planId), locale);
+    }
+
+    @GetMapping("/company-performance")
+    public ActionResult<List<CompanyPerformanceReportDto>> getCompanyPerformance(
+            @RequestParam String year,
+            @RequestParam UUID periodRangeId, Locale locale) {
+
+        return RESULT(service.getCompanyPerformanceReport(year, periodRangeId), locale);
     }
 
     @GetMapping("find-by-company")
