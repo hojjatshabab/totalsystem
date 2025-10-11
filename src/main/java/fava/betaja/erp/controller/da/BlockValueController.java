@@ -69,7 +69,7 @@ public class BlockValueController extends BaseController {
         return RESULT(response, locale);
     }
 
-    @GetMapping("general-report")
+    @GetMapping("/general-report")
     public ActionResult<BlockValueGeneralReport> blockValueGeneralReport(@RequestParam String year,
                                                                                        @RequestParam UUID periodRangeId,
                                                                                        @RequestParam Long companyId,

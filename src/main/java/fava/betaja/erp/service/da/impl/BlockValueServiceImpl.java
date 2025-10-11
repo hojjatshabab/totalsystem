@@ -4,7 +4,7 @@ import fava.betaja.erp.dto.PageRequest;
 import fava.betaja.erp.dto.PageResponse;
 import fava.betaja.erp.dto.da.BlockValueDto;
 import fava.betaja.erp.dto.da.BlockValueGeneralReport;
-import fava.betaja.erp.dto.da.PlanRepot;
+import fava.betaja.erp.dto.da.PlanReport;
 import fava.betaja.erp.dto.da.ProjectReport;
 import fava.betaja.erp.dto.security.UsersDto;
 import fava.betaja.erp.entities.baseinfo.Cartable;
@@ -221,43 +221,47 @@ public class BlockValueServiceImpl implements BlockValueService {
             , UUID periodRangeId, Long companyId, UUID planId) {
         BlockValueGeneralReport report = new BlockValueGeneralReport();
 
-        OrganizationUnit company = organizationUnitRepository.findById(companyId).get();
+        OrganizationUnit company = organizationUnitRepository.findById(companyId)
+                .orElseThrow(() -> new ServiceException("شرکت مورد نظر یافت نشد"));
+
         report.setCompanyName(company.getName());
 
-        List<Plan> plans = new ArrayList<>();
-        if (planId == null) {
-            plans = planRepository.findByOrganizationUnitId(companyId);
-        } else {
-            plans.add(planRepository.findById(planId).get());
-        }
-        List<PlanRepot> planRepots = new ArrayList<>();
-        for (Plan plan : plans) {
-            planRepots = new ArrayList<>();
-            List<Project> projects = projectRepository.findByPlanId(plan.getId());
-            if (projects.size() != 0) {
-                List<ProjectReport> projectReports = new ArrayList<>();
-                for (Project project : projects) {
-                    Optional<ProjectPeriod> optionalProjectPeriod = projectPeriodRepository
-                            .findByProjectIdAndPeriodRangeIdAndYear(project.getId()
-                                    , periodRangeId, year);
-                    if (optionalProjectPeriod.isPresent()) {
-                       List<BlockValue> blockValues = repository.findByProjectPeriodId(optionalProjectPeriod.get().getId());
-                        ProjectReport projectReport = new ProjectReport();
-                        projectReport.setProjectName(project.getName());
-                        projectReport.setBlocks(mapper.toDtoList(blockValues));
-                    }
-                }
-                if (projectReports.size() != 0) {
-                    PlanRepot planRepot = new PlanRepot();
-                    planRepot.setPlanName(plan.getName());
-                    planRepot.setProjectReports(projectReports);
-                    planRepots.add(planRepot);
-                }
+        List<Plan> plans = (planId == null)
+                ? planRepository.findByOrganizationUnitId(companyId)
+                : planRepository.findById(planId)
+                .map(List::of)
+                .orElse(Collections.emptyList());
 
+        List<PlanReport> planReports = new ArrayList<>();
+
+        for (Plan plan : plans) {
+            List<Project> projects = projectRepository.findByPlanId(plan.getId());
+
+            if (projects.isEmpty()) continue;
+
+            List<ProjectReport> projectReports = new ArrayList<>();
+            for (Project project : projects) {
+                Optional<ProjectPeriod> optionalProjectPeriod = projectPeriodRepository
+                        .findByProjectIdAndPeriodRangeIdAndYear(project.getId()
+                                , periodRangeId, year);
+                if (optionalProjectPeriod.isPresent()) {
+                    List<BlockValue> blockValues = repository.findByProjectPeriodId(optionalProjectPeriod.get().getId());
+                    ProjectReport projectReport = new ProjectReport();
+                    projectReport.setProjectName(project.getName());
+                    projectReport.setBlocks(mapper.toDtoList(blockValues));
+                    projectReports.add(projectReport);
+                }
             }
+            if (!projectReports.isEmpty()) {
+                PlanReport planReport = new PlanReport();
+                planReport.setPlanName(plan.getName());
+                planReport.setProjectReports(projectReports);
+                planReports.add(planReport);
+            }
+
         }
-        report.setPlanRepots(planRepots);
-        return null;
+        report.setPlanReports(planReports);
+        return report;
     }
 
     @Override

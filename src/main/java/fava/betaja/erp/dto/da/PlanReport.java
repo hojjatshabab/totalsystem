@@ -11,7 +11,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PlanRepot {
+public class PlanReport {
     String planName;
     List<ProjectReport> projectReports;
 }
