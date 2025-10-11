@@ -209,6 +209,20 @@ public class BlockValueServiceImpl implements BlockValueService {
         return new PageResponse<>(result, model.getPageSize(), count, model.getCurrentPage(), model.getSortBy());
     }
 
+
+    @Override
+    public PageResponse<BlockValueDto> findByPeriodCompanyPlan(String year
+            , UUID periodRangeId, Long companyId, UUID planId, PageRequest<BlockValueDto> model) {
+    /*    List<Plan> plans = planRepository.findByOrganizationUnitId(companyId);
+        if (plans.size() != 0) {
+            for (Plan plan : plans) {
+
+            }
+        }
+        projectPeriodRepository.findByPeriodRangeIdAndYear()*/
+        return null;
+    }
+
     @Override
     public PageResponse<BlockValueDto> findByProjectPeriodIdAndBlockId(UUID projectPeriodId, UUID blockId, PageRequest<BlockValueDto> model) {
         Page<BlockValue> page = repository.findByProjectPeriodIdAndBlockId(

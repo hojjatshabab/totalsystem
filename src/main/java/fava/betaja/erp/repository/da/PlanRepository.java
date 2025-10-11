@@ -14,4 +14,5 @@ public interface PlanRepository extends JpaRepository<Plan, UUID> {
     Page<Plan> findByOrganizationUnitId(Long organizationUnitId, Pageable pageable);
 
     List<Plan> findByOrganizationUnitId(Long organizationUnitId);
+
 }

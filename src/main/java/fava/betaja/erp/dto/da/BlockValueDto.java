@@ -37,4 +37,8 @@ public class BlockValueDto {
     private BlockValueState blockValueState;
     private UUID blockId;
     private String blockName;
+    private UUID projectId;
+    private String projectName;
+    private UUID planId;
+    private String planName;
 }
